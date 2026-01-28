@@ -585,40 +585,8 @@
         <p class="footer-copy">© 2026 Uncaged. All rights reserved.</p>
     </footer>
 
-    <script>
-        // Handle form submission
-        document.getElementById('emailForm').addEventListener('submit', function(e) {
-            const email = document.getElementById('emailInput').value;
-            
-            // Show success message
-            document.getElementById('successMessage').classList.add('show');
-            
-            // Clear input
-            document.getElementById('emailInput').value = '';
-            
-            // Update count
-            const countEl = document.getElementById('waitlistCount');
-            const currentCount = parseInt(countEl.textContent.replace(',', ''));
-            countEl.textContent = (currentCount + 1).toLocaleString();
-
-            // In the future, you'll send this email to your database
-            console.log('Email submitted:', email);
-        });
-
-        // Handle second form
-        document.getElementById('emailForm2').addEventListener('submit', function(e) {
-            const email = document.getElementById('emailInput2').value;
-            
-            // Scroll to top and show success
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            setTimeout(() => {
-                document.getElementById('successMessage').classList.add('show');
-            }, 500);
-            
-            document.getElementById('emailInput2').value = '';
-            
-            console.log('Email submitted:', email);
-        });
     </script>
+</script>
+    
 </body>
 </html>
