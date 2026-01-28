@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNCAGED | Content Without Limits</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0D0D0D;
+            color: #FFFFFF;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            padding: 25px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            background: linear-gradient(to bottom, rgba(13,13,13,1) 0%, rgba(13,13,13,0) 100%);
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-btn {
+            background: transparent;
+            border: 1px solid #F5A623;
+            color: #F5A623;
+            padding: 12px 28px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .header-btn:hover {
+            background: #F5A623;
+            color: #0D0D0D;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 120px 20px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 20%, rgba(107, 47, 235, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(245, 166, 35, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 166, 35, 0.15);
+            border: 1px solid rgba(245, 166, 35, 0.5);
+            padding: 8px 18px;
+            border-radius: 25px;
+            font-size: 13px;
+            font-weight: 600;
+            color: #F5A623;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 30px;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #F5A623;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.3); }
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(48px, 10vw, 100px);
+            line-height: 0.95;
+            letter-spacing: 3px;
+            margin-bottom: 25px;
+        }
+
+        .hero-title span {
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #B3B3B3;
+            line-height: 1.6;
+            margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Email Form */
+        .email-form {
+            display: flex;
+            gap: 15px;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .email-input {
+            flex: 1;
+            min-width: 280px;
+            background: #1A1A1A;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 18px 24px;
+            font-size: 16px;
+            color: #FFFFFF;
+            transition: border-color 0.3s ease;
+        }
+
+        .email-input:focus {
+            outline: none;
+            border-color: #F5A623;
+        }
+
+        .email-input::placeholder {
+            color: #666;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            border: none;
+            padding: 18px 40px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0D0D0D;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(245, 166, 35, 0.3);
+        }
+
+        .form-note {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .form-note span {
+            color: #F5A623;
+            font-weight: 600;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 100px 40px;
+            background: #0A0A0A;
+        }
+
+        .features-header {
+            text-align: center;
+            margin-bottom: 70px;
+        }
+
+        .features-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 48px;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+        }
+
+        .features-subtitle {
+            color: #888;
+            font-size: 18px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .feature-card {
+            background: #121212;
+            border: 1px solid #222;
+            border-radius: 16px;
+            padding: 40px 30px;
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            border-color: #F5A623;
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            margin-bottom: 20px;
+        }
+
+        .feature-title {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .feature-desc {
+            color: #888;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
+        /* Creator Section */
+        .creator-section {
+            padding: 100px 40px;
+            text-align: center;
+        }
+
+        .creator-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 25px;
+        }
+
+        .creator-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 42px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .creator-desc {
+            color: #888;
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+            line-height: 1.6;
+        }
+
+        .creator-stats {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 56px;
+            color: #F5A623;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 8px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            padding: 100px 40px;
+            background: linear-gradient(135deg, #1A1A1A 0%, #0D0D0D 100%);
+            text-align: center;
+        }
+
+        .cta-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 52px;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .cta-title span {
+            color: #F5A623;
+        }
+
+        .cta-desc {
+            color: #888;
+            font-size: 18px;
+            margin-bottom: 40px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 50px 40px;
+            background: #080808;
+            text-align: center;
+        }
+
+        .footer-logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-links a {
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: #F5A623;
+        }
+
+        .footer-copy {
+            color: #444;
+            font-size: 13px;
+        }
+
+        /* Success Message (hidden by default) */
+        .success-message {
+            display: none;
+            background: rgba(29, 185, 84, 0.15);
+            border: 1px solid #1DB954;
+            border-radius: 12px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .success-message h3 {
+            color: #1DB954;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+
+        .success-message p {
+            color: #B3B3B3;
+            font-size: 14px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 20px;
+            }
+
+            .logo {
+                font-size: 24px;
+            }
+
+            .header-btn {
+                padding: 10px 20px;
+                font-size: 12px;
+            }
+
+            .hero {
+                padding: 100px 20px 60px;
+            }
+
+            .hero-subtitle {
+                font-size: 16px;
+            }
+
+            .email-form {
+                flex-direction: column;
+                padding: 0 10px;
+            }
+
+            .email-input, .submit-btn {
+                width: 100%;
+                min-width: auto;
+            }
+
+            .features, .creator-section, .cta-section {
+                padding: 60px 20px;
+            }
+
+            .creator-stats {
+                gap: 40px;
+            }
+
+            .stat-number {
+                font-size: 42px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">UNCAGED</div>
+        <button class="header-btn" onclick="document.querySelector('.email-input').focus()">Get Early Access</button>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="badge">
+                <span class="badge-dot"></span>
+                Coming Soon
+            </div>
+            <h1 class="hero-title">CONTENT <span>WITHOUT</span> LIMITS</h1>
+            <p class="hero-subtitle">The home for unfiltered travel, nightlife, and lifestyle content. Watch what you want, when you want, without restrictions.</p>
+            
+            <div class="success-message" id="successMessage">
+                <h3>🎉 You're on the list!</h3>
+                <p>We'll notify you when Uncaged launches. Check your email for confirmation.</p>
+            </div>
+
+            <form class="email-form" id="emailForm">
+                <input type="email" class="email-input" placeholder="Enter your email for early access" required id="emailInput">
+                <button type="submit" class="submit-btn">Join Waitlist</button>
+            </form>
+            <p class="form-note">Join <span id="waitlistCount">1,247</span> others waiting for launch</p>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features">
+        <div class="features-header">
+            <h2 class="features-title">WHY UNCAGED?</h2>
+            <p class="features-subtitle">Built by creators, for creators</p>
+        </div>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎬</div>
+                <h3 class="feature-title">No Restrictions</h3>
+                <p class="feature-desc">Post the content YouTube won't let you. No age-restrictions, no demonetization, no algorithmic suppression.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💰</div>
+                <h3 class="feature-title">Keep 85% Revenue</h3>
+                <p class="feature-desc">You keep 85% of your earnings. No more giving away half your income to platforms that don't support you.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3 class="feature-title">Own Your Audience</h3>
+                <p class="feature-desc">Get your subscribers' emails. Build direct relationships. Never lose your audience to an algorithm change.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📺</div>
+                <h3 class="feature-title">Premium Experience</h3>
+                <p class="feature-desc">Netflix-quality viewing experience. No cheap, amateur platforms. Your content deserves better.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔴</div>
+                <h3 class="feature-title">Go Live Anytime</h3>
+                <p class="feature-desc">Stream directly to your subscribers. Real-time chat, tips, and exclusive live content.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌍</div>
+                <h3 class="feature-title">Global Community</h3>
+                <p class="feature-desc">Connect with travelers, nightlife enthusiasts, and lifestyle creators from around the world.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creator Section -->
+    <section class="creator-section">
+        <div class="creator-badge">For Creators</div>
+        <h2 class="creator-title">BUILT FOR THE CONTENT YOUTUBE WON'T SHOW</h2>
+        <p class="creator-desc">Travel vlogs. Nightlife adventures. Dating culture. Real stories from real places. No filters, no censorship, no limits.</p>
+        <div class="creator-stats">
+            <div class="stat">
+                <div class="stat-number">85%</div>
+                <div class="stat-label">Revenue to Creators</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Content Restrictions</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">100%</div>
+                <div class="stat-label">Audience Ownership</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <h2 class="cta-title">READY TO GO <span>UNCAGED</span>?</h2>
+        <p class="cta-desc">Be the first to know when we launch. Early supporters get exclusive benefits.</p>
+        <form class="email-form" id="emailForm2">
+            <input type="email" class="email-input" placeholder="Enter your email" required id="emailInput2">
+            <button type="submit" class="submit-btn">Get Early Access</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-logo">UNCAGED</div>
+        <div class="footer-links">
+            <a href="#">About</a>
+            <a href="#">For Creators</a>
+            <a href="#">Contact</a>
+            <a href="#">Privacy</a>
+            <a href="#">Terms</a>
+        </div>
+        <p class="footer-copy">© 2026 Uncaged. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Handle form submission
+        document.getElementById('emailForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput').value;
+            
+            // Show success message
+            document.getElementById('successMessage').classList.add('show');
+            
+            // Clear input
+            document.getElementById('emailInput').value = '';
+            
+            // Update count
+            const countEl = document.getElementById('waitlistCount');
+            const currentCount = parseInt(countEl.textContent.replace(',', ''));
+            countEl.textContent = (currentCount + 1).toLocaleString();
+
+            // In the future, you'll send this email to your database
+            console.log('Email submitted:', email);
+        });
+
+        // Handle second form
+        document.getElementById('emailForm2').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('emailInput2').value;
+            
+            // Scroll to top and show success
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            setTimeout(() => {
+                document.getElementById('successMessage').classList.add('show');
+            }, 500);
+            
+            document.getElementById('emailInput2').value = '';
+            
+            console.log('Email submitted:', email);
+        });
+    </script>
+</body>
+</html>
