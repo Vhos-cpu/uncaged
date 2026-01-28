@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNCAGED | Browse</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0D0D0D;
+            color: #FFFFFF;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 70px;
+            background: linear-gradient(to bottom, rgba(13,13,13,1) 0%, rgba(13,13,13,0.9) 50%, rgba(13,13,13,0) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 60px;
+            z-index: 1000;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 50px;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 32px;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            cursor: pointer;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: #B3B3B3;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+
+        .nav-link:hover {
+            color: #FFFFFF;
+        }
+
+        .nav-link.active {
+            color: #FFFFFF;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
+
+        .search-icon, .notification-icon {
+            color: #B3B3B3;
+            cursor: pointer;
+            font-size: 20px;
+            transition: color 0.2s ease;
+        }
+
+        .search-icon:hover, .notification-icon:hover {
+            color: #FFFFFF;
+        }
+
+        .profile-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 6px;
+            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 85vh;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .hero-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+        }
+
+        .hero-bg::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to right, rgba(13,13,13,0.95) 0%, rgba(13,13,13,0.6) 40%, rgba(13,13,13,0.2) 100%);
+        }
+
+        .hero-gradient-bottom {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, #0D0D0D 0%, transparent 100%);
+            z-index: 5;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            padding: 0 60px;
+            max-width: 650px;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 166, 35, 0.2);
+            border: 1px solid rgba(245, 166, 35, 0.5);
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            color: #F5A623;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            background: #F5A623;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.5; transform: scale(1.2); }
+        }
+
+        .hero-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 64px;
+            line-height: 1;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+        }
+
+        .hero-description {
+            font-size: 16px;
+            color: #B3B3B3;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .hero-meta {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 30px;
+            font-size: 14px;
+            color: #B3B3B3;
+        }
+
+        .hero-meta .rating {
+            color: #F5A623;
+            font-weight: 600;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn-play {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #FFFFFF;
+            color: #0D0D0D;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-play:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255,255,255,0.2);
+            color: #FFFFFF;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 16px;
+            cursor: pointer;
+            backdrop-filter: blur(5px);
+            transition: all 0.2s ease;
+        }
+
+        .btn-info:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        /* Category Pills */
+        .category-section {
+            padding: 0 60px;
+            margin-bottom: 30px;
+        }
+
+        .category-pills {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .category-pill {
+            background: #1A1A1A;
+            border: 1px solid #333;
+            color: #B3B3B3;
+            padding: 10px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .category-pill:hover {
+            border-color: #F5A623;
+            color: #F5A623;
+        }
+
+        .category-pill.active {
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            border-color: #F5A623;
+            color: #0D0D0D;
+        }
+
+        /* Content Rows */
+        .content-section {
+            padding: 0 60px;
+            margin-bottom: 50px;
+        }
+
+        .row-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .row-title {
+            font-size: 22px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .see-all {
+            color: #B3B3B3;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.2s ease;
+        }
+
+        .see-all:hover {
+            color: #F5A623;
+        }
+
+        .content-row {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            scroll-snap-type: x mandatory;
+        }
+
+        .content-row::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .content-row::-webkit-scrollbar-track {
+            background: #1A1A1A;
+        }
+
+        .content-row::-webkit-scrollbar-thumb {
+            background: #333;
+            border-radius: 2px;
+        }
+
+        /* Content Cards */
+        .content-card {
+            flex-shrink: 0;
+            width: 250px;
+            scroll-snap-align: start;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .content-card:hover {
+            transform: scale(1.05);
+        }
+
+        .card-thumbnail {
+            position: relative;
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #1A1A1A;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 12px;
+        }
+
+        .card-thumbnail-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 50%, #0d1b2a 100%);
+        }
+
+        .card-thumbnail .play-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            background: rgba(0,0,0,0.7);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .content-card:hover .play-overlay {
+            opacity: 1;
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: #F5A623;
+            color: #0D0D0D;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-badge.live {
+            background: #E50914;
+            color: #FFFFFF;
+            animation: livePulse 2s infinite;
+        }
+
+        @keyframes livePulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(229, 9, 20, 0.5); }
+            50% { box-shadow: 0 0 0 8px rgba(229, 9, 20, 0); }
+        }
+
+        .card-badge.vip {
+            background: #6B2FEB;
+            color: #FFFFFF;
+        }
+
+        .card-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(0,0,0,0.8);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .card-info {
+            padding: 0 5px;
+        }
+
+        .card-title {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            line-height: 1.3;
+        }
+
+        .card-creator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .creator-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
+        }
+
+        .creator-name {
+            font-size: 13px;
+            color: #B3B3B3;
+        }
+
+        .card-stats {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Creator Cards */
+        .creator-row {
+            display: flex;
+            gap: 25px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+        }
+
+        .creator-card {
+            flex-shrink: 0;
+            width: 160px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .creator-card:hover .creator-image {
+            transform: scale(1.05);
+            border-color: #F5A623;
+        }
+
+        .creator-image {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%);
+            margin: 0 auto 15px;
+            border: 3px solid #1A1A1A;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .creator-verified {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 28px;
+            height: 28px;
+            background: #F5A623;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #0D0D0D;
+            font-size: 12px;
+        }
+
+        .creator-card .name {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .creator-card .handle {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .creator-card .followers {
+            font-size: 12px;
+            color: #F5A623;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .footer {
+            background: #080808;
+            padding: 60px;
+            margin-top: 50px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .footer-brand .logo {
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .footer-brand p {
+            color: #666;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .footer-column h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .footer-column a {
+            display: block;
+            color: #666;
+            text-decoration: none;
+            font-size: 14px;
+            margin-bottom: 12px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-column a:hover {
+            color: #F5A623;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #1A1A1A;
+            margin-top: 40px;
+            padding-top: 30px;
+            text-align: center;
+            color: #444;
+            font-size: 13px;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .header {
+                padding: 0 20px;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content {
+                padding: 0 20px;
+            }
+
+            .hero-title {
+                font-size: 42px;
+            }
+
+            .category-section, .content-section {
+                padding: 0 20px;
+            }
+
+            .footer {
+                padding: 40px 20px;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+                gap: 30px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="index.html" class="logo">UNCAGED</a>
+            <nav class="nav-links">
+                <a href="browse.html" class="nav-link active">Browse</a>
+                <a href="#" class="nav-link">Live Now</a>
+                <a href="#" class="nav-link">Creators</a>
+                <a href="#" class="nav-link">Categories</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <span class="search-icon">🔍</span>
+            <span class="notification-icon">🔔</span>
+            <div class="profile-avatar">V</div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-dot"></span>
+                Featured Creator
+            </div>
+            <h1 class="hero-title">RIO NIGHTLIFE FINALLY DELIVERED</h1>
+            <p class="hero-description">Experience the raw, unfiltered nightlife of Rio de Janeiro. From underground clubs to rooftop parties, this is the content YouTube won't show you.</p>
+            <div class="hero-meta">
+                <span class="rating">★ 4.9</span>
+                <span>2024</span>
+                <span>18+</span>
+                <span>45 min</span>
+                <span>Travel • Nightlife</span>
+            </div>
+            <div class="hero-buttons">
+                <button class="btn-play">▶ Play</button>
+                <button class="btn-info">ℹ️ More Info</button>
+            </div>
+        </div>
+        <div class="hero-gradient-bottom"></div>
+    </section>
+
+    <!-- Categories -->
+    <section class="category-section">
+        <div class="category-pills">
+            <span class="category-pill active">All</span>
+            <span class="category-pill">🎉 Nightlife</span>
+            <span class="category-pill">🌍 Travel</span>
+            <span class="category-pill">💑 Dating</span>
+            <span class="category-pill">🎭 Culture</span>
+            <span class="category-pill">🏔️ Adventure</span>
+            <span class="category-pill">✨ Lifestyle</span>
+        </div>
+    </section>
+
+    <!-- Trending Now -->
+    <section class="content-section">
+        <div class="row-header">
+            <h2 class="row-title">🔥 Trending Now</h2>
+            <a href="#" class="see-all">See All →</a>
+        </div>
+        <div class="content-row">
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-badge">New</span>
+                    <span class="card-duration">24:35</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">She Took Me to a Favela Party in Rio</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>👁 2.4K views</span>
+                        <span>❤️ 342</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-badge live">Live</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Live from Cape Town - Q&A Session</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>👁 847 watching</span>
+                        <span>💬 Live Chat</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-badge vip">VIP</span>
+                    <span class="card-duration">32:18</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">The Uncut Brazil Experience - Full Documentary</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>👁 1.8K views</span>
+                        <span>❤️ 521</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-duration">18:42</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">She Hates American Men (So I Took Her Out)</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>👁 3.7K views</span>
+                        <span>❤️ 445</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-duration">28:55</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">My Portuguese Teacher Showed Me Rio's Secrets</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>👁 1.5K views</span>
+                        <span>❤️ 267</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Top Creators -->
+    <section class="content-section">
+        <div class="row-header">
+            <h2 class="row-title">⭐ Top Creators</h2>
+            <a href="#" class="see-all">See All →</a>
+        </div>
+        <div class="creator-row">
+            <div class="creator-card">
+                <div class="creator-image">
+                    <div class="creator-verified">✓</div>
+                </div>
+                <div class="name">Visa Vic</div>
+                <div class="handle">@visavic</div>
+                <div class="followers">12.4K followers</div>
+            </div>
+
+            <div class="creator-card">
+                <div class="creator-image"></div>
+                <div class="name">Travel King</div>
+                <div class="handle">@travelking</div>
+                <div class="followers">8.2K followers</div>
+            </div>
+
+            <div class="creator-card">
+                <div class="creator-image"></div>
+                <div class="name">Night Owl</div>
+                <div class="handle">@nightowl</div>
+                <div class="followers">6.7K followers</div>
+            </div>
+
+            <div class="creator-card">
+                <div class="creator-image"></div>
+                <div class="name">Wanderlust</div>
+                <div class="handle">@wanderlust</div>
+                <div class="followers">5.1K followers</div>
+            </div>
+
+            <div class="creator-card">
+                <div class="creator-image"></div>
+                <div class="name">Global Nomad</div>
+                <div class="handle">@globalnomad</div>
+                <div class="followers">4.8K followers</div>
+            </div>
+
+            <div class="creator-card">
+                <div class="creator-image"></div>
+                <div class="name">Culture Shock</div>
+                <div class="handle">@cultureshock</div>
+                <div class="followers">3.9K followers</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Continue Watching -->
+    <section class="content-section">
+        <div class="row-header">
+            <h2 class="row-title">▶️ Continue Watching</h2>
+            <a href="#" class="see-all">See All →</a>
+        </div>
+        <div class="content-row">
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-duration">12:30 left</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Rio's WILDEST Street Party Got Out of Control</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>45% watched</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-duration">8:15 left</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Dating in Colombia: What They Don't Tell You</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>72% watched</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-duration">22:00 left</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Medellín Nightlife: The Complete Guide</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>25% watched</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exclusive Content -->
+    <section class="content-section">
+        <div class="row-header">
+            <h2 class="row-title">🔒 Exclusive Content</h2>
+            <a href="#" class="see-all">See All →</a>
+        </div>
+        <div class="content-row">
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-badge vip">VIP Only</span>
+                    <span class="card-duration">45:00</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Behind the Scenes: Content That Got Banned</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>🔒 Premium</span>
+                        <span>🔥 Popular</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-badge vip">VIP Only</span>
+                    <span class="card-duration">38:22</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">The Full Medellín Documentary (Uncut)</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>🔒 Premium</span>
+                        <span>⭐ Top Rated</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-card">
+                <div class="card-thumbnail">
+                    <div class="card-thumbnail-bg"></div>
+                    <span class="card-badge vip">VIP Only</span>
+                    <span class="card-duration">52:15</span>
+                    <div class="play-overlay">▶</div>
+                </div>
+                <div class="card-info">
+                    <h3 class="card-title">Cape Town After Dark: The Real Experience</h3>
+                    <div class="card-creator">
+                        <div class="creator-avatar"></div>
+                        <span class="creator-name">Visa Vic</span>
+                    </div>
+                    <div class="card-stats">
+                        <span>🔒 Premium</span>
+                        <span>🆕 New</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">UNCAGED</a>
+                <p>The home for unfiltered creator content. Watch what you want, when you want, without restrictions.</p>
+            </div>
+            <div class="footer-column">
+                <h4>Browse</h4>
+                <a href="#">Home</a>
+                <a href="#">Trending</a>
+                <a href="#">Live</a>
+                <a href="#">Creators</a>
+            </div>
+            <div class="footer-column">
+                <h4>Categories</h4>
+                <a href="#">Travel</a>
+                <a href="#">Nightlife</a>
+                <a href="#">Dating</a>
+                <a href="#">Lifestyle</a>
+            </div>
+            <div class="footer-column">
+                <h4>Support</h4>
+                <a href="#">Help Center</a>
+                <a href="#">Contact Us</a>
+                <a href="#">Creator FAQ</a>
+                <a href="#">Terms</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2026 Uncaged. All rights reserved.</p>
+        </div>
+    </footer>
+
+<script>
+</script>
+</body>
+</html>
