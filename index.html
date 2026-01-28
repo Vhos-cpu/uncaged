@@ -588,7 +588,6 @@
     <script>
         // Handle form submission
         document.getElementById('emailForm').addEventListener('submit', function(e) {
-            e.preventDefault();
             const email = document.getElementById('emailInput').value;
             
             // Show success message
@@ -608,7 +607,6 @@
 
         // Handle second form
         document.getElementById('emailForm2').addEventListener('submit', function(e) {
-            e.preventDefault();
             const email = document.getElementById('emailInput2').value;
             
             // Scroll to top and show success
