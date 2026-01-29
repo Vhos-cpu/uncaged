@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNCAGED | Sign In</title>
+    <title>UNCAGED | Create Account</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * {
@@ -45,26 +45,53 @@
             padding: 20px;
         }
 
-        .login-card {
+        .signup-card {
             width: 100%;
             max-width: 400px;
             text-align: center;
         }
 
-        .login-title {
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 50px;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: #F5A623;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .step-dot.completed {
+            background: #1DB954;
+        }
+
+        /* Title */
+        .signup-title {
             font-size: 32px;
             font-weight: 700;
             margin-bottom: 12px;
         }
 
-        .login-subtitle {
+        .signup-subtitle {
             font-size: 16px;
             color: #888;
             margin-bottom: 40px;
         }
 
         /* Form */
-        .login-form {
+        .signup-form {
             text-align: left;
         }
 
@@ -115,43 +142,39 @@
             color: #666;
             cursor: pointer;
             font-size: 18px;
+            padding: 5px;
         }
 
         .password-toggle:hover {
             color: #F5A623;
         }
 
-        .form-extras {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
+        /* Password Strength */
+        .password-strength {
+            margin-top: 10px;
         }
 
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #888;
-            font-size: 14px;
-            cursor: pointer;
+        .strength-bar {
+            height: 4px;
+            background: #2A2A2A;
+            border-radius: 2px;
+            overflow: hidden;
+            margin-bottom: 8px;
         }
 
-        .remember-me input {
-            width: 18px;
-            height: 18px;
-            accent-color: #F5A623;
+        .strength-fill {
+            height: 100%;
+            width: 0%;
+            transition: all 0.3s ease;
         }
 
-        .forgot-link {
-            color: #F5A623;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-        }
+        .strength-fill.weak { width: 33%; background: #E50914; }
+        .strength-fill.medium { width: 66%; background: #F5A623; }
+        .strength-fill.strong { width: 100%; background: #1DB954; }
 
-        .forgot-link:hover {
-            text-decoration: underline;
+        .strength-text {
+            font-size: 12px;
+            color: #666;
         }
 
         /* Submit Button */
@@ -166,6 +189,7 @@
             color: #0D0D0D;
             cursor: pointer;
             transition: all 0.3s ease;
+            margin-top: 10px;
         }
 
         .submit-btn:hover {
@@ -266,21 +290,21 @@
             font-size: 20px;
         }
 
-        /* Sign Up Link */
-        .signup-link {
+        /* Sign In Link */
+        .signin-link {
             text-align: center;
             margin-top: 30px;
             font-size: 14px;
             color: #888;
         }
 
-        .signup-link a {
+        .signin-link a {
             color: #F5A623;
             text-decoration: none;
             font-weight: 600;
         }
 
-        .signup-link a:hover {
+        .signin-link a:hover {
             text-decoration: underline;
         }
 
@@ -311,18 +335,12 @@
                 padding: 20px;
             }
 
-            .login-card {
+            .signup-card {
                 padding: 0 10px;
             }
 
-            .login-title {
+            .signup-title {
                 font-size: 28px;
-            }
-
-            .form-extras {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
             }
         }
     </style>
@@ -333,13 +351,26 @@
     </header>
 
     <main class="main-container">
-        <div class="login-card">
-            <h1 class="login-title">Welcome back</h1>
-            <p class="login-subtitle">Sign in to continue to Uncaged</p>
+        <div class="signup-card">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+            </div>
+
+            <h1 class="signup-title">Create your account</h1>
+            <p class="signup-subtitle">Join the uncaged community</p>
 
             <div class="message" id="message"></div>
 
-            <form class="login-form" id="loginForm" onsubmit="handleLogin(event)">
+            <form class="signup-form" id="signupForm" onsubmit="handleNext(event)">
+                <div class="form-group">
+                    <label class="form-label">Username</label>
+                    <input type="text" class="form-input" id="username" placeholder="Choose a username" required>
+                </div>
+
                 <div class="form-group">
                     <label class="form-label">Email</label>
                     <input type="email" class="form-input" id="email" placeholder="Enter your email" required>
@@ -348,20 +379,18 @@
                 <div class="form-group">
                     <label class="form-label">Password</label>
                     <div class="password-field">
-                        <input type="password" class="form-input" id="password" placeholder="Enter your password" required>
+                        <input type="password" class="form-input" id="password" placeholder="Create a password" required minlength="6" oninput="checkPasswordStrength()">
                         <button type="button" class="password-toggle" onclick="togglePassword()">👁</button>
+                    </div>
+                    <div class="password-strength">
+                        <div class="strength-bar">
+                            <div class="strength-fill" id="strengthFill"></div>
+                        </div>
+                        <span class="strength-text" id="strengthText">Use 6+ characters</span>
                     </div>
                 </div>
 
-                <div class="form-extras">
-                    <label class="remember-me">
-                        <input type="checkbox" id="rememberMe">
-                        Remember me
-                    </label>
-                    <a href="#" class="forgot-link" onclick="handleForgotPassword(event)">Forgot password?</a>
-                </div>
-
-                <button type="submit" class="submit-btn" id="submitBtn">Sign In</button>
+                <button type="submit" class="submit-btn" id="submitBtn">Continue</button>
             </form>
 
             <div class="divider">
@@ -375,8 +404,8 @@
                 Continue with Google
             </button>
 
-            <p class="signup-link">
-                Don't have an account? <a href="signup.html">Create one</a>
+            <p class="signin-link">
+                Already have an account? <a href="login.html">Sign in</a>
             </p>
         </div>
     </main>
@@ -393,18 +422,11 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
             getAuth, 
-            signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
             signInWithPopup,
             GoogleAuthProvider,
-            sendPasswordResetEmail
+            updateProfile
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { 
-            getFirestore, 
-            doc, 
-            getDoc,
-            setDoc,
-            serverTimestamp 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
@@ -417,53 +439,63 @@
 
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
-        const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        window.handleLogin = async function(event) {
+        window.handleNext = async function(event) {
             event.preventDefault();
             
-            const email = document.getElementById('email').value;
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
             const password = document.getElementById('password').value;
             const btn = document.getElementById('submitBtn');
             const messageDiv = document.getElementById('message');
             
+            if (password.length < 6) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Password must be at least 6 characters.';
+                return;
+            }
+
             btn.disabled = true;
-            btn.innerHTML = '<span class="spinner"></span>Signing in...';
+            btn.innerHTML = '<span class="spinner"></span>Creating account...';
             messageDiv.style.display = 'none';
-            
+
             try {
-                await signInWithEmailAndPassword(auth, email, password);
-                
-                messageDiv.className = 'message success';
-                messageDiv.textContent = 'Success! Redirecting...';
-                
-                setTimeout(() => {
-                    window.location.href = 'browse.html';
-                }, 1000);
-                
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                await updateProfile(user, {
+                    displayName: username
+                });
+
+                // Store data for next steps
+                sessionStorage.setItem('signupData', JSON.stringify({
+                    uid: user.uid,
+                    username: username,
+                    email: email
+                }));
+
+                // Go to phone verification
+                window.location.href = 'signup-phone.html';
+
             } catch (error) {
                 btn.disabled = false;
-                btn.textContent = 'Sign In';
+                btn.textContent = 'Continue';
                 
                 messageDiv.className = 'message error';
                 
                 switch(error.code) {
-                    case 'auth/user-not-found':
-                        messageDiv.textContent = 'No account found with this email.';
-                        break;
-                    case 'auth/wrong-password':
-                    case 'auth/invalid-credential':
-                        messageDiv.textContent = 'Invalid email or password.';
+                    case 'auth/email-already-in-use':
+                        messageDiv.textContent = 'An account with this email already exists.';
                         break;
                     case 'auth/invalid-email':
                         messageDiv.textContent = 'Please enter a valid email address.';
                         break;
-                    case 'auth/too-many-requests':
-                        messageDiv.textContent = 'Too many attempts. Try again later.';
+                    case 'auth/weak-password':
+                        messageDiv.textContent = 'Password should be at least 6 characters.';
                         break;
                     default:
-                        messageDiv.textContent = 'Sign in failed. Please try again.';
+                        messageDiv.textContent = 'Something went wrong. Please try again.';
                 }
             }
         };
@@ -475,31 +507,13 @@
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
 
-                // Check if user exists in Firestore
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                
-                if (!userDoc.exists()) {
-                    // New Google user - create profile
-                    await setDoc(doc(db, 'users', user.uid), {
-                        uid: user.uid,
-                        email: user.email,
-                        username: user.displayName || 'User',
-                        displayName: user.displayName || 'User',
-                        photoURL: user.photoURL || null,
-                        phone: null,
-                        phoneVerified: false,
-                        bio: '',
-                        subscribers: 0,
-                        totalViews: 0,
-                        videosCount: 0,
-                        isCreator: false,
-                        isVerified: false,
-                        createdAt: serverTimestamp(),
-                        updatedAt: serverTimestamp()
-                    });
-                }
+                sessionStorage.setItem('signupData', JSON.stringify({
+                    uid: user.uid,
+                    username: user.displayName || 'User',
+                    email: user.email
+                }));
 
-                window.location.href = 'browse.html';
+                window.location.href = 'signup-phone.html';
 
             } catch (error) {
                 if (error.code !== 'auth/popup-closed-by-user') {
@@ -508,34 +522,36 @@
                 }
             }
         };
-
-        window.handleForgotPassword = async function(event) {
-            event.preventDefault();
-            
-            const email = document.getElementById('email').value;
-            const messageDiv = document.getElementById('message');
-            
-            if (!email) {
-                messageDiv.className = 'message error';
-                messageDiv.textContent = 'Enter your email first.';
-                return;
-            }
-            
-            try {
-                await sendPasswordResetEmail(auth, email);
-                messageDiv.className = 'message success';
-                messageDiv.textContent = 'Password reset email sent!';
-            } catch (error) {
-                messageDiv.className = 'message error';
-                messageDiv.textContent = 'Could not send reset email.';
-            }
-        };
     </script>
 
     <script>
         function togglePassword() {
             const input = document.getElementById('password');
             input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        function checkPasswordStrength() {
+            const password = document.getElementById('password').value;
+            const fill = document.getElementById('strengthFill');
+            const text = document.getElementById('strengthText');
+
+            if (password.length === 0) {
+                fill.className = 'strength-fill';
+                text.textContent = 'Use 6+ characters';
+                text.style.color = '#666';
+            } else if (password.length < 6) {
+                fill.className = 'strength-fill weak';
+                text.textContent = 'Too short';
+                text.style.color = '#E50914';
+            } else if (password.length < 10) {
+                fill.className = 'strength-fill medium';
+                text.textContent = 'Good';
+                text.style.color = '#F5A623';
+            } else {
+                fill.className = 'strength-fill strong';
+                text.textContent = 'Strong';
+                text.style.color = '#1DB954';
+            }
         }
     </script>
 </body>

@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNCAGED | Complete Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0D0D0D;
+            color: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .profile-card {
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 50px;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: #F5A623;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .step-dot.completed {
+            background: #1DB954;
+        }
+
+        /* Title */
+        .profile-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .profile-subtitle {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 40px;
+        }
+
+        /* Avatar Upload */
+        .avatar-upload {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 30px;
+        }
+
+        .avatar-preview {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            overflow: hidden;
+            border: 3px solid #2A2A2A;
+        }
+
+        .avatar-preview:hover {
+            border-color: #F5A623;
+            transform: scale(1.05);
+        }
+
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .avatar-upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 36px;
+            height: 36px;
+            background: #F5A623;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 3px solid #0D0D0D;
+            font-size: 16px;
+        }
+
+        .avatar-upload-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .avatar-input {
+            display: none;
+        }
+
+        /* Form */
+        .profile-form {
+            text-align: left;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #FFFFFF;
+            margin-bottom: 10px;
+        }
+
+        .form-label .optional {
+            color: #666;
+            font-weight: 400;
+            font-size: 12px;
+        }
+
+        .form-input {
+            width: 100%;
+            background: #1A1A1A;
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #FFFFFF;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #F5A623;
+            background: #1F1F1F;
+        }
+
+        .form-input::placeholder {
+            color: #555;
+        }
+
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-top: 6px;
+        }
+
+        .input-with-prefix {
+            display: flex;
+            align-items: center;
+            background: #1A1A1A;
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .input-with-prefix:focus-within {
+            border-color: #F5A623;
+            background: #1F1F1F;
+        }
+
+        .input-prefix {
+            padding: 16px;
+            color: #666;
+            font-size: 16px;
+        }
+
+        .input-with-prefix .form-input {
+            border: none;
+            background: transparent;
+            padding-left: 0;
+        }
+
+        .input-with-prefix .form-input:focus {
+            border: none;
+        }
+
+        /* Buttons */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .skip-btn {
+            flex: 1;
+            background: transparent;
+            border: 2px solid #2A2A2A;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #888;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .skip-btn:hover {
+            border-color: #444;
+            color: #FFFFFF;
+        }
+
+        .submit-btn {
+            flex: 2;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0D0D0D;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(245, 166, 35, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Message */
+        .message {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.error {
+            background: rgba(229, 9, 20, 0.15);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            color: #ff6b6b;
+            display: block;
+        }
+
+        .message.success {
+            background: rgba(29, 185, 84, 0.15);
+            border: 1px solid rgba(29, 185, 84, 0.3);
+            color: #1DB954;
+            display: block;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #0D0D0D;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #555;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .footer-links a:hover {
+            color: #F5A623;
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px;
+            }
+
+            .profile-card {
+                padding: 0 10px;
+            }
+
+            .profile-title {
+                font-size: 28px;
+            }
+
+            .button-group {
+                flex-direction: column;
+            }
+
+            .skip-btn, .submit-btn {
+                flex: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">UNCAGED</a>
+    </header>
+
+    <main class="main-container">
+        <div class="profile-card">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step-dot completed"></div>
+                <div class="step-dot completed"></div>
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+            </div>
+
+            <h1 class="profile-title">Complete your profile</h1>
+            <p class="profile-subtitle">Help others get to know you</p>
+
+            <div class="message" id="message"></div>
+
+            <!-- Avatar Upload -->
+            <div class="avatar-upload">
+                <div class="avatar-preview" id="avatarPreview" onclick="document.getElementById('avatarInput').click()">
+                    <span id="avatarInitial">V</span>
+                </div>
+                <div class="avatar-upload-btn" onclick="document.getElementById('avatarInput').click()">📷</div>
+                <input type="file" class="avatar-input" id="avatarInput" accept="image/*" onchange="handleAvatarUpload(this)">
+            </div>
+
+            <form class="profile-form" id="profileForm" onsubmit="handleSubmit(event)">
+                <div class="form-group">
+                    <label class="form-label">Bio <span class="optional">(optional)</span></label>
+                    <textarea class="form-input form-textarea" id="bio" placeholder="Tell us about yourself..." maxlength="200" oninput="updateCharCount()"></textarea>
+                    <div class="char-count"><span id="charCount">0</span>/200</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">YouTube Handle <span class="optional">(optional)</span></label>
+                    <div class="input-with-prefix">
+                        <span class="input-prefix">@</span>
+                        <input type="text" class="form-input" id="youtube" placeholder="youryoutube">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Instagram <span class="optional">(optional)</span></label>
+                    <div class="input-with-prefix">
+                        <span class="input-prefix">@</span>
+                        <input type="text" class="form-input" id="instagram" placeholder="yourinstagram">
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="button" class="skip-btn" onclick="skipProfile()">Skip for now</button>
+                    <button type="submit" class="submit-btn" id="submitBtn">Continue</button>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="terms.html">Terms</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="#">Help</a>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            updateDoc,
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Check if user came from phone verification
+        const signupData = JSON.parse(sessionStorage.getItem('signupData'));
+        if (!signupData || !signupData.phoneVerified) {
+            window.location.href = 'signup.html';
+        }
+
+        // Set initial avatar letter
+        if (signupData && signupData.username) {
+            document.getElementById('avatarInitial').textContent = signupData.username.charAt(0).toUpperCase();
+        }
+
+        window.handleSubmit = async function(event) {
+            event.preventDefault();
+
+            const bio = document.getElementById('bio').value.trim();
+            const youtube = document.getElementById('youtube').value.trim();
+            const instagram = document.getElementById('instagram').value.trim();
+            const btn = document.getElementById('submitBtn');
+            const messageDiv = document.getElementById('message');
+
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Saving...';
+            messageDiv.style.display = 'none';
+
+            try {
+                // Update user profile in Firestore
+                await updateDoc(doc(db, 'users', signupData.uid), {
+                    bio: bio,
+                    youtubeHandle: youtube || null,
+                    instagram: instagram || null,
+                    updatedAt: serverTimestamp()
+                });
+
+                // Update session storage
+                sessionStorage.setItem('signupData', JSON.stringify({
+                    ...signupData,
+                    bio,
+                    youtube,
+                    instagram,
+                    profileComplete: true
+                }));
+
+                // Go to welcome page
+                window.location.href = 'signup-welcome.html';
+
+            } catch (error) {
+                console.error('Error saving profile:', error);
+                btn.disabled = false;
+                btn.textContent = 'Continue';
+                
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Could not save profile. Please try again.';
+            }
+        };
+
+        window.skipProfile = function() {
+            sessionStorage.setItem('signupData', JSON.stringify({
+                ...signupData,
+                profileComplete: false
+            }));
+            window.location.href = 'signup-welcome.html';
+        };
+    </script>
+
+    <script>
+        function updateCharCount() {
+            const bio = document.getElementById('bio');
+            const count = document.getElementById('charCount');
+            count.textContent = bio.value.length;
+        }
+
+        function handleAvatarUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    const preview = document.getElementById('avatarPreview');
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Avatar">`;
+                };
+                
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+</body>
+</html>

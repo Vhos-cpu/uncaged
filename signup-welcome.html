@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNCAGED | Welcome</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0D0D0D;
+            color: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Background Animation */
+        .bg-gradient {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse at 30% 20%, rgba(245, 166, 35, 0.15) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(107, 47, 235, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .header {
+            padding: 30px 40px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .welcome-card {
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 50px;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #1DB954;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: #F5A623;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        /* Success Animation */
+        .success-icon {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, rgba(29, 185, 84, 0.2) 0%, rgba(29, 185, 84, 0.1) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 40px;
+            position: relative;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .success-icon::before {
+            content: '✓';
+            font-size: 60px;
+            color: #1DB954;
+            animation: checkmark 0.5s ease-out forwards;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(29, 185, 84, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 20px rgba(29, 185, 84, 0); }
+        }
+
+        @keyframes checkmark {
+            0% { opacity: 0; transform: scale(0); }
+            50% { transform: scale(1.2); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Welcome Text */
+        .welcome-title {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 16px;
+            animation: fadeInUp 0.6s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .welcome-subtitle {
+            font-size: 18px;
+            color: #888;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            animation: fadeInUp 0.6s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        .username-highlight {
+            color: #F5A623;
+            font-weight: 700;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Features */
+        .features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin: 40px 0;
+            animation: fadeInUp 0.6s ease-out 0.6s forwards;
+            opacity: 0;
+        }
+
+        .feature {
+            text-align: center;
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: #1A1A1A;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 24px;
+        }
+
+        .feature-text {
+            font-size: 13px;
+            color: #888;
+        }
+
+        /* Button */
+        .start-btn {
+            width: 100%;
+            max-width: 300px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            border: none;
+            padding: 20px 40px;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 700;
+            color: #0D0D0D;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out 0.8s forwards;
+            opacity: 0;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(245, 166, 35, 0.4);
+        }
+
+        /* Confetti Animation */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #F5A623;
+            top: -10px;
+            animation: fall linear forwards;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(720deg);
+            }
+        }
+
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .footer-text {
+            font-size: 13px;
+            color: #555;
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px;
+            }
+
+            .welcome-card {
+                padding: 0 10px;
+            }
+
+            .welcome-title {
+                font-size: 32px;
+            }
+
+            .features {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .feature {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                text-align: left;
+            }
+
+            .feature-icon {
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-gradient"></div>
+
+    <header class="header">
+        <a href="index.html" class="logo">UNCAGED</a>
+    </header>
+
+    <main class="main-container">
+        <div class="welcome-card">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot active"></div>
+            </div>
+
+            <div class="success-icon"></div>
+
+            <h1 class="welcome-title">Welcome to Uncaged!</h1>
+            <p class="welcome-subtitle">
+                You're all set, <span class="username-highlight" id="username">Creator</span>.<br>
+                Time to explore content without limits.
+            </p>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">🎬</div>
+                    <span class="feature-text">Watch unlimited</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">💰</div>
+                    <span class="feature-text">Keep 85% revenue</span>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🌍</div>
+                    <span class="feature-text">Global community</span>
+                </div>
+            </div>
+
+            <button class="start-btn" onclick="startBrowsing()">Start Browsing</button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p class="footer-text">© 2026 Uncaged. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Get signup data
+        const signupData = JSON.parse(sessionStorage.getItem('signupData'));
+        
+        if (signupData && signupData.username) {
+            document.getElementById('username').textContent = signupData.username;
+        }
+
+        // Create confetti
+        function createConfetti() {
+            const colors = ['#F5A623', '#6B2FEB', '#1DB954', '#FFFFFF', '#D4880F'];
+            
+            for (let i = 0; i < 50; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.height = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.animationDuration = (Math.random() * 3 + 2) + 's';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 5000);
+                }, i * 50);
+            }
+        }
+
+        // Run confetti on load
+        setTimeout(createConfetti, 500);
+
+        function startBrowsing() {
+            // Clear signup data
+            sessionStorage.removeItem('signupData');
+            
+            // Go to browse page
+            window.location.href = 'browse.html';
+        }
+    </script>
+</body>
+</html>

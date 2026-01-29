@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNCAGED | Verify Phone</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0D0D0D;
+            color: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .main-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .verify-card {
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 50px;
+        }
+
+        .step-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #333;
+            transition: all 0.3s ease;
+        }
+
+        .step-dot.active {
+            background: #F5A623;
+            width: 30px;
+            border-radius: 5px;
+        }
+
+        .step-dot.completed {
+            background: #1DB954;
+        }
+
+        /* Icon */
+        .verify-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(245, 166, 35, 0.2) 0%, rgba(245, 166, 35, 0.1) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 36px;
+        }
+
+        /* Title */
+        .verify-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .verify-subtitle {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 40px;
+            line-height: 1.5;
+        }
+
+        /* Phone Input Section */
+        .phone-section {
+            margin-bottom: 30px;
+        }
+
+        .phone-input-container {
+            display: flex;
+            background: #1A1A1A;
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .phone-input-container:focus-within {
+            border-color: #F5A623;
+        }
+
+        .country-code {
+            background: #252525;
+            padding: 16px 14px;
+            font-size: 16px;
+            color: #FFFFFF;
+            border: none;
+            border-right: 1px solid #2A2A2A;
+            cursor: pointer;
+        }
+
+        .phone-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 16px 20px;
+            font-size: 18px;
+            color: #FFFFFF;
+            letter-spacing: 1px;
+        }
+
+        .phone-input:focus {
+            outline: none;
+        }
+
+        .phone-input::placeholder {
+            color: #555;
+            letter-spacing: 0;
+        }
+
+        /* Code Input Section */
+        .code-section {
+            display: none;
+            margin-bottom: 30px;
+        }
+
+        .code-section.show {
+            display: block;
+        }
+
+        .code-sent-text {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 25px;
+        }
+
+        .code-sent-text strong {
+            color: #F5A623;
+        }
+
+        .code-inputs {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .code-input {
+            width: 52px;
+            height: 64px;
+            background: #1A1A1A;
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 700;
+            color: #FFFFFF;
+            transition: all 0.3s ease;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #F5A623;
+            background: #1F1F1F;
+        }
+
+        .code-input.filled {
+            border-color: #F5A623;
+        }
+
+        .code-input.verified {
+            border-color: #1DB954;
+            background: rgba(29, 185, 84, 0.1);
+        }
+
+        .resend-text {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .resend-link {
+            color: #F5A623;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .resend-link:hover {
+            text-decoration: underline;
+        }
+
+        .resend-link.disabled {
+            color: #555;
+            cursor: not-allowed;
+        }
+
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            color: #0D0D0D;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(245, 166, 35, 0.3);
+        }
+
+        .submit-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .submit-btn.success {
+            background: linear-gradient(135deg, #1DB954 0%, #169C46 100%);
+        }
+
+        /* Message */
+        .message {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.error {
+            background: rgba(229, 9, 20, 0.15);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            color: #ff6b6b;
+            display: block;
+        }
+
+        .message.success {
+            background: rgba(29, 185, 84, 0.15);
+            border: 1px solid rgba(29, 185, 84, 0.3);
+            color: #1DB954;
+            display: block;
+        }
+
+        .message.info {
+            background: rgba(107, 47, 235, 0.15);
+            border: 1px solid rgba(107, 47, 235, 0.3);
+            color: #a78bfa;
+            display: block;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #0D0D0D;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* reCAPTCHA */
+        #recaptcha-container {
+            margin-bottom: 20px;
+        }
+
+        /* Footer */
+        .footer {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            color: #555;
+            text-decoration: none;
+            font-size: 12px;
+        }
+
+        .footer-links a:hover {
+            color: #F5A623;
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 20px;
+            }
+
+            .verify-card {
+                padding: 0 10px;
+            }
+
+            .verify-title {
+                font-size: 28px;
+            }
+
+            .code-input {
+                width: 46px;
+                height: 58px;
+                font-size: 24px;
+            }
+
+            .code-inputs {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="index.html" class="logo">UNCAGED</a>
+    </header>
+
+    <main class="main-container">
+        <div class="verify-card">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step-dot completed"></div>
+                <div class="step-dot active"></div>
+                <div class="step-dot"></div>
+                <div class="step-dot"></div>
+            </div>
+
+            <div class="verify-icon">📱</div>
+
+            <h1 class="verify-title">Verify your phone</h1>
+            <p class="verify-subtitle">We'll send you a verification code to confirm your identity</p>
+
+            <div class="message" id="message"></div>
+
+            <!-- Phone Input -->
+            <div class="phone-section" id="phoneSection">
+                <div class="phone-input-container">
+                    <select class="country-code" id="countryCode">
+                        <option value="+1">🇺🇸 +1</option>
+                        <option value="+44">🇬🇧 +44</option>
+                        <option value="+27">🇿🇦 +27</option>
+                        <option value="+55">🇧🇷 +55</option>
+                        <option value="+52">🇲🇽 +52</option>
+                        <option value="+57">🇨🇴 +57</option>
+                        <option value="+234">🇳🇬 +234</option>
+                        <option value="+254">🇰🇪 +254</option>
+                        <option value="+233">🇬🇭 +233</option>
+                    </select>
+                    <input type="tel" class="phone-input" id="phoneInput" placeholder="Phone number" oninput="formatPhoneNumber()">
+                </div>
+            </div>
+
+            <!-- Verification Code -->
+            <div class="code-section" id="codeSection">
+                <p class="code-sent-text">Enter the 6-digit code sent to <strong id="sentToNumber"></strong></p>
+                <div class="code-inputs">
+                    <input type="text" class="code-input" maxlength="1" data-index="0" oninput="handleCodeInput(this)" onkeydown="handleKeyDown(event, this)">
+                    <input type="text" class="code-input" maxlength="1" data-index="1" oninput="handleCodeInput(this)" onkeydown="handleKeyDown(event, this)">
+                    <input type="text" class="code-input" maxlength="1" data-index="2" oninput="handleCodeInput(this)" onkeydown="handleKeyDown(event, this)">
+                    <input type="text" class="code-input" maxlength="1" data-index="3" oninput="handleCodeInput(this)" onkeydown="handleKeyDown(event, this)">
+                    <input type="text" class="code-input" maxlength="1" data-index="4" oninput="handleCodeInput(this)" onkeydown="handleKeyDown(event, this)">
+                    <input type="text" class="code-input" maxlength="1" data-index="5" oninput="handleCodeInput(this)" onkeydown="handleKeyDown(event, this)">
+                </div>
+                <p class="resend-text">
+                    Didn't receive the code? <a class="resend-link" id="resendLink" onclick="resendCode()">Resend</a>
+                </p>
+            </div>
+
+            <div id="recaptcha-container"></div>
+
+            <button type="button" class="submit-btn" id="submitBtn" onclick="handleSubmit()">
+                Send verification code
+            </button>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-links">
+            <a href="terms.html">Terms</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="#">Help</a>
+        </div>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth,
+            RecaptchaVerifier,
+            signInWithPhoneNumber,
+            PhoneAuthProvider,
+            linkWithCredential
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc,
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let confirmationResult = null;
+        let currentPhoneNumber = '';
+        let codeSent = false;
+
+        // Check if user came from signup
+        const signupData = JSON.parse(sessionStorage.getItem('signupData'));
+        if (!signupData) {
+            window.location.href = 'signup.html';
+        }
+
+        // Initialize reCAPTCHA
+        window.initRecaptcha = function() {
+            if (!window.recaptchaVerifier) {
+                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                    'size': 'invisible'
+                });
+            }
+        };
+
+        window.handleSubmit = async function() {
+            const btn = document.getElementById('submitBtn');
+            const messageDiv = document.getElementById('message');
+
+            if (!codeSent) {
+                // Send code
+                const countryCode = document.getElementById('countryCode').value;
+                const phoneInput = document.getElementById('phoneInput').value.replace(/\D/g, '');
+                
+                if (!phoneInput || phoneInput.length < 10) {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = 'Please enter a valid phone number.';
+                    return;
+                }
+
+                currentPhoneNumber = countryCode + phoneInput;
+                
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner"></span>Sending code...';
+                messageDiv.style.display = 'none';
+
+                try {
+                    initRecaptcha();
+                    confirmationResult = await signInWithPhoneNumber(auth, currentPhoneNumber, window.recaptchaVerifier);
+                    
+                    codeSent = true;
+                    
+                    // Show code input
+                    document.getElementById('phoneSection').style.display = 'none';
+                    document.getElementById('codeSection').classList.add('show');
+                    document.getElementById('sentToNumber').textContent = currentPhoneNumber;
+                    
+                    btn.disabled = false;
+                    btn.textContent = 'Verify code';
+                    
+                    // Focus first code input
+                    document.querySelector('.code-input').focus();
+                    
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = 'Code sent! Check your phone.';
+
+                } catch (error) {
+                    console.error('Error sending code:', error);
+                    btn.disabled = false;
+                    btn.textContent = 'Send verification code';
+                    
+                    messageDiv.className = 'message error';
+                    if (error.code === 'auth/invalid-phone-number') {
+                        messageDiv.textContent = 'Invalid phone number. Please check and try again.';
+                    } else if (error.code === 'auth/too-many-requests') {
+                        messageDiv.textContent = 'Too many attempts. Please try again later.';
+                    } else {
+                        messageDiv.textContent = 'Could not send code. Please try again.';
+                    }
+
+                    // Reset reCAPTCHA
+                    if (window.recaptchaVerifier) {
+                        window.recaptchaVerifier.clear();
+                        window.recaptchaVerifier = null;
+                    }
+                }
+            } else {
+                // Verify code
+                const codeInputs = document.querySelectorAll('.code-input');
+                const code = Array.from(codeInputs).map(input => input.value).join('');
+
+                if (code.length !== 6) {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = 'Please enter the complete 6-digit code.';
+                    return;
+                }
+
+                btn.disabled = true;
+                btn.innerHTML = '<span class="spinner"></span>Verifying...';
+                messageDiv.style.display = 'none';
+
+                try {
+                    // Verify the code
+                    const credential = PhoneAuthProvider.credential(confirmationResult.verificationId, code);
+                    
+                    // Link phone to existing account
+                    const currentUser = auth.currentUser;
+                    if (currentUser) {
+                        await linkWithCredential(currentUser, credential);
+                    }
+
+                    // Save user profile to Firestore
+                    await setDoc(doc(db, 'users', signupData.uid), {
+                        uid: signupData.uid,
+                        email: signupData.email,
+                        username: signupData.username,
+                        displayName: signupData.username,
+                        phone: currentPhoneNumber,
+                        phoneVerified: true,
+                        emailVerified: false,
+                        youtubeHandle: null,
+                        bio: '',
+                        photoURL: null,
+                        subscribers: 0,
+                        totalViews: 0,
+                        videosCount: 0,
+                        isCreator: false,
+                        isVerified: false,
+                        createdAt: serverTimestamp(),
+                        updatedAt: serverTimestamp()
+                    });
+
+                    // Update session storage
+                    sessionStorage.setItem('signupData', JSON.stringify({
+                        ...signupData,
+                        phone: currentPhoneNumber,
+                        phoneVerified: true
+                    }));
+
+                    // Success animation
+                    codeInputs.forEach(input => input.classList.add('verified'));
+                    btn.className = 'submit-btn success';
+                    btn.innerHTML = '✓ Verified';
+
+                    messageDiv.className = 'message success';
+                    messageDiv.textContent = 'Phone verified successfully!';
+
+                    // Go to next step
+                    setTimeout(() => {
+                        window.location.href = 'signup-profile.html';
+                    }, 1500);
+
+                } catch (error) {
+                    console.error('Verification error:', error);
+                    btn.disabled = false;
+                    btn.textContent = 'Verify code';
+                    
+                    messageDiv.className = 'message error';
+                    if (error.code === 'auth/invalid-verification-code') {
+                        messageDiv.textContent = 'Invalid code. Please check and try again.';
+                    } else if (error.code === 'auth/code-expired') {
+                        messageDiv.textContent = 'Code expired. Please request a new one.';
+                    } else {
+                        messageDiv.textContent = 'Verification failed. Please try again.';
+                    }
+
+                    // Clear code inputs
+                    codeInputs.forEach(input => {
+                        input.value = '';
+                        input.classList.remove('filled');
+                    });
+                    codeInputs[0].focus();
+                }
+            }
+        };
+
+        window.resendCode = async function() {
+            const resendLink = document.getElementById('resendLink');
+            const messageDiv = document.getElementById('message');
+
+            if (resendLink.classList.contains('disabled')) return;
+
+            resendLink.classList.add('disabled');
+            resendLink.textContent = 'Sending...';
+
+            try {
+                // Reset reCAPTCHA
+                if (window.recaptchaVerifier) {
+                    window.recaptchaVerifier.clear();
+                    window.recaptchaVerifier = null;
+                }
+                
+                initRecaptcha();
+                confirmationResult = await signInWithPhoneNumber(auth, currentPhoneNumber, window.recaptchaVerifier);
+
+                messageDiv.className = 'message success';
+                messageDiv.textContent = 'New code sent!';
+
+                // Countdown for resend
+                let countdown = 30;
+                resendLink.textContent = `Resend in ${countdown}s`;
+                
+                const timer = setInterval(() => {
+                    countdown--;
+                    resendLink.textContent = `Resend in ${countdown}s`;
+                    
+                    if (countdown <= 0) {
+                        clearInterval(timer);
+                        resendLink.classList.remove('disabled');
+                        resendLink.textContent = 'Resend';
+                    }
+                }, 1000);
+
+            } catch (error) {
+                resendLink.classList.remove('disabled');
+                resendLink.textContent = 'Resend';
+                
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Could not resend code. Please try again.';
+            }
+        };
+    </script>
+
+    <script>
+        function formatPhoneNumber() {
+            const input = document.getElementById('phoneInput');
+            let value = input.value.replace(/\D/g, '');
+            
+            if (value.length > 10) {
+                value = value.slice(0, 10);
+            }
+            
+            if (value.length >= 6) {
+                value = value.slice(0, 3) + ' ' + value.slice(3, 6) + ' ' + value.slice(6);
+            } else if (value.length >= 3) {
+                value = value.slice(0, 3) + ' ' + value.slice(3);
+            }
+            
+            input.value = value;
+        }
+
+        function handleCodeInput(input) {
+            const value = input.value;
+            
+            // Only allow numbers
+            input.value = value.replace(/\D/g, '');
+            
+            if (input.value) {
+                input.classList.add('filled');
+                
+                // Move to next input
+                const index = parseInt(input.dataset.index);
+                if (index < 5) {
+                    const nextInput = document.querySelector(`.code-input[data-index="${index + 1}"]`);
+                    if (nextInput) nextInput.focus();
+                }
+                
+                // Check if all filled
+                const allFilled = Array.from(document.querySelectorAll('.code-input')).every(i => i.value);
+                if (allFilled) {
+                    handleSubmit();
+                }
+            } else {
+                input.classList.remove('filled');
+            }
+        }
+
+        function handleKeyDown(event, input) {
+            if (event.key === 'Backspace' && !input.value) {
+                const index = parseInt(input.dataset.index);
+                if (index > 0) {
+                    const prevInput = document.querySelector(`.code-input[data-index="${index - 1}"]`);
+                    if (prevInput) {
+                        prevInput.focus();
+                        prevInput.value = '';
+                        prevInput.classList.remove('filled');
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
