@@ -231,6 +231,12 @@
             box-shadow: 0 10px 30px rgba(245, 166, 35, 0.3);
         }
 
+        .submit-btn:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         /* Divider */
         .divider {
             display: flex;
@@ -303,30 +309,44 @@
             text-decoration: underline;
         }
 
-        /* Success Message */
-        .success-message {
+        /* Error/Success Messages */
+        .message {
+            padding: 12px 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
             display: none;
-            text-align: center;
-            padding: 20px;
         }
 
-        .success-message.show {
+        .message.error {
+            background: rgba(229, 9, 20, 0.15);
+            border: 1px solid #E50914;
+            color: #ff6b6b;
             display: block;
         }
 
-        .success-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
+        .message.success {
+            background: rgba(29, 185, 84, 0.15);
+            border: 1px solid #1DB954;
+            color: #1DB954;
+            display: block;
         }
 
-        .success-message h2 {
-            font-size: 24px;
-            margin-bottom: 10px;
+        /* Loading Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #0D0D0D;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
         }
 
-        .success-message p {
-            color: #888;
-            margin-bottom: 25px;
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Footer */
@@ -396,31 +416,31 @@
             </div>
 
             <!-- Login Form -->
-            <form class="auth-form active" id="loginForm" action="browse.html">
-                <input type="hidden" name="form_type" value="login">
+            <form class="auth-form active" id="loginForm" onsubmit="handleLogin(event)">
+                <div class="message" id="loginMessage"></div>
                 
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-input" name="email" placeholder="Enter your email" required>
+                    <input type="email" class="form-input" id="loginEmail" placeholder="Enter your email" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Password</label>
                     <div class="password-field">
-                        <input type="password" class="form-input" name="password" placeholder="Enter your password" required id="loginPassword">
+                        <input type="password" class="form-input" id="loginPassword" placeholder="Enter your password" required>
                         <button type="button" class="password-toggle" onclick="togglePassword('loginPassword')">👁</button>
                     </div>
                 </div>
 
                 <div class="form-extras">
                     <label class="remember-me">
-                        <input type="checkbox" name="remember">
+                        <input type="checkbox" id="rememberMe">
                         Remember me
                     </label>
-                    <a href="#" class="forgot-link">Forgot password?</a>
+                    <a href="#" class="forgot-link" onclick="handleForgotPassword(event)">Forgot password?</a>
                 </div>
 
-                <button type="submit" class="submit-btn">Sign In</button>
+                <button type="submit" class="submit-btn" id="loginBtn">Sign In</button>
 
                 <div class="divider">
                     <div class="divider-line"></div>
@@ -429,35 +449,31 @@
                 </div>
 
                 <div class="social-buttons">
-                    <button type="button" class="social-btn">
+                    <button type="button" class="social-btn" onclick="handleGoogleSignIn()">
                         <span class="icon">G</span>
                         Continue with Google
-                    </button>
-                    <button type="button" class="social-btn">
-                        <span class="icon">🍎</span>
-                        Continue with Apple
                     </button>
                 </div>
             </form>
 
             <!-- Signup Form -->
-            <form class="auth-form" id="signupForm" action="browse.html">
-                <input type="hidden" name="form_type" value="signup">
+            <form class="auth-form" id="signupForm" onsubmit="handleSignup(event)">
+                <div class="message" id="signupMessage"></div>
                 
                 <div class="form-group">
                     <label class="form-label">Username</label>
-                    <input type="text" class="form-input" name="username" placeholder="Choose a username" required>
+                    <input type="text" class="form-input" id="signupUsername" placeholder="Choose a username" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Email</label>
-                    <input type="email" class="form-input" name="email" placeholder="Enter your email" required>
+                    <input type="email" class="form-input" id="signupEmail" placeholder="Enter your email" required>
                 </div>
 
                 <div class="form-group">
                     <label class="form-label">Password</label>
                     <div class="password-field">
-                        <input type="password" class="form-input" name="password" placeholder="Create a password" required id="signupPassword">
+                        <input type="password" class="form-input" id="signupPassword" placeholder="Create a password (min 6 characters)" required minlength="6">
                         <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')">👁</button>
                     </div>
                 </div>
@@ -465,12 +481,12 @@
                 <div class="form-group">
                     <label class="form-label">Confirm Password</label>
                     <div class="password-field">
-                        <input type="password" class="form-input" name="confirm_password" placeholder="Confirm your password" required id="confirmPassword">
+                        <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm your password" required>
                         <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">👁</button>
                     </div>
                 </div>
 
-                <button type="submit" class="submit-btn">Create Account</button>
+                <button type="submit" class="submit-btn" id="signupBtn">Create Account</button>
 
                 <div class="divider">
                     <div class="divider-line"></div>
@@ -479,13 +495,9 @@
                 </div>
 
                 <div class="social-buttons">
-                    <button type="button" class="social-btn">
+                    <button type="button" class="social-btn" onclick="handleGoogleSignIn()">
                         <span class="icon">G</span>
                         Continue with Google
-                    </button>
-                    <button type="button" class="social-btn">
-                        <span class="icon">🍎</span>
-                        Continue with Apple
                     </button>
                 </div>
 
@@ -506,6 +518,209 @@
         </div>
     </footer>
 
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import Firebase
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { 
+            getAuth, 
+            createUserWithEmailAndPassword, 
+            signInWithEmailAndPassword,
+            signInWithPopup,
+            GoogleAuthProvider,
+            sendPasswordResetEmail,
+            updateProfile
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        // Your Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const googleProvider = new GoogleAuthProvider();
+
+        // Make functions available globally
+        window.handleLogin = async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const btn = document.getElementById('loginBtn');
+            const messageDiv = document.getElementById('loginMessage');
+            
+            // Show loading
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Signing in...';
+            messageDiv.className = 'message';
+            messageDiv.style.display = 'none';
+            
+            try {
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Success - redirect to browse
+                messageDiv.className = 'message success';
+                messageDiv.textContent = 'Success! Redirecting...';
+                messageDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    window.location.href = 'browse.html';
+                }, 1000);
+                
+            } catch (error) {
+                btn.disabled = false;
+                btn.textContent = 'Sign In';
+                
+                messageDiv.className = 'message error';
+                
+                // User-friendly error messages
+                switch(error.code) {
+                    case 'auth/user-not-found':
+                        messageDiv.textContent = 'No account found with this email. Please sign up first.';
+                        break;
+                    case 'auth/wrong-password':
+                        messageDiv.textContent = 'Incorrect password. Please try again.';
+                        break;
+                    case 'auth/invalid-email':
+                        messageDiv.textContent = 'Please enter a valid email address.';
+                        break;
+                    case 'auth/too-many-requests':
+                        messageDiv.textContent = 'Too many failed attempts. Please try again later.';
+                        break;
+                    default:
+                        messageDiv.textContent = 'Sign in failed. Please check your credentials.';
+                }
+                messageDiv.style.display = 'block';
+            }
+        };
+
+        window.handleSignup = async function(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('signupUsername').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            const btn = document.getElementById('signupBtn');
+            const messageDiv = document.getElementById('signupMessage');
+            
+            // Check passwords match
+            if (password !== confirmPassword) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Passwords do not match.';
+                messageDiv.style.display = 'block';
+                return;
+            }
+            
+            // Show loading
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Creating account...';
+            messageDiv.className = 'message';
+            messageDiv.style.display = 'none';
+            
+            try {
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Update profile with username
+                await updateProfile(user, {
+                    displayName: username
+                });
+                
+                // Success - redirect to browse
+                messageDiv.className = 'message success';
+                messageDiv.textContent = 'Account created! Redirecting...';
+                messageDiv.style.display = 'block';
+                
+                setTimeout(() => {
+                    window.location.href = 'browse.html';
+                }, 1000);
+                
+            } catch (error) {
+                btn.disabled = false;
+                btn.textContent = 'Create Account';
+                
+                messageDiv.className = 'message error';
+                
+                // User-friendly error messages
+                switch(error.code) {
+                    case 'auth/email-already-in-use':
+                        messageDiv.textContent = 'An account with this email already exists.';
+                        break;
+                    case 'auth/invalid-email':
+                        messageDiv.textContent = 'Please enter a valid email address.';
+                        break;
+                    case 'auth/weak-password':
+                        messageDiv.textContent = 'Password should be at least 6 characters.';
+                        break;
+                    default:
+                        messageDiv.textContent = 'Signup failed. Please try again.';
+                }
+                messageDiv.style.display = 'block';
+            }
+        };
+
+        window.handleGoogleSignIn = async function() {
+            try {
+                const result = await signInWithPopup(auth, googleProvider);
+                const user = result.user;
+                
+                // Redirect to browse
+                window.location.href = 'browse.html';
+                
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                
+                // Show error on whichever form is active
+                const activeForm = document.querySelector('.auth-form.active');
+                const messageDiv = activeForm.querySelector('.message');
+                
+                if (error.code !== 'auth/popup-closed-by-user') {
+                    messageDiv.className = 'message error';
+                    messageDiv.textContent = 'Google sign-in failed. Please try again.';
+                    messageDiv.style.display = 'block';
+                }
+            }
+        };
+
+        window.handleForgotPassword = async function(event) {
+            event.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const messageDiv = document.getElementById('loginMessage');
+            
+            if (!email) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Please enter your email address first.';
+                messageDiv.style.display = 'block';
+                return;
+            }
+            
+            try {
+                await sendPasswordResetEmail(auth, email);
+                messageDiv.className = 'message success';
+                messageDiv.textContent = 'Password reset email sent! Check your inbox.';
+                messageDiv.style.display = 'block';
+            } catch (error) {
+                messageDiv.className = 'message error';
+                if (error.code === 'auth/user-not-found') {
+                    messageDiv.textContent = 'No account found with this email.';
+                } else {
+                    messageDiv.textContent = 'Could not send reset email. Please try again.';
+                }
+                messageDiv.style.display = 'block';
+            }
+        };
+    </script>
+
     <script>
         // Tab Switching
         function showForm(formType) {
@@ -516,6 +731,11 @@
             // Update forms
             document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
             document.getElementById(formType + 'Form').classList.add('active');
+            
+            // Clear messages
+            document.querySelectorAll('.message').forEach(msg => {
+                msg.style.display = 'none';
+            });
         }
 
         // Password Toggle
