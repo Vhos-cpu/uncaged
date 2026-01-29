@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNCAGED | Subscribe</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0D0D0D;
+            color: #FFFFFF;
+            min-height: 100vh;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(13, 13, 13, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 1000;
+            border-bottom: 1px solid #1A1A1A;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .back-btn {
+            background: #1A1A1A;
+            border: none;
+            color: #FFFFFF;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: #2A2A2A;
+        }
+
+        .main-content {
+            padding-top: 80px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+            padding-bottom: 40px;
+        }
+
+        /* Creator Info */
+        .creator-card {
+            background: #1A1A1A;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .creator-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .creator-info h2 {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .verified-badge {
+            background: #F5A623;
+            color: #0D0D0D;
+            font-size: 10px;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-weight: 700;
+        }
+
+        .creator-info p {
+            color: #888;
+            font-size: 14px;
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        /* Subscription Tiers */
+        .tiers-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .tier-card {
+            background: #1A1A1A;
+            border: 2px solid #2A2A2A;
+            border-radius: 16px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .tier-card:hover {
+            border-color: #F5A623;
+        }
+
+        .tier-card.selected {
+            border-color: #F5A623;
+            background: rgba(245, 166, 35, 0.1);
+        }
+
+        .tier-card.popular {
+            border-color: #F5A623;
+        }
+
+        .popular-badge {
+            position: absolute;
+            top: -12px;
+            right: 20px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            color: #0D0D0D;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .tier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .tier-name {
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .tier-price {
+            text-align: right;
+        }
+
+        .tier-price .amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: #F5A623;
+        }
+
+        .tier-price .period {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .tier-features {
+            list-style: none;
+        }
+
+        .tier-features li {
+            padding: 8px 0;
+            color: #B3B3B3;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .tier-features li::before {
+            content: "✓";
+            color: #1DB954;
+            font-weight: 700;
+        }
+
+        .tier-radio {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            width: 24px;
+            height: 24px;
+            border: 2px solid #444;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .tier-card.selected .tier-radio {
+            border-color: #F5A623;
+            background: #F5A623;
+        }
+
+        .tier-card.selected .tier-radio::after {
+            content: "✓";
+            color: #0D0D0D;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        /* One-time Tip */
+        .tip-section {
+            background: #1A1A1A;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .tip-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .tip-amounts {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .tip-amount {
+            background: #0D0D0D;
+            border: 2px solid #2A2A2A;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 600;
+        }
+
+        .tip-amount:hover {
+            border-color: #F5A623;
+        }
+
+        .tip-amount.selected {
+            border-color: #F5A623;
+            background: rgba(245, 166, 35, 0.1);
+            color: #F5A623;
+        }
+
+        .custom-tip {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .custom-tip input {
+            flex: 1;
+            background: #0D0D0D;
+            border: 2px solid #2A2A2A;
+            border-radius: 10px;
+            padding: 15px;
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+
+        .custom-tip input:focus {
+            outline: none;
+            border-color: #F5A623;
+        }
+
+        .tip-btn {
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            border: none;
+            color: #0D0D0D;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .tip-btn:hover {
+            transform: scale(1.02);
+        }
+
+        /* Payment Section */
+        .payment-section {
+            background: #1A1A1A;
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+
+        .payment-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+
+        #card-element {
+            background: #0D0D0D;
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #2A2A2A;
+        }
+
+        #card-errors {
+            color: #E50914;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        /* Subscribe Button */
+        .subscribe-btn {
+            width: 100%;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            border: none;
+            color: #0D0D0D;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(245, 166, 35, 0.3);
+        }
+
+        .subscribe-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Summary */
+        .summary {
+            background: #0D0D0D;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #1A1A1A;
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 18px;
+            color: #F5A623;
+        }
+
+        .summary-row span:first-child {
+            color: #888;
+        }
+
+        /* Security Note */
+        .security-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            color: #666;
+            font-size: 13px;
+        }
+
+        /* Success Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .success-modal {
+            background: #1A1A1A;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            max-width: 400px;
+        }
+
+        .success-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .success-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .success-message {
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .success-btn {
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            border: none;
+            color: #0D0D0D;
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #0D0D0D;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .creator-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .tip-amounts {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .tier-radio {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <a href="creator.html" class="back-btn">←</a>
+        <a href="index.html" class="logo">UNCAGED</a>
+        <div style="width: 40px;"></div>
+    </header>
+
+    <main class="main-content">
+        <!-- Creator Info -->
+        <div class="creator-card">
+            <div class="creator-avatar">V</div>
+            <div class="creator-info">
+                <h2>
+                    Visa Vic
+                    <span class="verified-badge">✓</span>
+                </h2>
+                <p>12.4K subscribers • 156 videos</p>
+            </div>
+        </div>
+
+        <!-- Subscription Tiers -->
+        <h3 class="section-title">Choose Your Plan</h3>
+        <div class="tiers-container">
+            <div class="tier-card" onclick="selectTier(this, 'basic', 4.99)">
+                <div class="tier-radio"></div>
+                <div class="tier-header" style="margin-left: 35px;">
+                    <span class="tier-name">Basic</span>
+                    <div class="tier-price">
+                        <span class="amount">$4.99</span>
+                        <span class="period">/month</span>
+                    </div>
+                </div>
+                <ul class="tier-features" style="margin-left: 35px;">
+                    <li>Access to all public videos</li>
+                    <li>Support the creator</li>
+                    <li>Cancel anytime</li>
+                </ul>
+            </div>
+
+            <div class="tier-card popular selected" onclick="selectTier(this, 'premium', 9.99)">
+                <span class="popular-badge">MOST POPULAR</span>
+                <div class="tier-radio"></div>
+                <div class="tier-header" style="margin-left: 35px;">
+                    <span class="tier-name">Premium</span>
+                    <div class="tier-price">
+                        <span class="amount">$9.99</span>
+                        <span class="period">/month</span>
+                    </div>
+                </div>
+                <ul class="tier-features" style="margin-left: 35px;">
+                    <li>Everything in Basic</li>
+                    <li>Exclusive behind-the-scenes</li>
+                    <li>Early access to new videos</li>
+                    <li>Direct messages</li>
+                </ul>
+            </div>
+
+            <div class="tier-card" onclick="selectTier(this, 'vip', 19.99)">
+                <div class="tier-radio"></div>
+                <div class="tier-header" style="margin-left: 35px;">
+                    <span class="tier-name">VIP</span>
+                    <div class="tier-price">
+                        <span class="amount">$19.99</span>
+                        <span class="period">/month</span>
+                    </div>
+                </div>
+                <ul class="tier-features" style="margin-left: 35px;">
+                    <li>Everything in Premium</li>
+                    <li>Uncut & uncensored content</li>
+                    <li>Monthly video calls</li>
+                    <li>Custom content requests</li>
+                    <li>Name in video credits</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- One-time Tip -->
+        <div class="tip-section">
+            <h3 class="tip-title">💰 Send a One-Time Tip</h3>
+            <div class="tip-amounts">
+                <div class="tip-amount" onclick="selectTip(this, 5)">$5</div>
+                <div class="tip-amount" onclick="selectTip(this, 10)">$10</div>
+                <div class="tip-amount" onclick="selectTip(this, 25)">$25</div>
+                <div class="tip-amount" onclick="selectTip(this, 50)">$50</div>
+            </div>
+            <div class="custom-tip">
+                <input type="number" id="customTip" placeholder="Custom amount" min="1">
+                <button class="tip-btn" onclick="sendTip()">Send Tip</button>
+            </div>
+        </div>
+
+        <!-- Payment Section -->
+        <div class="payment-section">
+            <h3 class="payment-title">Payment Details</h3>
+            <div id="card-element"></div>
+            <div id="card-errors"></div>
+
+            <div class="summary">
+                <div class="summary-row">
+                    <span>Plan</span>
+                    <span id="summaryPlan">Premium</span>
+                </div>
+                <div class="summary-row">
+                    <span>Billed</span>
+                    <span>Monthly</span>
+                </div>
+                <div class="summary-row">
+                    <span>Total</span>
+                    <span id="summaryTotal">$9.99/mo</span>
+                </div>
+            </div>
+
+            <button class="subscribe-btn" id="subscribeBtn" onclick="handleSubscribe()">
+                Subscribe Now
+            </button>
+
+            <div class="security-note">
+                🔒 Secured by Stripe. Cancel anytime.
+            </div>
+        </div>
+    </main>
+
+    <!-- Success Modal -->
+    <div class="modal-overlay" id="successModal">
+        <div class="success-modal">
+            <div class="success-icon">🎉</div>
+            <h2 class="success-title">You're Subscribed!</h2>
+            <p class="success-message">Thank you for supporting Visa Vic. You now have full access to all Premium content.</p>
+            <button class="success-btn" onclick="window.location.href='creator.html'">Start Watching</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc,
+            doc,
+            updateDoc,
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Make functions available globally
+        window.currentUser = currentUser;
+        window.db = db;
+        window.addDoc = addDoc;
+        window.collection = collection;
+        window.serverTimestamp = serverTimestamp;
+    </script>
+
+    <script>
+        // Stripe setup
+        const stripe = Stripe('pk_live_51SusKxBa0lvba104BbbQef9RH38cxk63X8NS2irsJsb54NRZkKNrQ060nUlSFB5tS01HlinFjsoeFkbbMGsF3hLj00J762Ahjx');
+        const elements = stripe.elements();
+        
+        const style = {
+            base: {
+                color: '#FFFFFF',
+                fontFamily: '"DM Sans", sans-serif',
+                fontSize: '16px',
+                '::placeholder': {
+                    color: '#666'
+                }
+            },
+            invalid: {
+                color: '#E50914'
+            }
+        };
+
+        const cardElement = elements.create('card', { style: style });
+        cardElement.mount('#card-element');
+
+        cardElement.on('change', function(event) {
+            const displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        // Tier selection
+        let selectedTierName = 'premium';
+        let selectedTierPrice = 9.99;
+
+        function selectTier(element, tierName, price) {
+            document.querySelectorAll('.tier-card').forEach(card => card.classList.remove('selected'));
+            element.classList.add('selected');
+            
+            selectedTierName = tierName;
+            selectedTierPrice = price;
+            
+            document.getElementById('summaryPlan').textContent = tierName.charAt(0).toUpperCase() + tierName.slice(1);
+            document.getElementById('summaryTotal').textContent = `$${price.toFixed(2)}/mo`;
+        }
+
+        // Tip selection
+        let selectedTipAmount = 0;
+
+        function selectTip(element, amount) {
+            document.querySelectorAll('.tip-amount').forEach(btn => btn.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedTipAmount = amount;
+            document.getElementById('customTip').value = '';
+        }
+
+        // Handle subscription
+        async function handleSubscribe() {
+            const btn = document.getElementById('subscribeBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner"></span>Processing...';
+
+            try {
+                // In production, you would:
+                // 1. Call your backend to create a Stripe subscription
+                // 2. Backend uses Stripe Connect to split payment 85/15
+                // 3. Return confirmation
+
+                // For now, simulate the process
+                const { paymentMethod, error } = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: cardElement,
+                });
+
+                if (error) {
+                    throw new Error(error.message);
+                }
+
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 2000));
+
+                // Record subscription in Firebase
+                // In production, this would be done by your backend after Stripe confirms
+                console.log('Subscription created:', {
+                    tier: selectedTierName,
+                    price: selectedTierPrice,
+                    paymentMethod: paymentMethod.id
+                });
+
+                // Show success
+                document.getElementById('successModal').classList.add('show');
+
+            } catch (error) {
+                console.error('Subscription error:', error);
+                document.getElementById('card-errors').textContent = error.message;
+                btn.disabled = false;
+                btn.textContent = 'Subscribe Now';
+            }
+        }
+
+        // Handle tip
+        async function sendTip() {
+            const customAmount = document.getElementById('customTip').value;
+            const tipAmount = customAmount ? parseFloat(customAmount) : selectedTipAmount;
+
+            if (!tipAmount || tipAmount < 1) {
+                alert('Please select or enter a tip amount');
+                return;
+            }
+
+            const tipBtn = document.querySelector('.tip-btn');
+            tipBtn.disabled = true;
+            tipBtn.textContent = 'Processing...';
+
+            try {
+                // In production, create a one-time payment through your backend
+                const { paymentMethod, error } = await stripe.createPaymentMethod({
+                    type: 'card',
+                    card: cardElement,
+                });
+
+                if (error) {
+                    throw new Error(error.message);
+                }
+
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                console.log('Tip sent:', {
+                    amount: tipAmount,
+                    paymentMethod: paymentMethod.id
+                });
+
+                alert(`Thank you! Your $${tipAmount} tip has been sent to Visa Vic! 🎉`);
+                
+                // Reset
+                selectedTipAmount = 0;
+                document.querySelectorAll('.tip-amount').forEach(btn => btn.classList.remove('selected'));
+                document.getElementById('customTip').value = '';
+
+            } catch (error) {
+                console.error('Tip error:', error);
+                alert('Error: ' + error.message);
+            } finally {
+                tipBtn.disabled = false;
+                tipBtn.textContent = 'Send Tip';
+            }
+        }
+
+        // Make functions global
+        window.selectTier = selectTier;
+        window.selectTip = selectTip;
+        window.handleSubscribe = handleSubscribe;
+        window.sendTip = sendTip;
+    </script>
+</body>
+</html>
