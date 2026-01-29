@@ -1,8 +1,6 @@
 // api/create-connect-account.js
 // Vercel Serverless Function for creating Stripe Connect accounts
 
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-
 export default async function handler(req, res) {
     // Enable CORS
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -16,6 +14,15 @@ export default async function handler(req, res) {
     if (req.method !== 'POST') {
         return res.status(405).json({ error: 'Method not allowed' });
     }
+
+    // Initialize Stripe INSIDE the function
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    
+    if (!stripeKey) {
+        return res.status(500).json({ error: 'Stripe API key not configured' });
+    }
+
+    const stripe = require('stripe')(stripeKey);
 
     const { userId, email } = req.body;
 
