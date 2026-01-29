@@ -21,7 +21,6 @@
             flex-direction: column;
         }
 
-        /* Header */
         .header {
             padding: 25px 40px;
             display: flex;
@@ -40,7 +39,6 @@
             text-decoration: none;
         }
 
-        /* Main Container */
         .main-container {
             flex: 1;
             display: flex;
@@ -50,7 +48,6 @@
             position: relative;
         }
 
-        /* Background Effects */
         .main-container::before {
             content: '';
             position: absolute;
@@ -64,7 +61,6 @@
             pointer-events: none;
         }
 
-        /* Auth Card */
         .auth-card {
             width: 100%;
             max-width: 420px;
@@ -76,21 +72,6 @@
             z-index: 10;
         }
 
-        .auth-title {
-            font-size: 28px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: 8px;
-        }
-
-        .auth-subtitle {
-            color: #888;
-            font-size: 15px;
-            text-align: center;
-            margin-bottom: 35px;
-        }
-
-        /* Tab Switcher */
         .tab-switcher {
             display: flex;
             background: #1A1A1A;
@@ -117,7 +98,6 @@
             color: #0D0D0D;
         }
 
-        /* Forms */
         .auth-form {
             display: none;
         }
@@ -158,7 +138,6 @@
             color: #555;
         }
 
-        /* Password Field */
         .password-field {
             position: relative;
         }
@@ -179,7 +158,6 @@
             color: #F5A623;
         }
 
-        /* Remember & Forgot */
         .form-extras {
             display: flex;
             justify-content: space-between;
@@ -212,7 +190,6 @@
             text-decoration: underline;
         }
 
-        /* Submit Button */
         .submit-btn {
             width: 100%;
             background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
@@ -237,7 +214,6 @@
             transform: none;
         }
 
-        /* Divider */
         .divider {
             display: flex;
             align-items: center;
@@ -258,7 +234,6 @@
             letter-spacing: 1px;
         }
 
-        /* Social Buttons */
         .social-buttons {
             display: flex;
             flex-direction: column;
@@ -291,7 +266,6 @@
             font-size: 20px;
         }
 
-        /* Terms Text */
         .terms-text {
             font-size: 12px;
             color: #666;
@@ -309,7 +283,6 @@
             text-decoration: underline;
         }
 
-        /* Error/Success Messages */
         .message {
             padding: 12px 15px;
             border-radius: 8px;
@@ -332,7 +305,6 @@
             display: block;
         }
 
-        /* Loading Spinner */
         .spinner {
             display: inline-block;
             width: 20px;
@@ -349,7 +321,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* Footer */
         .footer {
             padding: 25px 40px;
             text-align: center;
@@ -374,7 +345,6 @@
             color: #F5A623;
         }
 
-        /* Mobile Responsive */
         @media (max-width: 480px) {
             .header {
                 padding: 20px;
@@ -388,10 +358,6 @@
                 padding: 35px 25px;
             }
 
-            .auth-title {
-                font-size: 24px;
-            }
-
             .form-extras {
                 flex-direction: column;
                 gap: 15px;
@@ -401,15 +367,12 @@
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <a href="index.html" class="logo">UNCAGED</a>
     </header>
 
-    <!-- Main Container -->
     <main class="main-container">
         <div class="auth-card">
-            <!-- Tab Switcher -->
             <div class="tab-switcher">
                 <button class="tab-btn active" onclick="showForm('login')">Sign In</button>
                 <button class="tab-btn" onclick="showForm('signup')">Sign Up</button>
@@ -502,25 +465,23 @@
                 </div>
 
                 <p class="terms-text">
-                    By creating an account, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>
+                    By creating an account, you agree to our <a href="terms.html">Terms of Service</a> and <a href="privacy.html">Privacy Policy</a>
                 </p>
             </form>
         </div>
     </main>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="footer-links">
             <a href="#">Help</a>
-            <a href="#">Terms of Use</a>
-            <a href="#">Privacy Policy</a>
+            <a href="terms.html">Terms of Use</a>
+            <a href="privacy.html">Privacy Policy</a>
             <a href="#">Contact</a>
         </div>
     </footer>
 
     <!-- Firebase SDK -->
     <script type="module">
-        // Import Firebase
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { 
             getAuth, 
@@ -531,8 +492,15 @@
             sendPasswordResetEmail,
             updateProfile
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            doc, 
+            setDoc, 
+            getDoc,
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        // Your Firebase configuration
+        // Firebase configuration
         const firebaseConfig = {
             apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
             authDomain: "uncaged-85b49.firebaseapp.com",
@@ -545,9 +513,34 @@
         // Initialize Firebase
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
+        const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
-        // Make functions available globally
+        // Create user profile in Firestore
+        async function createUserProfile(user, username = null) {
+            const userRef = doc(db, 'users', user.uid);
+            const userSnap = await getDoc(userRef);
+            
+            if (!userSnap.exists()) {
+                await setDoc(userRef, {
+                    uid: user.uid,
+                    email: user.email,
+                    username: username || user.displayName || 'User',
+                    displayName: username || user.displayName || 'User',
+                    photoURL: user.photoURL || null,
+                    bio: '',
+                    subscribers: 0,
+                    totalViews: 0,
+                    videosCount: 0,
+                    isCreator: false,
+                    isVerified: false,
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                });
+            }
+        }
+
+        // Handle Login
         window.handleLogin = async function(event) {
             event.preventDefault();
             
@@ -556,7 +549,6 @@
             const btn = document.getElementById('loginBtn');
             const messageDiv = document.getElementById('loginMessage');
             
-            // Show loading
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span>Signing in...';
             messageDiv.className = 'message';
@@ -564,9 +556,7 @@
             
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
-                const user = userCredential.user;
                 
-                // Success - redirect to browse
                 messageDiv.className = 'message success';
                 messageDiv.textContent = 'Success! Redirecting...';
                 messageDiv.style.display = 'block';
@@ -581,7 +571,6 @@
                 
                 messageDiv.className = 'message error';
                 
-                // User-friendly error messages
                 switch(error.code) {
                     case 'auth/user-not-found':
                         messageDiv.textContent = 'No account found with this email. Please sign up first.';
@@ -591,6 +580,9 @@
                         break;
                     case 'auth/invalid-email':
                         messageDiv.textContent = 'Please enter a valid email address.';
+                        break;
+                    case 'auth/invalid-credential':
+                        messageDiv.textContent = 'Invalid email or password. Please try again.';
                         break;
                     case 'auth/too-many-requests':
                         messageDiv.textContent = 'Too many failed attempts. Please try again later.';
@@ -602,6 +594,7 @@
             }
         };
 
+        // Handle Signup
         window.handleSignup = async function(event) {
             event.preventDefault();
             
@@ -612,7 +605,6 @@
             const btn = document.getElementById('signupBtn');
             const messageDiv = document.getElementById('signupMessage');
             
-            // Check passwords match
             if (password !== confirmPassword) {
                 messageDiv.className = 'message error';
                 messageDiv.textContent = 'Passwords do not match.';
@@ -620,7 +612,6 @@
                 return;
             }
             
-            // Show loading
             btn.disabled = true;
             btn.innerHTML = '<span class="spinner"></span>Creating account...';
             messageDiv.className = 'message';
@@ -630,12 +621,14 @@
                 const userCredential = await createUserWithEmailAndPassword(auth, email, password);
                 const user = userCredential.user;
                 
-                // Update profile with username
+                // Update auth profile
                 await updateProfile(user, {
                     displayName: username
                 });
                 
-                // Success - redirect to browse
+                // Create user profile in Firestore database
+                await createUserProfile(user, username);
+                
                 messageDiv.className = 'message success';
                 messageDiv.textContent = 'Account created! Redirecting...';
                 messageDiv.style.display = 'block';
@@ -650,7 +643,6 @@
                 
                 messageDiv.className = 'message error';
                 
-                // User-friendly error messages
                 switch(error.code) {
                     case 'auth/email-already-in-use':
                         messageDiv.textContent = 'An account with this email already exists.';
@@ -668,18 +660,20 @@
             }
         };
 
+        // Handle Google Sign In
         window.handleGoogleSignIn = async function() {
             try {
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
                 
-                // Redirect to browse
+                // Create/update user profile in Firestore
+                await createUserProfile(user);
+                
                 window.location.href = 'browse.html';
                 
             } catch (error) {
                 console.error('Google sign-in error:', error);
                 
-                // Show error on whichever form is active
                 const activeForm = document.querySelector('.auth-form.active');
                 const messageDiv = activeForm.querySelector('.message');
                 
@@ -691,6 +685,7 @@
             }
         };
 
+        // Handle Forgot Password
         window.handleForgotPassword = async function(event) {
             event.preventDefault();
             
@@ -722,30 +717,21 @@
     </script>
 
     <script>
-        // Tab Switching
         function showForm(formType) {
-            // Update tabs
             document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
             event.target.classList.add('active');
             
-            // Update forms
             document.querySelectorAll('.auth-form').forEach(form => form.classList.remove('active'));
             document.getElementById(formType + 'Form').classList.add('active');
             
-            // Clear messages
             document.querySelectorAll('.message').forEach(msg => {
                 msg.style.display = 'none';
             });
         }
 
-        // Password Toggle
         function togglePassword(inputId) {
             const input = document.getElementById(inputId);
-            if (input.type === 'password') {
-                input.type = 'text';
-            } else {
-                input.type = 'password';
-            }
+            input.type = input.type === 'password' ? 'text' : 'password';
         }
     </script>
 </body>
