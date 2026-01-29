@@ -63,7 +63,7 @@
 
         .auth-card {
             width: 100%;
-            max-width: 420px;
+            max-width: 440px;
             background: #121212;
             border: 1px solid #222;
             border-radius: 16px;
@@ -118,6 +118,15 @@
             margin-bottom: 8px;
         }
 
+        .form-label .optional {
+            color: #666;
+            font-weight: 400;
+        }
+
+        .form-label .required {
+            color: #F5A623;
+        }
+
         .form-input {
             width: 100%;
             background: #1A1A1A;
@@ -136,6 +145,122 @@
 
         .form-input::placeholder {
             color: #555;
+        }
+
+        .input-with-prefix {
+            display: flex;
+            align-items: center;
+            background: #1A1A1A;
+            border: 1px solid #333;
+            border-radius: 10px;
+            transition: border-color 0.3s ease;
+        }
+
+        .input-with-prefix:focus-within {
+            border-color: #F5A623;
+        }
+
+        .input-prefix {
+            padding: 15px;
+            color: #666;
+            font-size: 16px;
+            border-right: 1px solid #333;
+        }
+
+        .input-with-prefix .form-input {
+            border: none;
+            background: transparent;
+        }
+
+        .input-with-prefix .form-input:focus {
+            border: none;
+        }
+
+        .input-with-button {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-with-button .form-input {
+            flex: 1;
+        }
+
+        .verify-btn {
+            background: #1A1A1A;
+            border: 1px solid #F5A623;
+            color: #F5A623;
+            padding: 15px 20px;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s ease;
+        }
+
+        .verify-btn:hover {
+            background: rgba(245, 166, 35, 0.1);
+        }
+
+        .verify-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .verify-btn.verified {
+            background: rgba(29, 185, 84, 0.15);
+            border-color: #1DB954;
+            color: #1DB954;
+        }
+
+        .verification-code-group {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .verification-code-group.show {
+            display: block;
+        }
+
+        .code-inputs {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .code-input {
+            width: 50px;
+            height: 55px;
+            background: #1A1A1A;
+            border: 1px solid #333;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 700;
+            color: #FFFFFF;
+            transition: border-color 0.3s ease;
+        }
+
+        .code-input:focus {
+            outline: none;
+            border-color: #F5A623;
+        }
+
+        .resend-link {
+            text-align: center;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .resend-link a {
+            color: #F5A623;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .resend-link a:hover {
+            text-decoration: underline;
         }
 
         .password-field {
@@ -305,6 +430,13 @@
             display: block;
         }
 
+        .message.info {
+            background: rgba(107, 47, 235, 0.15);
+            border: 1px solid #6B2FEB;
+            color: #a78bfa;
+            display: block;
+        }
+
         .spinner {
             display: inline-block;
             width: 20px;
@@ -315,6 +447,13 @@
             animation: spin 0.8s linear infinite;
             margin-right: 10px;
             vertical-align: middle;
+        }
+
+        .spinner-small {
+            width: 14px;
+            height: 14px;
+            border-width: 2px;
+            margin-right: 5px;
         }
 
         @keyframes spin {
@@ -345,6 +484,33 @@
             color: #F5A623;
         }
 
+        .form-hint {
+            font-size: 11px;
+            color: #666;
+            margin-top: 6px;
+        }
+
+        .verification-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .verification-status.verified {
+            color: #1DB954;
+        }
+
+        .verification-status.pending {
+            color: #F5A623;
+        }
+
+        /* reCAPTCHA container */
+        #recaptcha-container {
+            margin-bottom: 15px;
+        }
+
         @media (max-width: 480px) {
             .header {
                 padding: 20px;
@@ -362,6 +528,20 @@
                 flex-direction: column;
                 gap: 15px;
                 align-items: flex-start;
+            }
+
+            .input-with-button {
+                flex-direction: column;
+            }
+
+            .verify-btn {
+                width: 100%;
+            }
+
+            .code-input {
+                width: 45px;
+                height: 50px;
+                font-size: 20px;
             }
         }
     </style>
@@ -424,17 +604,68 @@
                 <div class="message" id="signupMessage"></div>
                 
                 <div class="form-group">
-                    <label class="form-label">Username</label>
+                    <label class="form-label">Username <span class="required">*</span></label>
                     <input type="text" class="form-input" id="signupUsername" placeholder="Choose a username" required>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Email</label>
+                    <label class="form-label">
+                        Email <span class="required">*</span>
+                        <span class="verification-status" id="emailVerificationStatus"></span>
+                    </label>
                     <input type="email" class="form-input" id="signupEmail" placeholder="Enter your email" required>
+                    <p class="form-hint">We'll send a verification link after signup</p>
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Password</label>
+                    <label class="form-label">
+                        Phone Number <span class="optional">(recommended)</span>
+                        <span class="verification-status" id="phoneVerificationStatus"></span>
+                    </label>
+                    <div class="input-with-button">
+                        <input type="tel" class="form-input" id="signupPhone" placeholder="+1 555 123 4567">
+                        <button type="button" class="verify-btn" id="sendCodeBtn" onclick="sendPhoneVerification()">
+                            Send Code
+                        </button>
+                    </div>
+                    <p class="form-hint">We'll send a code to verify your number</p>
+                    
+                    <!-- Phone Verification Code Input -->
+                    <div class="verification-code-group" id="phoneCodeGroup">
+                        <p style="font-size: 13px; color: #B3B3B3; text-align: center; margin-bottom: 15px;">
+                            Enter the 6-digit code sent to your phone
+                        </p>
+                        <div class="code-inputs">
+                            <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 1)">
+                            <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 2)">
+                            <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 3)">
+                            <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 4)">
+                            <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 5)">
+                            <input type="text" class="code-input" maxlength="1" oninput="moveToNext(this, 6)">
+                        </div>
+                        <button type="button" class="verify-btn" style="width: 100%;" onclick="verifyPhoneCode()">
+                            Verify Code
+                        </button>
+                        <p class="resend-link" style="margin-top: 10px;">
+                            Didn't receive code? <a onclick="sendPhoneVerification()">Resend</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Hidden reCAPTCHA container for phone auth -->
+                <div id="recaptcha-container"></div>
+
+                <div class="form-group">
+                    <label class="form-label">YouTube Handle <span class="optional">(optional)</span></label>
+                    <div class="input-with-prefix">
+                        <span class="input-prefix">@</span>
+                        <input type="text" class="form-input" id="signupYouTube" placeholder="yourhandle">
+                    </div>
+                    <p class="form-hint">Connect your YouTube for easier content migration</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Password <span class="required">*</span></label>
                     <div class="password-field">
                         <input type="password" class="form-input" id="signupPassword" placeholder="Create a password (min 6 characters)" required minlength="6">
                         <button type="button" class="password-toggle" onclick="togglePassword('signupPassword')">👁</button>
@@ -442,7 +673,7 @@
                 </div>
 
                 <div class="form-group">
-                    <label class="form-label">Confirm Password</label>
+                    <label class="form-label">Confirm Password <span class="required">*</span></label>
                     <div class="password-field">
                         <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm your password" required>
                         <button type="button" class="password-toggle" onclick="togglePassword('confirmPassword')">👁</button>
@@ -490,13 +721,17 @@
             signInWithPopup,
             GoogleAuthProvider,
             sendPasswordResetEmail,
-            updateProfile
+            sendEmailVerification,
+            updateProfile,
+            RecaptchaVerifier,
+            signInWithPhoneNumber
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
         import { 
             getFirestore, 
             doc, 
             setDoc, 
             getDoc,
+            updateDoc,
             serverTimestamp 
         } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -516,8 +751,145 @@
         const db = getFirestore(app);
         const googleProvider = new GoogleAuthProvider();
 
+        // Phone verification state
+        let confirmationResult = null;
+        let phoneVerified = false;
+
+        // Initialize reCAPTCHA
+        window.initRecaptcha = function() {
+            if (!window.recaptchaVerifier) {
+                window.recaptchaVerifier = new RecaptchaVerifier(auth, 'recaptcha-container', {
+                    'size': 'invisible',
+                    'callback': (response) => {
+                        console.log('reCAPTCHA solved');
+                    }
+                });
+            }
+        };
+
+        // Send phone verification code
+        window.sendPhoneVerification = async function() {
+            const phoneInput = document.getElementById('signupPhone');
+            const sendBtn = document.getElementById('sendCodeBtn');
+            const codeGroup = document.getElementById('phoneCodeGroup');
+            const messageDiv = document.getElementById('signupMessage');
+            
+            let phoneNumber = phoneInput.value.trim();
+            
+            if (!phoneNumber) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Please enter a phone number first.';
+                messageDiv.style.display = 'block';
+                return;
+            }
+
+            // Format phone number if needed
+            if (!phoneNumber.startsWith('+')) {
+                phoneNumber = '+1' + phoneNumber.replace(/\D/g, '');
+            }
+
+            sendBtn.disabled = true;
+            sendBtn.innerHTML = '<span class="spinner spinner-small"></span>Sending...';
+            
+            try {
+                initRecaptcha();
+                confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, window.recaptchaVerifier);
+                
+                codeGroup.classList.add('show');
+                sendBtn.textContent = 'Code Sent';
+                sendBtn.disabled = false;
+                
+                messageDiv.className = 'message info';
+                messageDiv.textContent = 'Verification code sent to ' + phoneNumber;
+                messageDiv.style.display = 'block';
+                
+                // Focus first code input
+                document.querySelector('.code-input').focus();
+                
+            } catch (error) {
+                console.error('Phone verification error:', error);
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send Code';
+                
+                messageDiv.className = 'message error';
+                if (error.code === 'auth/invalid-phone-number') {
+                    messageDiv.textContent = 'Invalid phone number format. Use +1XXXXXXXXXX';
+                } else if (error.code === 'auth/too-many-requests') {
+                    messageDiv.textContent = 'Too many attempts. Please try again later.';
+                } else {
+                    messageDiv.textContent = 'Could not send verification code. Please try again.';
+                }
+                messageDiv.style.display = 'block';
+                
+                // Reset reCAPTCHA
+                if (window.recaptchaVerifier) {
+                    window.recaptchaVerifier.clear();
+                    window.recaptchaVerifier = null;
+                }
+            }
+        };
+
+        // Verify phone code
+        window.verifyPhoneCode = async function() {
+            const codeInputs = document.querySelectorAll('.code-input');
+            const code = Array.from(codeInputs).map(input => input.value).join('');
+            const messageDiv = document.getElementById('signupMessage');
+            const statusSpan = document.getElementById('phoneVerificationStatus');
+            const sendBtn = document.getElementById('sendCodeBtn');
+            
+            if (code.length !== 6) {
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Please enter the complete 6-digit code.';
+                messageDiv.style.display = 'block';
+                return;
+            }
+
+            try {
+                await confirmationResult.confirm(code);
+                
+                phoneVerified = true;
+                statusSpan.innerHTML = '✓ Verified';
+                statusSpan.className = 'verification-status verified';
+                
+                sendBtn.textContent = '✓ Verified';
+                sendBtn.className = 'verify-btn verified';
+                sendBtn.disabled = true;
+                
+                document.getElementById('phoneCodeGroup').classList.remove('show');
+                
+                messageDiv.className = 'message success';
+                messageDiv.textContent = 'Phone number verified successfully!';
+                messageDiv.style.display = 'block';
+                
+                // Sign out of phone auth (we'll create proper account with email)
+                await auth.signOut();
+                
+            } catch (error) {
+                console.error('Code verification error:', error);
+                messageDiv.className = 'message error';
+                messageDiv.textContent = 'Invalid verification code. Please try again.';
+                messageDiv.style.display = 'block';
+            }
+        };
+
+        // Move to next code input
+        window.moveToNext = function(current, nextIndex) {
+            if (current.value.length === 1 && nextIndex <= 6) {
+                const inputs = document.querySelectorAll('.code-input');
+                if (inputs[nextIndex]) {
+                    inputs[nextIndex].focus();
+                }
+            }
+            
+            // Auto-verify when all 6 digits entered
+            const allFilled = Array.from(document.querySelectorAll('.code-input')).every(input => input.value.length === 1);
+            if (allFilled) {
+                verifyPhoneCode();
+            }
+        };
+
         // Create user profile in Firestore
-        async function createUserProfile(user, username = null) {
+        async function createUserProfile(user, additionalData = {}) {
             const userRef = doc(db, 'users', user.uid);
             const userSnap = await getDoc(userRef);
             
@@ -525,9 +897,13 @@
                 await setDoc(userRef, {
                     uid: user.uid,
                     email: user.email,
-                    username: username || user.displayName || 'User',
-                    displayName: username || user.displayName || 'User',
+                    emailVerified: user.emailVerified || false,
+                    username: additionalData.username || user.displayName || 'User',
+                    displayName: additionalData.username || user.displayName || 'User',
                     photoURL: user.photoURL || null,
+                    phone: additionalData.phone || null,
+                    phoneVerified: additionalData.phoneVerified || false,
+                    youtubeHandle: additionalData.youtubeHandle || null,
                     bio: '',
                     subscribers: 0,
                     totalViews: 0,
@@ -556,6 +932,24 @@
             
             try {
                 const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+                
+                // Check if email is verified
+                if (!user.emailVerified) {
+                    messageDiv.className = 'message info';
+                    messageDiv.textContent = 'Please verify your email. Check your inbox for the verification link.';
+                    messageDiv.style.display = 'block';
+                    
+                    // Offer to resend verification email
+                    btn.disabled = false;
+                    btn.textContent = 'Sign In';
+                    
+                    // Still allow login but show warning
+                    setTimeout(() => {
+                        window.location.href = 'browse.html';
+                    }, 2000);
+                    return;
+                }
                 
                 messageDiv.className = 'message success';
                 messageDiv.textContent = 'Success! Redirecting...';
@@ -600,6 +994,8 @@
             
             const username = document.getElementById('signupUsername').value;
             const email = document.getElementById('signupEmail').value;
+            const phone = document.getElementById('signupPhone').value;
+            const youtubeHandle = document.getElementById('signupYouTube').value;
             const password = document.getElementById('signupPassword').value;
             const confirmPassword = document.getElementById('confirmPassword').value;
             const btn = document.getElementById('signupBtn');
@@ -626,16 +1022,24 @@
                     displayName: username
                 });
                 
+                // Send email verification
+                await sendEmailVerification(user);
+                
                 // Create user profile in Firestore database
-                await createUserProfile(user, username);
+                await createUserProfile(user, {
+                    username: username,
+                    phone: phone || null,
+                    phoneVerified: phoneVerified,
+                    youtubeHandle: youtubeHandle || null
+                });
                 
                 messageDiv.className = 'message success';
-                messageDiv.textContent = 'Account created! Redirecting...';
+                messageDiv.textContent = 'Account created! Check your email to verify your account.';
                 messageDiv.style.display = 'block';
                 
                 setTimeout(() => {
                     window.location.href = 'browse.html';
-                }, 1000);
+                }, 2000);
                 
             } catch (error) {
                 btn.disabled = false;
@@ -666,7 +1070,6 @@
                 const result = await signInWithPopup(auth, googleProvider);
                 const user = result.user;
                 
-                // Create/update user profile in Firestore
                 await createUserProfile(user);
                 
                 window.location.href = 'browse.html';
