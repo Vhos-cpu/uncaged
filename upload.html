@@ -1,0 +1,1219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNCAGED | Upload Video</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0D0D0D;
+            color: #FFFFFF;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: rgba(13, 13, 13, 0.95);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            z-index: 1000;
+            border-bottom: 1px solid #1A1A1A;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .back-btn {
+            background: #1A1A1A;
+            border: none;
+            color: #FFFFFF;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: background 0.2s ease;
+            text-decoration: none;
+        }
+
+        .back-btn:hover {
+            background: #2A2A2A;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 28px;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding-top: 80px;
+            padding-bottom: 40px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+
+        .page-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
+
+        /* Upload Steps */
+        .upload-steps {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #555;
+        }
+
+        .step.active {
+            color: #F5A623;
+        }
+
+        .step.completed {
+            color: #1DB954;
+        }
+
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: #1A1A1A;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .step.active .step-number {
+            background: #F5A623;
+            color: #0D0D0D;
+        }
+
+        .step.completed .step-number {
+            background: #1DB954;
+            color: #0D0D0D;
+        }
+
+        .step-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        /* Upload Sections */
+        .upload-section {
+            display: none;
+        }
+
+        .upload-section.active {
+            display: block;
+        }
+
+        /* Step 1: File Upload */
+        .upload-zone {
+            border: 2px dashed #333;
+            border-radius: 16px;
+            padding: 60px 40px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #0F0F0F;
+        }
+
+        .upload-zone:hover {
+            border-color: #F5A623;
+            background: rgba(245, 166, 35, 0.05);
+        }
+
+        .upload-zone.drag-over {
+            border-color: #F5A623;
+            background: rgba(245, 166, 35, 0.1);
+        }
+
+        .upload-zone.has-file {
+            border-color: #1DB954;
+            background: rgba(29, 185, 84, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .upload-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .upload-subtitle {
+            font-size: 14px;
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            border: none;
+            color: #0D0D0D;
+            padding: 14px 30px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .upload-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .upload-formats {
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* File Preview */
+        .file-preview {
+            display: none;
+            margin-top: 30px;
+            background: #1A1A1A;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .file-preview.show {
+            display: block;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .file-icon {
+            font-size: 40px;
+        }
+
+        .file-details {
+            flex: 1;
+        }
+
+        .file-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .file-size {
+            font-size: 13px;
+            color: #888;
+        }
+
+        .file-remove {
+            background: #E50914;
+            border: none;
+            color: #FFFFFF;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .progress-container.show {
+            display: block;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .progress-status {
+            color: #F5A623;
+        }
+
+        .progress-percent {
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #2A2A2A;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.compressing {
+            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
+        }
+
+        .progress-fill.complete {
+            background: linear-gradient(135deg, #1DB954 0%, #169C46 100%);
+        }
+
+        /* Step 2: Video Details */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .form-label .optional {
+            color: #666;
+            font-weight: 400;
+        }
+
+        .form-input {
+            width: 100%;
+            background: #1A1A1A;
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 16px;
+            color: #FFFFFF;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #F5A623;
+        }
+
+        .form-input::placeholder {
+            color: #555;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: #666;
+            margin-top: 8px;
+        }
+
+        /* Tags Input */
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px;
+            background: #1A1A1A;
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            min-height: 56px;
+        }
+
+        .tags-container:focus-within {
+            border-color: #F5A623;
+        }
+
+        .tag {
+            background: rgba(245, 166, 35, 0.2);
+            color: #F5A623;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .tag-input {
+            flex: 1;
+            min-width: 100px;
+            background: transparent;
+            border: none;
+            color: #FFFFFF;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .tag-input::placeholder {
+            color: #555;
+        }
+
+        /* Thumbnail Section */
+        .thumbnail-section {
+            margin-bottom: 25px;
+        }
+
+        .thumbnail-options {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .thumbnail-option {
+            aspect-ratio: 16/9;
+            background: #1A1A1A;
+            border: 2px solid #2A2A2A;
+            border-radius: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            position: relative;
+        }
+
+        .thumbnail-option:hover {
+            border-color: #F5A623;
+        }
+
+        .thumbnail-option.selected {
+            border-color: #F5A623;
+            box-shadow: 0 0 0 2px rgba(245, 166, 35, 0.3);
+        }
+
+        .thumbnail-option img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .thumbnail-upload {
+            flex-direction: column;
+            gap: 5px;
+            font-size: 12px;
+            color: #888;
+        }
+
+        .thumbnail-upload-icon {
+            font-size: 24px;
+        }
+
+        .thumbnail-time {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: rgba(0,0,0,0.8);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+
+        /* Visibility Options */
+        .visibility-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .visibility-option {
+            flex: 1;
+            background: #1A1A1A;
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .visibility-option:hover {
+            border-color: #444;
+        }
+
+        .visibility-option.selected {
+            border-color: #F5A623;
+            background: rgba(245, 166, 35, 0.1);
+        }
+
+        .visibility-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .visibility-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .visibility-desc {
+            font-size: 12px;
+            color: #888;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 16px 32px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-secondary {
+            background: #1A1A1A;
+            color: #FFFFFF;
+            flex: 1;
+        }
+
+        .btn-secondary:hover {
+            background: #2A2A2A;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            color: #0D0D0D;
+            flex: 2;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(245, 166, 35, 0.3);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Step 3: Success */
+        .success-section {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 30px;
+        }
+
+        .success-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .success-subtitle {
+            font-size: 16px;
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .video-link {
+            background: #1A1A1A;
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .video-link input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            color: #FFFFFF;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .copy-btn {
+            background: #F5A623;
+            border: none;
+            color: #0D0D0D;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .success-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        /* Spinner */
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid #0D0D0D;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 0.8s linear infinite;
+            margin-right: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Messages */
+        .message {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            display: none;
+        }
+
+        .message.error {
+            background: rgba(229, 9, 20, 0.15);
+            border: 1px solid rgba(229, 9, 20, 0.3);
+            color: #ff6b6b;
+            display: block;
+        }
+
+        .message.success {
+            background: rgba(29, 185, 84, 0.15);
+            border: 1px solid rgba(29, 185, 84, 0.3);
+            color: #1DB954;
+            display: block;
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .upload-steps {
+                gap: 15px;
+            }
+
+            .step-label {
+                display: none;
+            }
+
+            .thumbnail-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .visibility-options {
+                flex-direction: column;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-left">
+            <a href="browse.html" class="back-btn">←</a>
+            <a href="index.html" class="logo">UNCAGED</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <h1 class="page-title">Upload Video</h1>
+
+        <!-- Progress Steps -->
+        <div class="upload-steps">
+            <div class="step active" id="step1indicator">
+                <div class="step-number">1</div>
+                <span class="step-label">Select File</span>
+            </div>
+            <div class="step" id="step2indicator">
+                <div class="step-number">2</div>
+                <span class="step-label">Details</span>
+            </div>
+            <div class="step" id="step3indicator">
+                <div class="step-number">3</div>
+                <span class="step-label">Published</span>
+            </div>
+        </div>
+
+        <div class="message" id="message"></div>
+
+        <!-- Step 1: Select File -->
+        <div class="upload-section active" id="step1">
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">🎬</div>
+                <h2 class="upload-title">Drag and drop your video</h2>
+                <p class="upload-subtitle">Or click to browse from your device</p>
+                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                    Select Video
+                </button>
+                <p class="upload-formats">Supported formats: MP4, MOV, AVI, MKV • Max 4GB</p>
+                <input type="file" class="file-input" id="fileInput" accept="video/*">
+            </div>
+
+            <div class="file-preview" id="filePreview">
+                <div class="file-info">
+                    <div class="file-icon">🎥</div>
+                    <div class="file-details">
+                        <div class="file-name" id="fileName">video.mp4</div>
+                        <div class="file-size" id="fileSize">0 MB</div>
+                    </div>
+                    <button class="file-remove" onclick="removeFile()">✕</button>
+                </div>
+            </div>
+
+            <div class="progress-container" id="progressContainer">
+                <div class="progress-header">
+                    <span class="progress-status" id="progressStatus">Uploading...</span>
+                    <span class="progress-percent" id="progressPercent">0%</span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
+            <div class="action-buttons" id="step1Actions" style="display: none;">
+                <button class="btn btn-primary" id="continueBtn" onclick="goToStep2()">
+                    Continue
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 2: Video Details -->
+        <div class="upload-section" id="step2">
+            <div class="form-group">
+                <label class="form-label">Title</label>
+                <input type="text" class="form-input" id="videoTitle" placeholder="Enter a catchy title" maxlength="100">
+                <div class="char-count"><span id="titleCount">0</span>/100</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Description <span class="optional">(optional)</span></label>
+                <textarea class="form-input form-textarea" id="videoDescription" placeholder="Tell viewers about your video..." maxlength="2000"></textarea>
+                <div class="char-count"><span id="descCount">0</span>/2000</div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Tags <span class="optional">(optional)</span></label>
+                <div class="tags-container" id="tagsContainer">
+                    <input type="text" class="tag-input" id="tagInput" placeholder="Add tags (press Enter)">
+                </div>
+            </div>
+
+            <div class="thumbnail-section">
+                <label class="form-label">Thumbnail</label>
+                <div class="thumbnail-options">
+                    <div class="thumbnail-option selected" onclick="selectThumbnail(this, 'auto1')">
+                        <span class="thumbnail-time">0:05</span>
+                        <div style="background: linear-gradient(135deg, #1a1a2e, #2d1f3d); width:100%; height:100%;"></div>
+                    </div>
+                    <div class="thumbnail-option" onclick="selectThumbnail(this, 'auto2')">
+                        <span class="thumbnail-time">0:30</span>
+                        <div style="background: linear-gradient(135deg, #2d1f3d, #1a2e1a); width:100%; height:100%;"></div>
+                    </div>
+                    <div class="thumbnail-option" onclick="selectThumbnail(this, 'auto3')">
+                        <span class="thumbnail-time">1:00</span>
+                        <div style="background: linear-gradient(135deg, #1a2e1a, #2e1a1a); width:100%; height:100%;"></div>
+                    </div>
+                    <div class="thumbnail-option thumbnail-upload" onclick="document.getElementById('thumbnailInput').click()">
+                        <span class="thumbnail-upload-icon">📷</span>
+                        <span>Upload</span>
+                    </div>
+                </div>
+                <input type="file" id="thumbnailInput" accept="image/*" style="display:none" onchange="handleThumbnailUpload(this)">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Visibility</label>
+                <div class="visibility-options">
+                    <div class="visibility-option selected" onclick="selectVisibility(this, 'public')">
+                        <div class="visibility-icon">🌍</div>
+                        <div class="visibility-title">Public</div>
+                        <div class="visibility-desc">Anyone can watch</div>
+                    </div>
+                    <div class="visibility-option" onclick="selectVisibility(this, 'subscribers')">
+                        <div class="visibility-icon">⭐</div>
+                        <div class="visibility-title">Subscribers</div>
+                        <div class="visibility-desc">Only your subscribers</div>
+                    </div>
+                    <div class="visibility-option" onclick="selectVisibility(this, 'private')">
+                        <div class="visibility-icon">🔒</div>
+                        <div class="visibility-title">Private</div>
+                        <div class="visibility-desc">Only you can watch</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="btn btn-secondary" onclick="goToStep1()">Back</button>
+                <button class="btn btn-primary" id="publishBtn" onclick="publishVideo()">
+                    Publish Video
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Success -->
+        <div class="upload-section" id="step3">
+            <div class="success-section">
+                <div class="success-icon">🎉</div>
+                <h2 class="success-title">Video Published!</h2>
+                <p class="success-subtitle">Your video is now live and ready to watch</p>
+                
+                <div class="video-link">
+                    <input type="text" id="videoUrl" value="https://uncaged-two.vercel.app/watch.html?v=abc123" readonly>
+                    <button class="copy-btn" onclick="copyLink()">Copy</button>
+                </div>
+
+                <div class="success-actions">
+                    <button class="btn btn-secondary" onclick="window.location.href='browse.html'">Browse Videos</button>
+                    <button class="btn btn-primary" onclick="uploadAnother()">Upload Another</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            addDoc, 
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Bunny.net config
+        const BUNNY_LIBRARY_ID = '588548';
+        const BUNNY_API_KEY = 'f60a48bd-3572-46ce-af3f0c8f3c97-8420-48bd';
+        const BUNNY_CDN_HOSTNAME = 'vz-fa698983-d99.b-cdn.net';
+
+        let currentUser = null;
+        let selectedFile = null;
+        let uploadedVideoId = null;
+        let selectedThumbnail = 'auto1';
+        let selectedVisibility = 'public';
+        let tags = [];
+
+        // Check auth
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // File selection
+        window.handleFileSelect = function(file) {
+            const maxSize = 4 * 1024 * 1024 * 1024; // 4GB
+            
+            if (file.size > maxSize) {
+                showMessage('File too large. Maximum size is 4GB.', 'error');
+                return;
+            }
+
+            if (!file.type.startsWith('video/')) {
+                showMessage('Please select a video file.', 'error');
+                return;
+            }
+
+            selectedFile = file;
+            
+            document.getElementById('fileName').textContent = file.name;
+            document.getElementById('fileSize').textContent = formatFileSize(file.size);
+            document.getElementById('filePreview').classList.add('show');
+            document.getElementById('uploadZone').classList.add('has-file');
+            
+            // Start upload immediately
+            uploadToBunny(file);
+        };
+
+        // Upload to Bunny
+        async function uploadToBunny(file) {
+            const progressContainer = document.getElementById('progressContainer');
+            const progressFill = document.getElementById('progressFill');
+            const progressPercent = document.getElementById('progressPercent');
+            const progressStatus = document.getElementById('progressStatus');
+            const step1Actions = document.getElementById('step1Actions');
+
+            progressContainer.classList.add('show');
+            progressStatus.textContent = 'Creating video...';
+
+            try {
+                // Step 1: Create video in Bunny
+                const createResponse = await fetch(`https://video.bunnycdn.com/library/${BUNNY_LIBRARY_ID}/videos`, {
+                    method: 'POST',
+                    headers: {
+                        'AccessKey': BUNNY_API_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: file.name
+                    })
+                });
+
+                if (!createResponse.ok) {
+                    throw new Error('Failed to create video');
+                }
+
+                const videoData = await createResponse.json();
+                uploadedVideoId = videoData.guid;
+
+                // Step 2: Upload the file
+                progressStatus.textContent = 'Uploading...';
+                
+                const uploadResponse = await fetch(`https://video.bunnycdn.com/library/${BUNNY_LIBRARY_ID}/videos/${uploadedVideoId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'AccessKey': BUNNY_API_KEY,
+                        'Content-Type': 'application/octet-stream'
+                    },
+                    body: file
+                });
+
+                // Simulate progress (Bunny doesn't give real-time progress easily)
+                let progress = 0;
+                const progressInterval = setInterval(() => {
+                    progress += Math.random() * 15;
+                    if (progress > 95) progress = 95;
+                    progressFill.style.width = progress + '%';
+                    progressPercent.textContent = Math.round(progress) + '%';
+                }, 500);
+
+                if (!uploadResponse.ok) {
+                    clearInterval(progressInterval);
+                    throw new Error('Failed to upload video');
+                }
+
+                clearInterval(progressInterval);
+                
+                // Complete
+                progressFill.style.width = '100%';
+                progressFill.classList.add('complete');
+                progressPercent.textContent = '100%';
+                progressStatus.textContent = 'Upload complete!';
+                
+                step1Actions.style.display = 'flex';
+
+            } catch (error) {
+                console.error('Upload error:', error);
+                showMessage('Upload failed. Please try again.', 'error');
+                progressContainer.classList.remove('show');
+            }
+        }
+
+        // Publish video
+        window.publishVideo = async function() {
+            const title = document.getElementById('videoTitle').value.trim();
+            const description = document.getElementById('videoDescription').value.trim();
+            const publishBtn = document.getElementById('publishBtn');
+
+            if (!title) {
+                showMessage('Please enter a title for your video.', 'error');
+                return;
+            }
+
+            if (!uploadedVideoId) {
+                showMessage('Video not uploaded yet. Please wait.', 'error');
+                return;
+            }
+
+            publishBtn.disabled = true;
+            publishBtn.innerHTML = '<span class="spinner"></span>Publishing...';
+
+            try {
+                // Update video title in Bunny
+                await fetch(`https://video.bunnycdn.com/library/${BUNNY_LIBRARY_ID}/videos/${uploadedVideoId}`, {
+                    method: 'POST',
+                    headers: {
+                        'AccessKey': BUNNY_API_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        title: title
+                    })
+                });
+
+                // Save to Firebase
+                await addDoc(collection(db, 'videos'), {
+                    bunnyVideoId: uploadedVideoId,
+                    title: title,
+                    description: description,
+                    tags: tags,
+                    thumbnail: selectedThumbnail,
+                    visibility: selectedVisibility,
+                    creatorId: currentUser.uid,
+                    creatorName: currentUser.displayName || 'Unknown',
+                    views: 0,
+                    likes: 0,
+                    dislikes: 0,
+                    embedUrl: `https://iframe.mediadelivery.net/embed/${BUNNY_LIBRARY_ID}/${uploadedVideoId}`,
+                    cdnUrl: `https://${BUNNY_CDN_HOSTNAME}/${uploadedVideoId}`,
+                    createdAt: serverTimestamp(),
+                    updatedAt: serverTimestamp()
+                });
+
+                // Update URL
+                document.getElementById('videoUrl').value = `https://uncaged-two.vercel.app/watch.html?v=${uploadedVideoId}`;
+
+                // Go to success
+                goToStep3();
+
+            } catch (error) {
+                console.error('Publish error:', error);
+                showMessage('Failed to publish. Please try again.', 'error');
+                publishBtn.disabled = false;
+                publishBtn.textContent = 'Publish Video';
+            }
+        };
+
+        // Helper functions
+        window.formatFileSize = function(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        };
+
+        window.showMessage = function(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = 'message ' + type;
+        };
+    </script>
+
+    <script>
+        // Drag and drop
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+
+        uploadZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadZone.classList.add('drag-over');
+        });
+
+        uploadZone.addEventListener('dragleave', () => {
+            uploadZone.classList.remove('drag-over');
+        });
+
+        uploadZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadZone.classList.remove('drag-over');
+            const file = e.dataTransfer.files[0];
+            if (file) handleFileSelect(file);
+        });
+
+        uploadZone.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) handleFileSelect(file);
+        });
+
+        // Remove file
+        function removeFile() {
+            selectedFile = null;
+            uploadedVideoId = null;
+            document.getElementById('filePreview').classList.remove('show');
+            document.getElementById('uploadZone').classList.remove('has-file');
+            document.getElementById('progressContainer').classList.remove('show');
+            document.getElementById('step1Actions').style.display = 'none';
+            document.getElementById('progressFill').style.width = '0%';
+            document.getElementById('progressFill').classList.remove('complete');
+            fileInput.value = '';
+        }
+
+        // Navigation
+        function goToStep1() {
+            document.getElementById('step1').classList.add('active');
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step1indicator').classList.add('active');
+            document.getElementById('step1indicator').classList.remove('completed');
+            document.getElementById('step2indicator').classList.remove('active');
+        }
+
+        function goToStep2() {
+            document.getElementById('step1').classList.remove('active');
+            document.getElementById('step2').classList.add('active');
+            document.getElementById('step1indicator').classList.remove('active');
+            document.getElementById('step1indicator').classList.add('completed');
+            document.getElementById('step2indicator').classList.add('active');
+        }
+
+        function goToStep3() {
+            document.getElementById('step2').classList.remove('active');
+            document.getElementById('step3').classList.add('active');
+            document.getElementById('step2indicator').classList.remove('active');
+            document.getElementById('step2indicator').classList.add('completed');
+            document.getElementById('step3indicator').classList.add('active');
+        }
+
+        // Thumbnail selection
+        function selectThumbnail(element, value) {
+            document.querySelectorAll('.thumbnail-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedThumbnail = value;
+        }
+
+        function handleThumbnailUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const uploadOption = document.querySelector('.thumbnail-upload');
+                    uploadOption.innerHTML = `<img src="${e.target.result}" alt="Thumbnail">`;
+                    selectThumbnail(uploadOption, 'custom');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // Visibility selection
+        function selectVisibility(element, value) {
+            document.querySelectorAll('.visibility-option').forEach(el => el.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedVisibility = value;
+        }
+
+        // Tags
+        const tagInput = document.getElementById('tagInput');
+        const tagsContainer = document.getElementById('tagsContainer');
+        let tags = [];
+
+        tagInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && tagInput.value.trim()) {
+                e.preventDefault();
+                const tag = tagInput.value.trim();
+                if (!tags.includes(tag) && tags.length < 10) {
+                    tags.push(tag);
+                    const tagEl = document.createElement('span');
+                    tagEl.className = 'tag';
+                    tagEl.innerHTML = `#${tag} <span class="tag-remove" onclick="removeTag(this, '${tag}')">×</span>`;
+                    tagsContainer.insertBefore(tagEl, tagInput);
+                }
+                tagInput.value = '';
+            }
+        });
+
+        function removeTag(element, tag) {
+            tags = tags.filter(t => t !== tag);
+            element.parentElement.remove();
+        }
+
+        // Character counts
+        document.getElementById('videoTitle').addEventListener('input', function() {
+            document.getElementById('titleCount').textContent = this.value.length;
+        });
+
+        document.getElementById('videoDescription').addEventListener('input', function() {
+            document.getElementById('descCount').textContent = this.value.length;
+        });
+
+        // Copy link
+        function copyLink() {
+            const input = document.getElementById('videoUrl');
+            input.select();
+            document.execCommand('copy');
+            document.querySelector('.copy-btn').textContent = 'Copied!';
+            setTimeout(() => {
+                document.querySelector('.copy-btn').textContent = 'Copy';
+            }, 2000);
+        }
+
+        // Upload another
+        function uploadAnother() {
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
