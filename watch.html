@@ -76,18 +76,26 @@
         .header-right {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
         }
 
-        .header-icon {
-            color: #888;
-            cursor: pointer;
-            font-size: 20px;
-            transition: color 0.2s ease;
-        }
-
-        .header-icon:hover {
+        .header-btn {
+            background: #1A1A1A;
+            border: none;
             color: #FFFFFF;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            text-decoration: none;
+        }
+
+        .header-btn:hover {
+            background: #2A2A2A;
         }
 
         .profile-avatar {
@@ -101,6 +109,8 @@
             font-weight: 600;
             font-size: 14px;
             cursor: pointer;
+            text-decoration: none;
+            color: #FFFFFF;
         }
 
         /* Main Content */
@@ -113,7 +123,7 @@
         /* Video Section */
         .video-section {
             flex: 1;
-            max-width: 1200px;
+            max-width: 1000px;
             padding: 20px;
         }
 
@@ -134,6 +144,31 @@
             width: 100%;
             height: 100%;
             border: none;
+        }
+
+        .video-loading {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #1A1A1A;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #333;
+            border-radius: 50%;
+            border-top-color: #F5A623;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
         }
 
         /* Video Info */
@@ -205,6 +240,16 @@
             transform: scale(1.02);
         }
 
+        .action-btn.report {
+            background: #1A1A1A;
+            color: #888;
+        }
+
+        .action-btn.report:hover {
+            background: rgba(229, 9, 20, 0.2);
+            color: #E50914;
+        }
+
         /* Creator Section */
         .creator-section {
             display: flex;
@@ -230,6 +275,9 @@
             justify-content: center;
             font-size: 20px;
             font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            color: #FFFFFF;
         }
 
         .creator-details h3 {
@@ -238,6 +286,15 @@
             display: flex;
             align-items: center;
             gap: 8px;
+        }
+
+        .creator-details h3 a {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+
+        .creator-details h3 a:hover {
+            color: #F5A623;
         }
 
         .verified-badge {
@@ -265,6 +322,7 @@
             font-weight: 700;
             cursor: pointer;
             transition: all 0.2s ease;
+            text-decoration: none;
         }
 
         .subscribe-btn:hover {
@@ -329,6 +387,8 @@
             padding: 8px;
             border-radius: 8px;
             transition: background 0.2s ease;
+            text-decoration: none;
+            color: #FFFFFF;
         }
 
         .related-video:hover {
@@ -342,6 +402,13 @@
             border-radius: 8px;
             flex-shrink: 0;
             position: relative;
+            overflow: hidden;
+        }
+
+        .related-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .related-duration {
@@ -456,7 +523,212 @@
             color: #F5A623;
         }
 
-        /* Mobile Responsive */
+        /* Report Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: #1A1A1A;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-title {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .modal-close {
+            background: #2A2A2A;
+            border: none;
+            color: #FFFFFF;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .report-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .report-option {
+            background: #0D0D0D;
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            padding: 15px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.2s ease;
+        }
+
+        .report-option:hover {
+            border-color: #F5A623;
+        }
+
+        .report-option.selected {
+            border-color: #F5A623;
+            background: rgba(245, 166, 35, 0.1);
+        }
+
+        .report-option.urgent {
+            border-color: rgba(229, 9, 20, 0.3);
+        }
+
+        .report-option.urgent:hover,
+        .report-option.urgent.selected {
+            border-color: #E50914;
+            background: rgba(229, 9, 20, 0.1);
+        }
+
+        .report-icon {
+            font-size: 24px;
+        }
+
+        .report-label {
+            flex: 1;
+        }
+
+        .report-label strong {
+            display: block;
+            margin-bottom: 3px;
+        }
+
+        .report-label span {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .report-details {
+            display: none;
+            margin-bottom: 20px;
+        }
+
+        .report-details.show {
+            display: block;
+        }
+
+        .report-details textarea {
+            width: 100%;
+            background: #0D0D0D;
+            border: 2px solid #2A2A2A;
+            border-radius: 12px;
+            padding: 15px;
+            color: #FFFFFF;
+            font-size: 14px;
+            font-family: inherit;
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .report-details label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #888;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            border: none;
+        }
+
+        .modal-btn.cancel {
+            background: #2A2A2A;
+            color: #FFFFFF;
+        }
+
+        .modal-btn.submit {
+            background: #E50914;
+            color: #FFFFFF;
+        }
+
+        .report-success {
+            display: none;
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .report-success.show {
+            display: block;
+        }
+
+        .report-success-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        /* Error State */
+        .error-state {
+            text-align: center;
+            padding: 60px 20px;
+        }
+
+        .error-state-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+
+        .error-state h2 {
+            margin-bottom: 10px;
+        }
+
+        .error-state p {
+            color: #888;
+            margin-bottom: 20px;
+        }
+
+        .error-state a {
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            color: #0D0D0D;
+            padding: 12px 25px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* Mobile */
         @media (max-width: 1024px) {
             .sidebar {
                 display: none;
@@ -510,9 +782,9 @@
             <a href="index.html" class="logo">UNCAGED</a>
         </div>
         <div class="header-right">
-            <span class="header-icon">🔍</span>
-            <span class="header-icon">🔔</span>
-            <div class="profile-avatar">V</div>
+            <a href="browse.html" class="header-btn">🔍</a>
+            <a href="#" class="header-btn">🔔</a>
+            <a href="dashboard.html" class="profile-avatar" id="profileAvatar">?</a>
         </div>
     </header>
 
@@ -521,85 +793,65 @@
         <!-- Video Section -->
         <div class="video-section">
             <!-- Video Player -->
-            <div class="video-player-container">
-                <iframe 
-                    src="https://iframe.mediadelivery.net/embed/588548/4a151978-5124-4d7f-a0e8-8ed11490e02d?autoplay=false&loop=false&muted=false&preload=true&responsive=true"
-                    loading="lazy"
-                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                    allowfullscreen="true"
-                ></iframe>
+            <div class="video-player-container" id="videoContainer">
+                <div class="video-loading">
+                    <div class="spinner"></div>
+                </div>
             </div>
 
             <!-- Video Info -->
             <div class="video-info">
-                <h1 class="video-title">Rio Nightlife FINALLY Delivered! (Casa Bonita Experience)</h1>
+                <h1 class="video-title" id="videoTitle">Loading...</h1>
                 <div class="video-meta">
-                    <span>👁 3,742 views</span>
-                    <span>❤️ 521 likes</span>
-                    <span>📅 Jan 28, 2026</span>
+                    <span id="videoViews">👁 0 views</span>
+                    <span id="videoLikes">❤️ 0 likes</span>
+                    <span id="videoDate">📅 Loading...</span>
                 </div>
             </div>
 
             <!-- Action Buttons -->
             <div class="action-buttons">
-                <button class="action-btn active">👍 521</button>
-                <button class="action-btn">👎 12</button>
-                <button class="action-btn">↗️ Share</button>
+                <button class="action-btn" id="likeBtn">👍 <span id="likeCount">0</span></button>
+                <button class="action-btn" id="dislikeBtn">👎 <span id="dislikeCount">0</span></button>
+                <button class="action-btn" onclick="shareVideo()">↗️ Share</button>
                 <button class="action-btn">📥 Save</button>
-                <button class="action-btn primary">💰 Tip</button>
-                <button class="action-btn">⚠️ Report</button>
+                <button class="action-btn primary" onclick="tipCreator()">💰 Tip</button>
+                <button class="action-btn report" onclick="openReportModal()">⚠️ Report</button>
             </div>
 
             <!-- Creator Section -->
             <div class="creator-section">
                 <div class="creator-info">
-                    <div class="creator-avatar">V</div>
+                    <a href="#" class="creator-avatar" id="creatorAvatar">?</a>
                     <div class="creator-details">
                         <h3>
-                            Visa Vic
-                            <span class="verified-badge">✓</span>
+                            <a href="#" id="creatorLink">Loading...</a>
+                            <span class="verified-badge" id="verifiedBadge" style="display: none;">✓</span>
                         </h3>
-                        <p>12.4K subscribers</p>
+                        <p id="creatorSubscribers">0 subscribers</p>
                     </div>
                 </div>
-                <button class="subscribe-btn">Subscribe $9.99/mo</button>
+                <a href="#" class="subscribe-btn" id="subscribeBtn">Subscribe $9.99/mo</a>
             </div>
 
             <!-- Description -->
             <div class="video-description">
-                <p class="description-text">Finally made it to Casa Bonita in Rio de Janeiro! This is what nightlife content is supposed to look like - unfiltered, uncensored, and real.
-
-In this video:
-• The real Rio nightlife experience
-• Casa Bonita walkthrough
-• Meeting locals
-• What they don't show you on YouTube
-
-This content would get restricted on YouTube, so I'm sharing the full experience here on Uncaged.
-
-📍 Location: Rio de Janeiro, Brazil
-🎬 Shot on: iPhone 15 Pro Max</p>
-                <div class="description-tags">
-                    <span class="tag">#RioDeJaneiro</span>
-                    <span class="tag">#Nightlife</span>
-                    <span class="tag">#Brazil</span>
-                    <span class="tag">#Travel</span>
-                    <span class="tag">#Uncaged</span>
-                </div>
+                <p class="description-text" id="videoDescription">Loading description...</p>
+                <div class="description-tags" id="videoTags"></div>
             </div>
 
             <!-- Comments -->
             <div class="comments-section">
                 <div class="comments-header">
-                    <span class="comments-count">89 Comments</span>
+                    <span class="comments-count" id="commentsCount">0 Comments</span>
                 </div>
                 <div class="add-comment">
-                    <div class="comment-avatar">U</div>
+                    <div class="comment-avatar" id="userAvatar">?</div>
                     <div class="comment-input-container">
-                        <input type="text" class="comment-input" placeholder="Add a comment...">
+                        <input type="text" class="comment-input" placeholder="Add a comment..." id="commentInput">
                         <div class="comment-actions">
                             <button class="comment-btn cancel">Cancel</button>
-                            <button class="comment-btn submit">Comment</button>
+                            <button class="comment-btn submit" onclick="submitComment()">Comment</button>
                         </div>
                     </div>
                 </div>
@@ -609,73 +861,375 @@ This content would get restricted on YouTube, so I'm sharing the full experience
         <!-- Sidebar -->
         <aside class="sidebar">
             <h3 class="sidebar-title">Up Next</h3>
-            
-            <div class="related-video">
-                <div class="related-thumbnail">
-                    <span class="related-duration">18:42</span>
-                </div>
-                <div class="related-info">
-                    <h4>She Hates American Men (So I Took Her Out)</h4>
-                    <p>Visa Vic</p>
-                    <p>4.2K views • 1 week ago</p>
-                </div>
-            </div>
-
-            <div class="related-video">
-                <div class="related-thumbnail">
-                    <span class="related-duration">24:35</span>
-                </div>
-                <div class="related-info">
-                    <h4>She Took Me to a Favela Party in Rio</h4>
-                    <p>Visa Vic</p>
-                    <p>2.4K views • 3 days ago</p>
-                </div>
-            </div>
-
-            <div class="related-video">
-                <div class="related-thumbnail">
-                    <span class="related-duration">32:18</span>
-                </div>
-                <div class="related-info">
-                    <h4>The Uncut Brazil Experience - Full Documentary</h4>
-                    <p>Visa Vic</p>
-                    <p>1.8K views • 5 days ago</p>
-                </div>
-            </div>
-
-            <div class="related-video">
-                <div class="related-thumbnail">
-                    <span class="related-duration">28:55</span>
-                </div>
-                <div class="related-info">
-                    <h4>My Portuguese Teacher Showed Me Rio's Secrets</h4>
-                    <p>Visa Vic</p>
-                    <p>1.5K views • 2 weeks ago</p>
-                </div>
-            </div>
-
-            <div class="related-video">
-                <div class="related-thumbnail">
-                    <span class="related-duration">45:00</span>
-                </div>
-                <div class="related-info">
-                    <h4>Behind the Scenes: Content That Got Banned</h4>
-                    <p>Visa Vic</p>
-                    <p>2.1K views • 1 week ago</p>
-                </div>
-            </div>
-
-            <div class="related-video">
-                <div class="related-thumbnail">
-                    <span class="related-duration">22:10</span>
-                </div>
-                <div class="related-info">
-                    <h4>Dating in Colombia: What They Don't Tell You</h4>
-                    <p>Visa Vic</p>
-                    <p>6.3K views • 3 weeks ago</p>
-                </div>
+            <div id="relatedVideos">
+                <p style="color: #888;">Loading...</p>
             </div>
         </aside>
     </div>
+
+    <!-- Report Modal -->
+    <div class="modal-overlay" id="reportModal">
+        <div class="modal">
+            <div id="reportForm">
+                <div class="modal-header">
+                    <h2 class="modal-title">Report Video</h2>
+                    <button class="modal-close" onclick="closeReportModal()">✕</button>
+                </div>
+
+                <div class="report-options">
+                    <div class="report-option urgent" onclick="selectReportOption(this, 'csam')">
+                        <span class="report-icon">🚨</span>
+                        <div class="report-label">
+                            <strong>Child exploitation / CSAM</strong>
+                            <span>Sexual content involving minors - immediate review</span>
+                        </div>
+                    </div>
+                    <div class="report-option urgent" onclick="selectReportOption(this, 'nonconsent')">
+                        <span class="report-icon">⛔</span>
+                        <div class="report-label">
+                            <strong>Non-consensual content</strong>
+                            <span>Intimate content shared without consent</span>
+                        </div>
+                    </div>
+                    <div class="report-option" onclick="selectReportOption(this, 'illegal')">
+                        <span class="report-icon">🚫</span>
+                        <div class="report-label">
+                            <strong>Illegal activity</strong>
+                            <span>Violence, threats, or criminal behavior</span>
+                        </div>
+                    </div>
+                    <div class="report-option" onclick="selectReportOption(this, 'copyright')">
+                        <span class="report-icon">©️</span>
+                        <div class="report-label">
+                            <strong>Copyright infringement</strong>
+                            <span>Content that infringes your copyright</span>
+                        </div>
+                    </div>
+                    <div class="report-option" onclick="selectReportOption(this, 'spam')">
+                        <span class="report-icon">🗑️</span>
+                        <div class="report-label">
+                            <strong>Spam or misleading</strong>
+                            <span>Scams, fake content, or spam</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="report-details" id="reportDetails">
+                    <label>Additional details (optional)</label>
+                    <textarea id="reportText" placeholder="Please provide any additional information..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="modal-btn cancel" onclick="closeReportModal()">Cancel</button>
+                    <button class="modal-btn submit" id="submitReportBtn" onclick="submitReport()" disabled>Submit Report</button>
+                </div>
+            </div>
+
+            <div class="report-success" id="reportSuccess">
+                <div class="report-success-icon">✅</div>
+                <h3>Report Submitted</h3>
+                <p style="color: #888; margin-bottom: 20px;">Thank you for helping keep Uncaged safe.</p>
+                <button class="modal-btn cancel" onclick="closeReportModal()" style="width: 100%;">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { 
+            getFirestore, 
+            collection, 
+            doc,
+            getDoc,
+            getDocs,
+            query,
+            where,
+            orderBy,
+            limit,
+            updateDoc,
+            increment,
+            addDoc,
+            serverTimestamp 
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const BUNNY_LIBRARY_ID = '588548';
+
+        let currentUser = null;
+        let currentVideo = null;
+
+        // Get video ID from URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const videoId = urlParams.get('v');
+
+        // Check auth state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
+                document.getElementById('profileAvatar').textContent = initial;
+                document.getElementById('userAvatar').textContent = initial;
+            } else {
+                document.getElementById('profileAvatar').textContent = '?';
+                document.getElementById('userAvatar').textContent = '?';
+            }
+        });
+
+        // Load video
+        async function loadVideo() {
+            if (!videoId) {
+                showError('No video specified');
+                return;
+            }
+
+            try {
+                // Try to find video in Firebase by bunnyVideoId
+                const videosRef = collection(db, 'videos');
+                const q = query(videosRef, where('bunnyVideoId', '==', videoId));
+                const snapshot = await getDocs(q);
+
+                if (!snapshot.empty) {
+                    const videoDoc = snapshot.docs[0];
+                    currentVideo = { id: videoDoc.id, ...videoDoc.data() };
+                    displayVideo(currentVideo);
+                    
+                    // Increment view count
+                    await updateDoc(doc(db, 'videos', videoDoc.id), {
+                        views: increment(1)
+                    });
+                } else {
+                    // Video not in Firebase, but might exist in Bunny - try to play it
+                    displayVideoFromBunny(videoId);
+                }
+
+                // Load related videos
+                loadRelatedVideos();
+
+            } catch (error) {
+                console.error('Error loading video:', error);
+                // Still try to play from Bunny
+                displayVideoFromBunny(videoId);
+            }
+        }
+
+        // Display video from Firebase data
+        function displayVideo(video) {
+            // Set player
+            const container = document.getElementById('videoContainer');
+            container.innerHTML = `
+                <iframe 
+                    src="https://iframe.mediadelivery.net/embed/${BUNNY_LIBRARY_ID}/${video.bunnyVideoId}?autoplay=false&loop=false&muted=false&preload=true&responsive=true"
+                    loading="lazy"
+                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                    allowfullscreen="true"
+                ></iframe>
+            `;
+
+            // Set video info
+            document.getElementById('videoTitle').textContent = video.title || 'Untitled Video';
+            document.getElementById('videoViews').textContent = `👁 ${formatNumber(video.views || 0)} views`;
+            document.getElementById('videoLikes').textContent = `❤️ ${formatNumber(video.likes || 0)} likes`;
+            document.getElementById('videoDate').textContent = `📅 ${formatDate(video.createdAt)}`;
+            document.getElementById('likeCount').textContent = video.likes || 0;
+            document.getElementById('dislikeCount').textContent = video.dislikes || 0;
+            document.getElementById('videoDescription').textContent = video.description || 'No description';
+
+            // Set tags
+            const tagsContainer = document.getElementById('videoTags');
+            if (video.tags && video.tags.length > 0) {
+                tagsContainer.innerHTML = video.tags.map(tag => `<span class="tag">#${tag}</span>`).join('');
+            } else {
+                tagsContainer.innerHTML = '';
+            }
+
+            // Set creator info
+            const creatorInitial = (video.creatorName || 'U')[0].toUpperCase();
+            document.getElementById('creatorAvatar').textContent = creatorInitial;
+            document.getElementById('creatorLink').textContent = video.creatorName || 'Unknown Creator';
+            document.getElementById('creatorLink').href = `creator.html?id=${video.creatorId}`;
+            document.getElementById('creatorAvatar').href = `creator.html?id=${video.creatorId}`;
+            document.getElementById('subscribeBtn').href = `subscribe.html?creator=${video.creatorId}`;
+
+            // Update page title
+            document.title = `${video.title} | UNCAGED`;
+        }
+
+        // Display video directly from Bunny (fallback)
+        function displayVideoFromBunny(bunnyId) {
+            const container = document.getElementById('videoContainer');
+            container.innerHTML = `
+                <iframe 
+                    src="https://iframe.mediadelivery.net/embed/${BUNNY_LIBRARY_ID}/${bunnyId}?autoplay=false&loop=false&muted=false&preload=true&responsive=true"
+                    loading="lazy"
+                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                    allowfullscreen="true"
+                ></iframe>
+            `;
+
+            document.getElementById('videoTitle').textContent = 'Video';
+            document.getElementById('videoDescription').textContent = 'No description available';
+        }
+
+        // Load related videos
+        async function loadRelatedVideos() {
+            try {
+                const videosRef = collection(db, 'videos');
+                const q = query(videosRef, orderBy('createdAt', 'desc'), limit(6));
+                const snapshot = await getDocs(q);
+
+                const container = document.getElementById('relatedVideos');
+                
+                if (snapshot.empty) {
+                    container.innerHTML = '<p style="color: #888;">No related videos yet</p>';
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const video = doc.data();
+                    if (video.bunnyVideoId !== videoId) {
+                        html += `
+                            <a href="watch.html?v=${video.bunnyVideoId}" class="related-video">
+                                <div class="related-thumbnail">
+                                    <div style="width:100%;height:100%;background:linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%);display:flex;align-items:center;justify-content:center;">🎬</div>
+                                    <span class="related-duration">${video.duration || '10:00'}</span>
+                                </div>
+                                <div class="related-info">
+                                    <h4>${video.title || 'Untitled'}</h4>
+                                    <p>${video.creatorName || 'Unknown'}</p>
+                                    <p>${formatNumber(video.views || 0)} views • ${formatDate(video.createdAt)}</p>
+                                </div>
+                            </a>
+                        `;
+                    }
+                });
+
+                container.innerHTML = html || '<p style="color: #888;">No related videos yet</p>';
+
+            } catch (error) {
+                console.error('Error loading related videos:', error);
+            }
+        }
+
+        // Show error
+        function showError(message) {
+            document.querySelector('.video-section').innerHTML = `
+                <div class="error-state">
+                    <div class="error-state-icon">😕</div>
+                    <h2>Video Not Found</h2>
+                    <p>${message}</p>
+                    <a href="browse.html">Browse Videos</a>
+                </div>
+            `;
+        }
+
+        // Helper functions
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        function formatDate(timestamp) {
+            if (!timestamp) return 'Just now';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            
+            if (days === 0) return 'Today';
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return `${days} days ago`;
+            if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
+            return date.toLocaleDateString();
+        }
+
+        // Make functions available globally
+        window.db = db;
+        window.currentUser = currentUser;
+        window.currentVideo = currentVideo;
+
+        // Load video on page load
+        loadVideo();
+    </script>
+
+    <script>
+        // Report modal functions
+        let selectedReportType = null;
+
+        function openReportModal() {
+            document.getElementById('reportModal').classList.add('show');
+        }
+
+        function closeReportModal() {
+            document.getElementById('reportModal').classList.remove('show');
+            // Reset
+            document.getElementById('reportForm').style.display = 'block';
+            document.getElementById('reportSuccess').classList.remove('show');
+            document.querySelectorAll('.report-option').forEach(opt => opt.classList.remove('selected'));
+            document.getElementById('reportDetails').classList.remove('show');
+            document.getElementById('submitReportBtn').disabled = true;
+            selectedReportType = null;
+        }
+
+        function selectReportOption(element, type) {
+            document.querySelectorAll('.report-option').forEach(opt => opt.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedReportType = type;
+            document.getElementById('reportDetails').classList.add('show');
+            document.getElementById('submitReportBtn').disabled = false;
+        }
+
+        function submitReport() {
+            console.log('Report submitted:', selectedReportType);
+            document.getElementById('reportForm').style.display = 'none';
+            document.getElementById('reportSuccess').classList.add('show');
+        }
+
+        // Share video
+        function shareVideo() {
+            const url = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: document.getElementById('videoTitle').textContent,
+                    url: url
+                });
+            } else {
+                navigator.clipboard.writeText(url);
+                alert('Link copied to clipboard!');
+            }
+        }
+
+        // Tip creator
+        function tipCreator() {
+            const subscribeUrl = document.getElementById('subscribeBtn').href;
+            window.location.href = subscribeUrl;
+        }
+
+        // Submit comment
+        function submitComment() {
+            const comment = document.getElementById('commentInput').value.trim();
+            if (!comment) {
+                alert('Please enter a comment');
+                return;
+            }
+            alert('Comments coming soon!');
+            document.getElementById('commentInput').value = '';
+        }
+    </script>
 </body>
 </html>

@@ -3,1064 +3,298 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Visa Vic | UNCAGED</title>
+    <title>UNCAGED | Creator Profile</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: #0D0D0D;
-            color: #FFFFFF;
-            min-height: 100vh;
-        }
-
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 70px;
-            background: rgba(13, 13, 13, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 60px;
-            z-index: 1000;
-            border-bottom: 1px solid #1A1A1A;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 50px;
-        }
-
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 32px;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .nav-link {
-            color: #B3B3B3;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        .nav-link:hover {
-            color: #FFFFFF;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 25px;
-        }
-
-        .header-icon {
-            color: #B3B3B3;
-            cursor: pointer;
-            font-size: 20px;
-            transition: color 0.2s ease;
-        }
-
-        .header-icon:hover {
-            color: #FFFFFF;
-        }
-
-        .profile-avatar-small {
-            width: 35px;
-            height: 35px;
-            border-radius: 6px;
-            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        /* Banner */
-        .banner {
-            height: 350px;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
-            position: relative;
-            margin-top: 70px;
-        }
-
-        .banner::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 150px;
-            background: linear-gradient(to top, #0D0D0D 0%, transparent 100%);
-        }
-
-        /* Profile Section */
-        .profile-section {
-            position: relative;
-            z-index: 10;
-            margin-top: -100px;
-            padding: 0 60px;
-        }
-
-        .profile-header {
-            display: flex;
-            gap: 30px;
-            align-items: flex-end;
-            margin-bottom: 30px;
-        }
-
-        .profile-avatar {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
-            border: 5px solid #0D0D0D;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-            font-weight: 700;
-            flex-shrink: 0;
-        }
-
-        .profile-info {
-            flex: 1;
-            padding-bottom: 10px;
-        }
-
-        .profile-name {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .verified-badge {
-            background: #F5A623;
-            color: #0D0D0D;
-            font-size: 12px;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .profile-handle {
-            font-size: 18px;
-            color: #888;
-            margin-bottom: 15px;
-        }
-
-        .profile-stats {
-            display: flex;
-            gap: 40px;
-        }
-
-        .stat {
-            text-align: center;
-        }
-
-        .stat-number {
-            font-size: 24px;
-            font-weight: 700;
-            color: #FFFFFF;
-        }
-
-        .stat-label {
-            font-size: 13px;
-            color: #888;
-        }
-
-        .profile-actions {
-            display: flex;
-            gap: 15px;
-            padding-bottom: 10px;
-        }
-
-        .subscribe-btn {
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            border: none;
-            color: #0D0D0D;
-            padding: 14px 35px;
-            border-radius: 30px;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .subscribe-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 10px 30px rgba(245, 166, 35, 0.3);
-        }
-
-        .action-btn {
-            background: #1A1A1A;
-            border: 1px solid #333;
-            color: #FFFFFF;
-            padding: 14px 25px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .action-btn:hover {
-            background: #252525;
-            border-color: #444;
-        }
-
-        /* Bio Section */
-        .bio-section {
-            padding: 0 60px;
-            margin-bottom: 40px;
-        }
-
-        .bio-text {
-            font-size: 16px;
-            color: #B3B3B3;
-            line-height: 1.7;
-            max-width: 800px;
-            margin-bottom: 20px;
-        }
-
-        .bio-tags {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-        }
-
-        .bio-tag {
-            background: #1A1A1A;
-            border: 1px solid #333;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 13px;
-            color: #B3B3B3;
-        }
-
-        .social-links {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-        }
-
-        .social-link {
-            background: #1A1A1A;
-            border: 1px solid #333;
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-        }
-
-        .social-link:hover {
-            background: #252525;
-            border-color: #F5A623;
-        }
-
-        /* Tabs */
-        .tabs-section {
-            padding: 0 60px;
-            border-bottom: 1px solid #1A1A1A;
-            margin-bottom: 40px;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 40px;
-        }
-
-        .tab {
-            padding: 20px 5px;
-            font-size: 15px;
-            font-weight: 600;
-            color: #888;
-            cursor: pointer;
-            border-bottom: 3px solid transparent;
-            transition: all 0.2s ease;
-        }
-
-        .tab:hover {
-            color: #FFFFFF;
-        }
-
-        .tab.active {
-            color: #F5A623;
-            border-bottom-color: #F5A623;
-        }
-
-        /* Content Grid */
-        .content-section {
-            padding: 0 60px;
-            margin-bottom: 60px;
-        }
-
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
-
-        .content-card {
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            text-decoration: none;
-            color: inherit;
-            display: block;
-        }
-
-        .content-card:hover {
-            transform: scale(1.03);
-        }
-
-        .card-thumbnail {
-            position: relative;
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: #1A1A1A;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 15px;
-        }
-
-        .card-thumbnail-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 50%, #0d1b2a 100%);
-        }
-
-        .card-thumbnail .play-overlay {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 60px;
-            height: 60px;
-            background: rgba(0,0,0,0.7);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        }
-
-        .content-card:hover .play-overlay {
-            opacity: 1;
-        }
-
-        .card-badge {
-            position: absolute;
-            top: 12px;
-            left: 12px;
-            background: #F5A623;
-            color: #0D0D0D;
-            padding: 5px 12px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 700;
-            text-transform: uppercase;
-        }
-
-        .card-badge.vip {
-            background: #6B2FEB;
-            color: #FFFFFF;
-        }
-
-        .card-badge.live {
-            background: #E50914;
-            color: #FFFFFF;
-        }
-
-        .card-duration {
-            position: absolute;
-            bottom: 12px;
-            right: 12px;
-            background: rgba(0,0,0,0.85);
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .card-info {
-            padding: 0 5px;
-        }
-
-        .card-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .card-meta {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            font-size: 13px;
-            color: #888;
-        }
-
-        /* Membership Tiers */
-        .membership-section {
-            padding: 0 60px;
-            margin-bottom: 60px;
-            display: none;
-        }
-
-        .membership-section.active {
-            display: block;
-        }
-
-        .membership-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-            max-width: 1000px;
-        }
-
-        .tier-card {
-            background: #121212;
-            border: 2px solid #1A1A1A;
-            border-radius: 20px;
-            padding: 35px;
-            transition: all 0.3s ease;
-        }
-
-        .tier-card:hover {
-            border-color: #333;
-        }
-
-        .tier-card.popular {
-            border-color: #F5A623;
-            position: relative;
-        }
-
-        .tier-card.popular::before {
-            content: 'MOST POPULAR';
-            position: absolute;
-            top: -12px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #F5A623;
-            color: #0D0D0D;
-            padding: 5px 15px;
-            border-radius: 15px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .tier-name {
-            font-size: 22px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        .tier-price {
-            font-size: 36px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .tier-price span {
-            font-size: 16px;
-            font-weight: 400;
-            color: #888;
-        }
-
-        .tier-description {
-            font-size: 14px;
-            color: #888;
-            margin-bottom: 25px;
-        }
-
-        .tier-features {
-            list-style: none;
-            margin-bottom: 30px;
-        }
-
-        .tier-features li {
-            padding: 10px 0;
-            font-size: 14px;
-            color: #B3B3B3;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .tier-features li::before {
-            content: '✓';
-            color: #F5A623;
-            font-weight: 700;
-        }
-
-        .tier-btn {
-            width: 100%;
-            padding: 14px;
-            border-radius: 30px;
-            font-size: 15px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .tier-btn.primary {
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            border: none;
-            color: #0D0D0D;
-        }
-
-        .tier-btn.primary:hover {
-            transform: scale(1.02);
-            box-shadow: 0 10px 30px rgba(245, 166, 35, 0.3);
-        }
-
-        .tier-btn.secondary {
-            background: transparent;
-            border: 2px solid #333;
-            color: #FFFFFF;
-        }
-
-        .tier-btn.secondary:hover {
-            border-color: #F5A623;
-            color: #F5A623;
-        }
-
-        /* About Section */
-        .about-section {
-            padding: 0 60px;
-            margin-bottom: 60px;
-            display: none;
-        }
-
-        .about-section.active {
-            display: block;
-        }
-
-        .about-content {
-            max-width: 800px;
-        }
-
-        .about-title {
-            font-size: 24px;
-            font-weight: 700;
-            margin-bottom: 20px;
-        }
-
-        .about-text {
-            font-size: 16px;
-            color: #B3B3B3;
-            line-height: 1.8;
-            margin-bottom: 30px;
-        }
-
-        .about-stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            background: #121212;
-            border-radius: 16px;
-            padding: 30px;
-        }
-
-        .about-stat {
-            text-align: center;
-        }
-
-        .about-stat-number {
-            font-size: 28px;
-            font-weight: 700;
-            color: #F5A623;
-            margin-bottom: 5px;
-        }
-
-        .about-stat-label {
-            font-size: 13px;
-            color: #888;
-        }
-
-        /* Footer */
-        .footer {
-            background: #080808;
-            padding: 50px 60px;
-            border-top: 1px solid #1A1A1A;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .footer-logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 24px;
-            letter-spacing: 3px;
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 30px;
-        }
-
-        .footer-links a {
-            color: #666;
-            text-decoration: none;
-            font-size: 14px;
-            transition: color 0.2s ease;
-        }
-
-        .footer-links a:hover {
-            color: #F5A623;
-        }
-
-        /* Mobile Responsive */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: #0D0D0D; color: #FFFFFF; min-height: 100vh; }
+        
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; z-index: 1000; border-bottom: 1px solid #1A1A1A; }
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .back-btn { background: #1A1A1A; border: none; color: #FFFFFF; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; text-decoration: none; }
+        .back-btn:hover { background: #2A2A2A; }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .header-btn { background: #1A1A1A; border: none; color: #FFFFFF; width: 40px; height: 40px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 16px; text-decoration: none; }
+        .profile-avatar-header { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%); display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px; cursor: pointer; text-decoration: none; color: #FFFFFF; }
+        
+        .banner { height: 250px; background: linear-gradient(135deg, #1a1a2e 0%, #2d1f3d 50%, #1a1a2e 100%); position: relative; margin-top: 60px; }
+        .banner-overlay { position: absolute; bottom: 0; left: 0; right: 0; height: 100px; background: linear-gradient(transparent, #0D0D0D); }
+        
+        .profile-section { max-width: 1200px; margin: -80px auto 0; padding: 0 30px 40px; position: relative; z-index: 10; }
+        .profile-header { display: flex; align-items: flex-end; gap: 25px; margin-bottom: 30px; }
+        .profile-avatar { width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%); display: flex; align-items: center; justify-content: center; font-size: 60px; font-weight: 700; border: 5px solid #0D0D0D; flex-shrink: 0; }
+        .profile-info { flex: 1; padding-bottom: 10px; }
+        .profile-name { font-size: 32px; font-weight: 700; display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+        .verified-badge { background: #F5A623; color: #0D0D0D; font-size: 12px; padding: 4px 10px; border-radius: 12px; font-weight: 700; }
+        .profile-handle { color: #888; font-size: 16px; margin-bottom: 15px; }
+        .profile-stats { display: flex; gap: 30px; }
+        .stat-value { font-size: 22px; font-weight: 700; }
+        .stat-label { font-size: 13px; color: #888; }
+        .profile-actions { display: flex; gap: 12px; padding-bottom: 10px; }
+        .subscribe-btn { background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); border: none; color: #0D0D0D; padding: 14px 35px; border-radius: 25px; font-size: 16px; font-weight: 700; cursor: pointer; text-decoration: none; transition: all 0.2s ease; }
+        .subscribe-btn:hover { transform: scale(1.05); box-shadow: 0 5px 25px rgba(245, 166, 35, 0.3); }
+        .action-btn { background: #1A1A1A; border: none; color: #FFFFFF; padding: 14px 25px; border-radius: 25px; font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px; }
+        .action-btn:hover { background: #2A2A2A; }
+        
+        .profile-bio { margin-bottom: 30px; padding: 20px; background: #1A1A1A; border-radius: 16px; }
+        .bio-text { font-size: 15px; color: #B3B3B3; line-height: 1.6; white-space: pre-wrap; }
+        .social-links { display: flex; gap: 15px; margin-top: 15px; }
+        .social-link { color: #F5A623; text-decoration: none; font-size: 14px; }
+        .social-link:hover { text-decoration: underline; }
+        
+        .tabs { display: flex; gap: 5px; border-bottom: 1px solid #1A1A1A; margin-bottom: 30px; }
+        .tab { background: transparent; border: none; color: #888; padding: 15px 25px; font-size: 15px; font-weight: 600; cursor: pointer; position: relative; }
+        .tab:hover { color: #FFFFFF; }
+        .tab.active { color: #F5A623; }
+        .tab.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 3px; background: #F5A623; border-radius: 3px 3px 0 0; }
+        
+        .video-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .video-card { cursor: pointer; transition: transform 0.2s ease; text-decoration: none; color: #FFFFFF; }
+        .video-card:hover { transform: translateY(-5px); }
+        .video-thumbnail { position: relative; aspect-ratio: 16/9; background: #1A1A1A; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
+        .video-thumbnail img { width: 100%; height: 100%; object-fit: cover; }
+        .video-thumbnail-placeholder { width: 100%; height: 100%; background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%); display: flex; align-items: center; justify-content: center; font-size: 40px; }
+        .video-duration { position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.85); padding: 4px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; }
+        .video-badge { position: absolute; top: 10px; left: 10px; background: #F5A623; color: #0D0D0D; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 700; }
+        .video-title { font-size: 15px; font-weight: 600; margin-bottom: 5px; line-height: 1.3; }
+        .video-meta { font-size: 13px; color: #888; }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .tiers-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .tier-card { background: #1A1A1A; border: 2px solid #2A2A2A; border-radius: 16px; padding: 25px; position: relative; }
+        .tier-card.popular { border-color: #F5A623; }
+        .popular-badge { position: absolute; top: -12px; right: 20px; background: #F5A623; color: #0D0D0D; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .tier-name { font-size: 20px; font-weight: 700; margin-bottom: 5px; }
+        .tier-price { font-size: 28px; font-weight: 700; color: #F5A623; margin-bottom: 15px; }
+        .tier-price span { font-size: 14px; color: #888; font-weight: 400; }
+        .tier-features { list-style: none; margin-bottom: 20px; }
+        .tier-features li { padding: 8px 0; color: #B3B3B3; font-size: 14px; display: flex; align-items: center; gap: 10px; }
+        .tier-features li::before { content: "✓"; color: #1DB954; font-weight: 700; }
+        .tier-btn { width: 100%; background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); border: none; color: #0D0D0D; padding: 14px; border-radius: 10px; font-weight: 700; cursor: pointer; text-decoration: none; display: block; text-align: center; }
+        
+        .empty-state { text-align: center; padding: 60px 20px; color: #888; }
+        .empty-state-icon { font-size: 60px; margin-bottom: 20px; }
+        .empty-state h3 { color: #FFFFFF; margin-bottom: 10px; }
+        
+        .loading { text-align: center; padding: 60px; }
+        .spinner { width: 40px; height: 40px; border: 3px solid #333; border-radius: 50%; border-top-color: #F5A623; animation: spin 0.8s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
         @media (max-width: 768px) {
-            .header {
-                padding: 0 20px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .banner {
-                height: 200px;
-            }
-
-            .profile-section {
-                padding: 0 20px;
-            }
-
-            .profile-header {
-                flex-direction: column;
-                align-items: center;
-                text-align: center;
-            }
-
-            .profile-avatar {
-                width: 120px;
-                height: 120px;
-                font-size: 40px;
-            }
-
-            .profile-name {
-                font-size: 28px;
-                flex-direction: column;
-                gap: 10px;
-            }
-
-            .profile-stats {
-                justify-content: center;
-            }
-
-            .profile-actions {
-                justify-content: center;
-                flex-wrap: wrap;
-            }
-
-            .bio-section, .tabs-section, .content-section, .membership-section, .about-section {
-                padding: 0 20px;
-            }
-
-            .tabs {
-                gap: 20px;
-                overflow-x: auto;
-            }
-
-            .about-stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .footer {
-                padding: 30px 20px;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                gap: 20px;
-            }
+            .profile-header { flex-direction: column; align-items: center; text-align: center; }
+            .profile-avatar { width: 100px; height: 100px; font-size: 40px; }
+            .profile-stats { justify-content: center; }
+            .profile-actions { justify-content: center; flex-wrap: wrap; }
+            .video-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="header-left">
+            <a href="browse.html" class="back-btn">←</a>
             <a href="index.html" class="logo">UNCAGED</a>
-            <nav class="nav-links">
-                <a href="browse.html" class="nav-link">Browse</a>
-                <a href="#" class="nav-link">Live Now</a>
-                <a href="#" class="nav-link">Creators</a>
-                <a href="#" class="nav-link">Categories</a>
-            </nav>
         </div>
         <div class="header-right">
-            <span class="header-icon">🔍</span>
-            <span class="header-icon">🔔</span>
-            <a href="login.html" class="profile-avatar-small">V</a>
+            <a href="browse.html" class="header-btn">🔍</a>
+            <a href="#" class="header-btn">🔔</a>
+            <a href="dashboard.html" class="profile-avatar-header" id="headerAvatar">?</a>
         </div>
     </header>
 
-    <!-- Banner -->
-    <div class="banner"></div>
+    <div class="banner"><div class="banner-overlay"></div></div>
 
-    <!-- Profile Section -->
     <section class="profile-section">
         <div class="profile-header">
-            <div class="profile-avatar">V</div>
+            <div class="profile-avatar" id="creatorAvatar">?</div>
             <div class="profile-info">
                 <h1 class="profile-name">
-                    Visa Vic
-                    <span class="verified-badge">✓ Verified Creator</span>
+                    <span id="creatorName">Loading...</span>
+                    <span class="verified-badge" id="verifiedBadge" style="display: none;">✓ VERIFIED</span>
                 </h1>
-                <p class="profile-handle">@visavic</p>
+                <p class="profile-handle" id="creatorHandle">@loading</p>
                 <div class="profile-stats">
-                    <div class="stat">
-                        <div class="stat-number">12.4K</div>
-                        <div class="stat-label">Subscribers</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number">147</div>
-                        <div class="stat-label">Videos</div>
-                    </div>
-                    <div class="stat">
-                        <div class="stat-number">2.1M</div>
-                        <div class="stat-label">Total Views</div>
-                    </div>
+                    <div class="stat"><div class="stat-value" id="subscriberCount">0</div><div class="stat-label">Subscribers</div></div>
+                    <div class="stat"><div class="stat-value" id="videoCount">0</div><div class="stat-label">Videos</div></div>
+                    <div class="stat"><div class="stat-value" id="viewCount">0</div><div class="stat-label">Total Views</div></div>
                 </div>
             </div>
             <div class="profile-actions">
-                <button class="subscribe-btn">Subscribe $9.99/mo</button>
+                <a href="subscribe.html" class="subscribe-btn" id="subscribeBtn">Subscribe $9.99/mo</a>
                 <button class="action-btn">💬 Message</button>
                 <button class="action-btn">🔔 Notify</button>
             </div>
         </div>
-    </section>
 
-    <!-- Bio Section -->
-    <section class="bio-section">
-        <p class="bio-text">
-            🌍 Travel content creator documenting the REAL experiences you won't find anywhere else. From Rio's underground nightlife to Cape Town's hidden gems - I show you what the world is actually like, unfiltered and uncensored.
-        </p>
-        <div class="bio-tags">
-            <span class="bio-tag">🌍 Travel</span>
-            <span class="bio-tag">🎉 Nightlife</span>
-            <span class="bio-tag">💑 Dating Culture</span>
-            <span class="bio-tag">✈️ Digital Nomad</span>
-            <span class="bio-tag">🎬 Documentary</span>
+        <div class="profile-bio">
+            <p class="bio-text" id="creatorBio">Loading bio...</p>
+            <div class="social-links" id="socialLinks"></div>
         </div>
-        <div class="social-links">
-            <a href="#" class="social-link">📺</a>
-            <a href="#" class="social-link">📸</a>
-            <a href="#" class="social-link">🐦</a>
-            <a href="#" class="social-link">🔗</a>
-        </div>
-    </section>
 
-    <!-- Tabs -->
-    <section class="tabs-section">
         <div class="tabs">
-            <div class="tab active" onclick="showTab('videos')">Videos</div>
-            <div class="tab" onclick="showTab('membership')">Membership</div>
-            <div class="tab" onclick="showTab('about')">About</div>
+            <button class="tab active" onclick="showTab('videos')">Videos</button>
+            <button class="tab" onclick="showTab('tiers')">Subscription Tiers</button>
+            <button class="tab" onclick="showTab('about')">About</button>
         </div>
-    </section>
 
-    <!-- Videos Content -->
-    <section class="content-section" id="videos-content">
-        <div class="content-grid">
-            <a href="watch.html" class="content-card">
-                <div class="card-thumbnail">
-                    <div class="card-thumbnail-bg"></div>
-                    <span class="card-badge">New</span>
-                    <span class="card-duration">24:35</span>
-                    <div class="play-overlay">▶</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">Rio Nightlife FINALLY Delivered! (Casa Bonita)</h3>
-                    <div class="card-meta">
-                        <span>👁 3.7K views</span>
-                        <span>2 days ago</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="watch.html" class="content-card">
-                <div class="card-thumbnail">
-                    <div class="card-thumbnail-bg"></div>
-                    <span class="card-badge vip">VIP</span>
-                    <span class="card-duration">45:00</span>
-                    <div class="play-overlay">▶</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">Behind the Scenes: Content That Got Banned</h3>
-                    <div class="card-meta">
-                        <span>👁 2.1K views</span>
-                        <span>5 days ago</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="watch.html" class="content-card">
-                <div class="card-thumbnail">
-                    <div class="card-thumbnail-bg"></div>
-                    <span class="card-duration">18:42</span>
-                    <div class="play-overlay">▶</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">She Hates American Men (So I Took Her Out)</h3>
-                    <div class="card-meta">
-                        <span>👁 4.2K views</span>
-                        <span>1 week ago</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="watch.html" class="content-card">
-                <div class="card-thumbnail">
-                    <div class="card-thumbnail-bg"></div>
-                    <span class="card-badge vip">VIP</span>
-                    <span class="card-duration">52:15</span>
-                    <div class="play-overlay">▶</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">Cape Town After Dark: The Real Experience</h3>
-                    <div class="card-meta">
-                        <span>👁 1.8K views</span>
-                        <span>1 week ago</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="watch.html" class="content-card">
-                <div class="card-thumbnail">
-                    <div class="card-thumbnail-bg"></div>
-                    <span class="card-duration">28:55</span>
-                    <div class="play-overlay">▶</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">My Portuguese Teacher Showed Me Rio's Secrets</h3>
-                    <div class="card-meta">
-                        <span>👁 2.9K views</span>
-                        <span>2 weeks ago</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="watch.html" class="content-card">
-                <div class="card-thumbnail">
-                    <div class="card-thumbnail-bg"></div>
-                    <span class="card-badge vip">VIP</span>
-                    <span class="card-duration">38:22</span>
-                    <div class="play-overlay">▶</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">The Full Medellín Documentary (Uncut)</h3>
-                    <div class="card-meta">
-                        <span>👁 5.1K views</span>
-                        <span>2 weeks ago</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="watch.html" class="content-card">
-                <div class="card-thumbnail">
-                    <div class="card-thumbnail-bg"></div>
-                    <span class="card-duration">22:10</span>
-                    <div class="play-overlay">▶</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">Dating in Colombia: What They Don't Tell You</h3>
-                    <div class="card-meta">
-                        <span>👁 6.3K views</span>
-                        <span>3 weeks ago</span>
-                    </div>
-                </div>
-            </a>
-
-            <a href="watch.html" class="content-card">
-                <div class="card-thumbnail">
-                    <div class="card-thumbnail-bg"></div>
-                    <span class="card-duration">32:18</span>
-                    <div class="play-overlay">▶</div>
-                </div>
-                <div class="card-info">
-                    <h3 class="card-title">The Uncut Brazil Experience - Full Documentary</h3>
-                    <div class="card-meta">
-                        <span>👁 4.7K views</span>
-                        <span>1 month ago</span>
-                    </div>
-                </div>
-            </a>
+        <div class="tab-content active" id="videosTab">
+            <div class="video-grid" id="creatorVideos">
+                <div class="loading"><div class="spinner"></div><p>Loading videos...</p></div>
+            </div>
         </div>
-    </section>
 
-    <!-- Membership Content -->
-    <section class="membership-section" id="membership-content">
-        <div class="membership-grid">
-            <div class="tier-card">
-                <h3 class="tier-name">Supporter</h3>
-                <div class="tier-price">$4.99<span>/month</span></div>
-                <p class="tier-description">Support the journey and get basic perks</p>
-                <ul class="tier-features">
-                    <li>Ad-free viewing</li>
-                    <li>Members-only posts</li>
-                    <li>Early access to videos</li>
-                    <li>Supporter badge in comments</li>
-                </ul>
-                <button class="tier-btn secondary">Select Plan</button>
+        <div class="tab-content" id="tiersTab">
+            <div class="tiers-grid">
+                <div class="tier-card">
+                    <h3 class="tier-name">Basic</h3>
+                    <div class="tier-price">$4.99 <span>/month</span></div>
+                    <ul class="tier-features">
+                        <li>Access to all public videos</li>
+                        <li>Support the creator</li>
+                        <li>Cancel anytime</li>
+                    </ul>
+                    <a href="subscribe.html" class="tier-btn">Subscribe</a>
+                </div>
+                <div class="tier-card popular">
+                    <span class="popular-badge">MOST POPULAR</span>
+                    <h3 class="tier-name">Premium</h3>
+                    <div class="tier-price">$9.99 <span>/month</span></div>
+                    <ul class="tier-features">
+                        <li>Everything in Basic</li>
+                        <li>Exclusive behind-the-scenes</li>
+                        <li>Early access to new videos</li>
+                        <li>Direct messages</li>
+                    </ul>
+                    <a href="subscribe.html" class="tier-btn">Subscribe</a>
+                </div>
+                <div class="tier-card">
+                    <h3 class="tier-name">VIP</h3>
+                    <div class="tier-price">$19.99 <span>/month</span></div>
+                    <ul class="tier-features">
+                        <li>Everything in Premium</li>
+                        <li>Uncut & uncensored content</li>
+                        <li>Monthly video calls</li>
+                        <li>Custom content requests</li>
+                    </ul>
+                    <a href="subscribe.html" class="tier-btn">Subscribe</a>
+                </div>
             </div>
+        </div>
 
-            <div class="tier-card popular">
-                <h3 class="tier-name">Premium</h3>
-                <div class="tier-price">$9.99<span>/month</span></div>
-                <p class="tier-description">Full access to all content</p>
-                <ul class="tier-features">
-                    <li>Everything in Supporter</li>
-                    <li>All premium videos</li>
-                    <li>Behind-the-scenes content</li>
-                    <li>Monthly Q&A sessions</li>
-                    <li>Discord access</li>
-                </ul>
-                <button class="tier-btn primary">Select Plan</button>
-            </div>
-
-            <div class="tier-card">
-                <h3 class="tier-name">VIP</h3>
-                <div class="tier-price">$24.99<span>/month</span></div>
-                <p class="tier-description">The ultimate experience</p>
-                <ul class="tier-features">
-                    <li>Everything in Premium</li>
-                    <li>Direct messaging access</li>
-                    <li>Exclusive VIP-only content</li>
-                    <li>1-on-1 video calls (monthly)</li>
-                    <li>Travel tips & location guides</li>
-                    <li>Name in video credits</li>
-                </ul>
-                <button class="tier-btn secondary">Select Plan</button>
+        <div class="tab-content" id="aboutTab">
+            <div class="profile-bio">
+                <h3 style="margin-bottom: 15px;">About</h3>
+                <p class="bio-text" id="creatorAbout">Loading...</p>
             </div>
         </div>
     </section>
 
-    <!-- About Content -->
-    <section class="about-section" id="about-content">
-        <div class="about-content">
-            <h2 class="about-title">About Visa Vic</h2>
-            <p class="about-text">
-                Hey, I'm Vic - a military veteran turned travel content creator. After years of being told where to go and what to do, I decided to take control of my life and see the world on my own terms.
-                <br><br>
-                I started documenting my travels in 2023, focusing on the experiences that mainstream travel content ignores - the nightlife, the dating culture, the real interactions with locals. YouTube kept restricting my content, so I built UNCAGED to share these stories without limitations.
-                <br><br>
-                My mission is simple: show you the world as it really is, not the sanitized version you see on traditional platforms. From the favelas of Rio to the clubs of Cape Town, I'm bringing you along for the ride.
-                <br><br>
-                When I'm not traveling, I'm working on building businesses and creating content that helps other men live life on their own terms.
-            </p>
-            <div class="about-stats">
-                <div class="about-stat">
-                    <div class="about-stat-number">37</div>
-                    <div class="about-stat-label">Countries Visited</div>
-                </div>
-                <div class="about-stat">
-                    <div class="about-stat-number">2023</div>
-                    <div class="about-stat-label">Started Creating</div>
-                </div>
-                <div class="about-stat">
-                    <div class="about-stat-number">147</div>
-                    <div class="about-stat-label">Videos Posted</div>
-                </div>
-                <div class="about-stat">
-                    <div class="about-stat-number">12.4K</div>
-                    <div class="about-stat-label">Community Members</div>
-                </div>
-            </div>
-        </div>
-    </section>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, getDocs, query, where, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-logo">UNCAGED</div>
-            <div class="footer-links">
-                <a href="index.html">Home</a>
-                <a href="browse.html">Browse</a>
-                <a href="#">Help</a>
-                <a href="#">Terms</a>
-                <a href="#">Privacy</a>
-            </div>
-        </div>
-    </footer>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const creatorId = urlParams.get('id');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
+                document.getElementById('headerAvatar').textContent = initial;
+            }
+        });
+
+        // Show demo profile
+        function showDemoProfile() {
+            document.getElementById('creatorAvatar').textContent = 'V';
+            document.getElementById('creatorName').textContent = 'Visa Vic';
+            document.getElementById('creatorHandle').textContent = '@visavic';
+            document.getElementById('creatorBio').textContent = 'Travel creator sharing authentic experiences from around the world. Nightlife, dating, culture - the content YouTube won\'t let me post. 🌍✈️';
+            document.getElementById('creatorAbout').textContent = 'Hey! I\'m Vic, a travel content creator focused on showing you the REAL side of international travel.\n\nNo filters, no BS - just authentic experiences from nightlife to dating culture to hidden gems.\n\nI started Uncaged because YouTube kept restricting my content. Here, I share everything uncensored.';
+            document.getElementById('subscriberCount').textContent = '12.4K';
+            document.getElementById('videoCount').textContent = '156';
+            document.getElementById('viewCount').textContent = '2.1M';
+            document.getElementById('verifiedBadge').style.display = 'inline-block';
+            document.getElementById('socialLinks').innerHTML = `
+                <a href="#" class="social-link">📺 YouTube</a>
+                <a href="#" class="social-link">📷 Instagram</a>
+            `;
+            document.title = 'Visa Vic | UNCAGED';
+        }
+
+        // Load videos
+        async function loadVideos() {
+            const container = document.getElementById('creatorVideos');
+            try {
+                const videosRef = collection(db, 'videos');
+                const q = creatorId 
+                    ? query(videosRef, where('creatorId', '==', creatorId), orderBy('createdAt', 'desc'))
+                    : query(videosRef, orderBy('createdAt', 'desc'));
+                const snapshot = await getDocs(q);
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon">🎬</div><h3>No Videos Yet</h3><p>Check back soon!</p></div>';
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const v = doc.data();
+                    html += `
+                        <a href="watch.html?v=${v.bunnyVideoId || doc.id}" class="video-card">
+                            <div class="video-thumbnail">
+                                <div class="video-thumbnail-placeholder">🎬</div>
+                                <span class="video-duration">${v.duration || '10:00'}</span>
+                                ${v.visibility === 'subscribers' ? '<span class="video-badge">EXCLUSIVE</span>' : ''}
+                            </div>
+                            <h3 class="video-title">${v.title || 'Untitled'}</h3>
+                            <div class="video-meta">${v.views || 0} views • ${formatDate(v.createdAt)}</div>
+                        </a>
+                    `;
+                });
+                container.innerHTML = html;
+            } catch (e) {
+                console.error(e);
+                container.innerHTML = '<div class="empty-state" style="grid-column:1/-1;"><div class="empty-state-icon">🎬</div><h3>No Videos Yet</h3></div>';
+            }
+        }
+
+        function formatDate(ts) {
+            if (!ts) return 'Just now';
+            const d = ts.toDate ? ts.toDate() : new Date(ts);
+            const days = Math.floor((new Date() - d) / 86400000);
+            if (days === 0) return 'Today';
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return days + ' days ago';
+            return d.toLocaleDateString();
+        }
+
+        showDemoProfile();
+        loadVideos();
+    </script>
 
     <script>
-        function showTab(tabName) {
-            // Update tab styles
-            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+        function showTab(name) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
             event.target.classList.add('active');
-
-            // Hide all content sections
-            document.getElementById('videos-content').style.display = 'none';
-            document.getElementById('membership-content').classList.remove('active');
-            document.getElementById('about-content').classList.remove('active');
-
-            // Show selected content
-            if (tabName === 'videos') {
-                document.getElementById('videos-content').style.display = 'block';
-            } else if (tabName === 'membership') {
-                document.getElementById('membership-content').classList.add('active');
-            } else if (tabName === 'about') {
-                document.getElementById('about-content').classList.add('active');
-            }
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById(name + 'Tab').classList.add('active');
         }
     </script>
 </body>

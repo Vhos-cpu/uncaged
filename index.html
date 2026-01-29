@@ -3,74 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNCAGED | Content Without Limits</title>
+    <title>UNCAGED | Unleash Your Content</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: 'DM Sans', sans-serif;
             background: #0D0D0D;
             color: #FFFFFF;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* Header */
         .header {
-            padding: 25px 40px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100;
-            background: linear-gradient(to bottom, rgba(13,13,13,1) 0%, rgba(13,13,13,0) 100%);
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 50px;
+            z-index: 1000;
+            background: linear-gradient(180deg, rgba(13,13,13,0.9) 0%, transparent 100%);
         }
 
         .logo {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: 32px;
+            font-size: 36px;
             letter-spacing: 4px;
             background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
+            text-decoration: none;
         }
 
-        .header-btn {
-            background: transparent;
-            border: 1px solid #F5A623;
-            color: #F5A623;
-            padding: 12px 28px;
-            border-radius: 6px;
-            font-weight: 600;
+        .nav-links {
+            display: flex;
+            gap: 35px;
+        }
+
+        .nav-link {
+            color: #B3B3B3;
+            text-decoration: none;
             font-size: 14px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            font-weight: 500;
+            transition: color 0.2s ease;
         }
 
-        .header-btn:hover {
-            background: #F5A623;
+        .nav-link:hover { color: #FFFFFF; }
+
+        .header-buttons {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1px solid #333;
+            color: #FFFFFF;
+        }
+
+        .btn-outline:hover {
+            border-color: #FFFFFF;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
             color: #0D0D0D;
         }
 
-        /* Hero Section */
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 25px rgba(245, 166, 35, 0.3);
+        }
+
+        /* Logged in state */
+        .user-menu {
+            display: none;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-menu.show { display: flex; }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            cursor: pointer;
+            text-decoration: none;
+            color: #FFFFFF;
+        }
+
+        /* Hero */
         .hero {
             min-height: 100vh;
             display: flex;
-            flex-direction: column;
-            justify-content: center;
             align-items: center;
+            justify-content: center;
             text-align: center;
-            padding: 120px 20px 80px;
+            padding: 100px 20px;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0D0D0D 70%);
             position: relative;
-            overflow: hidden;
         }
 
         .hero::before {
@@ -80,51 +135,32 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: 
-                radial-gradient(ellipse at 20% 20%, rgba(107, 47, 235, 0.15) 0%, transparent 50%),
-                radial-gradient(ellipse at 80% 80%, rgba(245, 166, 35, 0.1) 0%, transparent 50%);
+            background: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
             pointer-events: none;
         }
 
         .hero-content {
             position: relative;
-            z-index: 10;
+            z-index: 1;
             max-width: 800px;
         }
 
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
+        .hero-badge {
+            display: inline-block;
             background: rgba(245, 166, 35, 0.15);
-            border: 1px solid rgba(245, 166, 35, 0.5);
-            padding: 8px 18px;
+            border: 1px solid rgba(245, 166, 35, 0.3);
+            padding: 8px 20px;
             border-radius: 25px;
             font-size: 13px;
-            font-weight: 600;
             color: #F5A623;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
             margin-bottom: 30px;
-        }
-
-        .badge-dot {
-            width: 8px;
-            height: 8px;
-            background: #F5A623;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.5; transform: scale(1.3); }
         }
 
         .hero-title {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(48px, 10vw, 100px);
-            line-height: 0.95;
+            font-size: clamp(60px, 12vw, 120px);
+            line-height: 0.9;
             letter-spacing: 3px;
             margin-bottom: 25px;
         }
@@ -133,216 +169,186 @@
             background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            background-clip: text;
         }
 
         .hero-subtitle {
             font-size: 20px;
             color: #B3B3B3;
+            margin-bottom: 40px;
             line-height: 1.6;
-            margin-bottom: 50px;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
         }
 
-        /* Email Form */
-        .email-form {
+        .hero-buttons {
             display: flex;
-            gap: 15px;
-            max-width: 500px;
-            margin: 0 auto 30px;
-            flex-wrap: wrap;
+            gap: 20px;
             justify-content: center;
+            flex-wrap: wrap;
         }
 
-        .email-input {
-            flex: 1;
-            min-width: 280px;
-            background: #1A1A1A;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 18px 24px;
+        .btn-large {
+            padding: 18px 45px;
             font-size: 16px;
-            color: #FFFFFF;
-            transition: border-color 0.3s ease;
         }
 
-        .email-input:focus {
-            outline: none;
-            border-color: #F5A623;
-        }
-
-        .email-input::placeholder {
-            color: #666;
-        }
-
-        .submit-btn {
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            border: none;
-            padding: 18px 40px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 700;
-            color: #0D0D0D;
-            cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .submit-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 40px rgba(245, 166, 35, 0.3);
-        }
-
-        .form-note {
-            font-size: 13px;
-            color: #666;
-        }
-
-        .form-note span {
-            color: #F5A623;
-            font-weight: 600;
-        }
-
-        /* Features Section */
+        /* Features */
         .features {
-            padding: 100px 40px;
-            background: #0A0A0A;
-        }
-
-        .features-header {
-            text-align: center;
-            margin-bottom: 70px;
-        }
-
-        .features-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 48px;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-        }
-
-        .features-subtitle {
-            color: #888;
-            font-size: 18px;
-        }
-
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 30px;
+            padding: 100px 20px;
             max-width: 1200px;
             margin: 0 auto;
         }
 
+        .section-title {
+            text-align: center;
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 60px;
+        }
+
+        .section-title span {
+            color: #F5A623;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
         .feature-card {
-            background: #121212;
-            border: 1px solid #222;
-            border-radius: 16px;
+            background: #1A1A1A;
+            border-radius: 20px;
             padding: 40px 30px;
-            transition: all 0.3s ease;
+            text-align: center;
+            transition: transform 0.3s ease;
         }
 
         .feature-card:hover {
-            border-color: #F5A623;
-            transform: translateY(-5px);
+            transform: translateY(-10px);
         }
 
         .feature-icon {
-            font-size: 40px;
+            font-size: 50px;
             margin-bottom: 20px;
         }
 
         .feature-title {
             font-size: 22px;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 15px;
         }
 
         .feature-desc {
             color: #888;
-            font-size: 15px;
             line-height: 1.6;
         }
 
-        /* Creator Section */
-        .creator-section {
-            padding: 100px 40px;
-            text-align: center;
+        /* Revenue Section */
+        .revenue-section {
+            padding: 100px 20px;
+            background: linear-gradient(180deg, #0D0D0D 0%, #1a1a2e 50%, #0D0D0D 100%);
         }
 
-        .creator-badge {
-            display: inline-block;
-            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-size: 12px;
+        .revenue-content {
+            max-width: 1000px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .revenue-text h2 {
+            font-size: 42px;
             font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
             margin-bottom: 25px;
         }
 
-        .creator-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 42px;
-            letter-spacing: 2px;
-            margin-bottom: 20px;
-        }
+        .revenue-text h2 span { color: #1DB954; }
 
-        .creator-desc {
+        .revenue-text p {
             color: #888;
             font-size: 18px;
-            max-width: 600px;
-            margin: 0 auto 40px;
-            line-height: 1.6;
+            line-height: 1.7;
+            margin-bottom: 30px;
         }
 
-        .creator-stats {
+        .revenue-stats {
             display: flex;
-            justify-content: center;
-            gap: 60px;
-            flex-wrap: wrap;
+            gap: 40px;
         }
 
-        .stat {
+        .revenue-stat {
             text-align: center;
         }
 
-        .stat-number {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 56px;
+        .revenue-stat-value {
+            font-size: 48px;
+            font-weight: 700;
             color: #F5A623;
-            line-height: 1;
         }
 
-        .stat-label {
+        .revenue-stat-label {
+            color: #888;
+            font-size: 14px;
+        }
+
+        .revenue-visual {
+            background: #1A1A1A;
+            border-radius: 20px;
+            padding: 40px;
+        }
+
+        .split-bar {
+            height: 60px;
+            border-radius: 10px;
+            display: flex;
+            overflow: hidden;
+            margin-bottom: 20px;
+        }
+
+        .split-creator {
+            width: 85%;
+            background: linear-gradient(90deg, #1DB954, #17a34a);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 18px;
+        }
+
+        .split-platform {
+            width: 15%;
+            background: #333;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        .split-labels {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .split-label {
             font-size: 14px;
             color: #888;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-top: 8px;
         }
 
-        /* CTA Section */
+        /* CTA */
         .cta-section {
-            padding: 100px 40px;
-            background: linear-gradient(135deg, #1A1A1A 0%, #0D0D0D 100%);
+            padding: 100px 20px;
             text-align: center;
         }
 
         .cta-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 52px;
-            letter-spacing: 2px;
+            font-size: 48px;
+            font-weight: 700;
             margin-bottom: 20px;
         }
 
-        .cta-title span {
-            color: #F5A623;
-        }
-
-        .cta-desc {
+        .cta-subtitle {
             color: #888;
             font-size: 18px;
             margin-bottom: 40px;
@@ -350,243 +356,222 @@
 
         /* Footer */
         .footer {
-            padding: 50px 40px;
-            background: #080808;
-            text-align: center;
+            border-top: 1px solid #1A1A1A;
+            padding: 60px 20px 30px;
         }
 
-        .footer-logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 28px;
-            letter-spacing: 3px;
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-brand .logo { font-size: 28px; }
+        .footer-brand p { color: #666; margin-top: 15px; font-size: 14px; line-height: 1.6; }
+
+        .footer-links h4 {
+            font-size: 14px;
             margin-bottom: 20px;
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            margin-bottom: 30px;
-            flex-wrap: wrap;
+            color: #888;
         }
 
         .footer-links a {
+            display: block;
             color: #666;
             text-decoration: none;
             font-size: 14px;
-            transition: color 0.3s ease;
+            margin-bottom: 12px;
         }
 
-        .footer-links a:hover {
-            color: #F5A623;
-        }
+        .footer-links a:hover { color: #F5A623; }
 
-        .footer-copy {
-            color: #444;
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 30px;
+            border-top: 1px solid #1A1A1A;
+            display: flex;
+            justify-content: space-between;
+            color: #666;
             font-size: 13px;
         }
 
-        /* Success Message (hidden by default) */
-        .success-message {
-            display: none;
-            background: rgba(29, 185, 84, 0.15);
-            border: 1px solid #1DB954;
-            border-radius: 12px;
-            padding: 20px 30px;
-            margin-bottom: 30px;
-            max-width: 500px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        .success-message.show {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .success-message h3 {
-            color: #1DB954;
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-
-        .success-message p {
-            color: #B3B3B3;
-            font-size: 14px;
-        }
-
-        /* Mobile Responsive */
         @media (max-width: 768px) {
-            .header {
-                padding: 20px;
-            }
-
-            .logo {
-                font-size: 24px;
-            }
-
-            .header-btn {
-                padding: 10px 20px;
-                font-size: 12px;
-            }
-
-            .hero {
-                padding: 100px 20px 60px;
-            }
-
-            .hero-subtitle {
-                font-size: 16px;
-            }
-
-            .email-form {
-                flex-direction: column;
-                padding: 0 10px;
-            }
-
-            .email-input, .submit-btn {
-                width: 100%;
-                min-width: auto;
-            }
-
-            .features, .creator-section, .cta-section {
-                padding: 60px 20px;
-            }
-
-            .creator-stats {
-                gap: 40px;
-            }
-
-            .stat-number {
-                font-size: 42px;
-            }
+            .header { padding: 0 20px; }
+            .nav-links { display: none; }
+            .revenue-content { grid-template-columns: 1fr; }
+            .footer-content { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
-        <div class="logo">UNCAGED</div>
-        <a href="login.html" class="header-btn">Sign In</a>
+        <a href="index.html" class="logo">UNCAGED</a>
+        <nav class="nav-links">
+            <a href="browse.html" class="nav-link">Browse</a>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#creators" class="nav-link">For Creators</a>
+        </nav>
+        <div class="header-buttons" id="authButtons">
+            <a href="login.html" class="btn btn-outline">Log In</a>
+            <a href="signup.html" class="btn btn-primary">Get Started</a>
+        </div>
+        <div class="user-menu" id="userMenu">
+            <a href="upload.html" class="btn btn-primary">Upload</a>
+            <a href="dashboard.html" class="user-avatar" id="userAvatar">?</a>
+        </div>
     </header>
 
-    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
-            <div class="badge">
-                <span class="badge-dot"></span>
-                Coming Soon
+            <span class="hero-badge">🔥 The Platform for Creators Without Limits</span>
+            <h1 class="hero-title">CONTENT<br><span>UNCAGED</span></h1>
+            <p class="hero-subtitle">Create freely. Earn more. No restrictions on your authentic content.<br>Keep 85% of everything you earn.</p>
+            <div class="hero-buttons">
+                <a href="signup.html" class="btn btn-primary btn-large">Start Creating</a>
+                <a href="browse.html" class="btn btn-outline btn-large">Browse Content</a>
             </div>
-            <h1 class="hero-title">CONTENT <span>WITHOUT</span> LIMITS</h1>
-            <p class="hero-subtitle">The home for unfiltered travel, nightlife, and lifestyle content. Watch what you want, when you want, without restrictions.</p>
-            
-            <div class="success-message" id="successMessage">
-                <h3>🎉 You're on the list!</h3>
-                <p>We'll notify you when Uncaged launches. Check your email for confirmation.</p>
-            </div>
-
-            <form class="email-form" id="emailForm" action="https://formspree.io/f/mdaznzvg" method="POST">
-                <input type="email" class="email-input" placeholder="Enter your email for early access" required id="emailInput" name="email">
-                <button type="submit" class="submit-btn">Join Waitlist</button>
-            </form>
-            <p class="form-note">Join <span id="waitlistCount">1,247</span> others waiting for launch</p>
         </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features">
-        <div class="features-header">
-            <h2 class="features-title">WHY UNCAGED?</h2>
-            <p class="features-subtitle">Built by creators, for creators</p>
-        </div>
+    <section class="features" id="features">
+        <h2 class="section-title">Why Creators Choose <span>UNCAGED</span></h2>
         <div class="features-grid">
             <div class="feature-card">
-                <div class="feature-icon">🎬</div>
-                <h3 class="feature-title">No Restrictions</h3>
-                <p class="feature-desc">Post the content YouTube won't let you. No age-restrictions, no demonetization, no algorithmic suppression.</p>
+                <div class="feature-icon">🔓</div>
+                <h3 class="feature-title">No Content Restrictions</h3>
+                <p class="feature-desc">Post the content YouTube won't let you. Travel, nightlife, dating culture - share your authentic experiences.</p>
             </div>
             <div class="feature-card">
                 <div class="feature-icon">💰</div>
                 <h3 class="feature-title">Keep 85% Revenue</h3>
-                <p class="feature-desc">You keep 85% of your earnings. No more giving away half your income to platforms that don't support you.</p>
+                <p class="feature-desc">Industry-leading revenue split. You keep 85% of all subscriptions and tips. We only take 15%.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">👥</div>
-                <h3 class="feature-title">Own Your Audience</h3>
-                <p class="feature-desc">Get your subscribers' emails. Build direct relationships. Never lose your audience to an algorithm change.</p>
+                <div class="feature-icon">🎬</div>
+                <h3 class="feature-title">4K Video Support</h3>
+                <p class="feature-desc">Upload high-quality content up to 4K resolution. Global CDN ensures fast streaming worldwide.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">📺</div>
-                <h3 class="feature-title">Premium Experience</h3>
-                <p class="feature-desc">Netflix-quality viewing experience. No cheap, amateur platforms. Your content deserves better.</p>
+                <div class="feature-icon">💳</div>
+                <h3 class="feature-title">Multiple Revenue Streams</h3>
+                <p class="feature-desc">Earn from subscriptions, one-time tips, pay-per-view content, and more. You control your pricing.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🔴</div>
-                <h3 class="feature-title">Go Live Anytime</h3>
-                <p class="feature-desc">Stream directly to your subscribers. Real-time chat, tips, and exclusive live content.</p>
+                <div class="feature-icon">📊</div>
+                <h3 class="feature-title">Creator Dashboard</h3>
+                <p class="feature-desc">Track your earnings, subscribers, and analytics in real-time. Know exactly how your content performs.</p>
             </div>
             <div class="feature-card">
-                <div class="feature-icon">🌍</div>
-                <h3 class="feature-title">Global Community</h3>
-                <p class="feature-desc">Connect with travelers, nightlife enthusiasts, and lifestyle creators from around the world.</p>
+                <div class="feature-icon">🚀</div>
+                <h3 class="feature-title">Instant Payouts</h3>
+                <p class="feature-desc">Get paid directly to your bank account. Monthly automatic payouts or request early withdrawal anytime.</p>
             </div>
         </div>
     </section>
 
-    <!-- Creator Section -->
-    <section class="creator-section">
-        <div class="creator-badge">For Creators</div>
-        <h2 class="creator-title">BUILT FOR THE CONTENT YOUTUBE WON'T SHOW</h2>
-        <p class="creator-desc">Travel vlogs. Nightlife adventures. Dating culture. Real stories from real places. No filters, no censorship, no limits.</p>
-        <div class="creator-stats">
-            <div class="stat">
-                <div class="stat-number">85%</div>
-                <div class="stat-label">Revenue to Creators</div>
+    <section class="revenue-section" id="creators">
+        <div class="revenue-content">
+            <div class="revenue-text">
+                <h2>Keep More of <span>Your Money</span></h2>
+                <p>While YouTube takes 45% and other platforms take 20-50%, we believe creators should keep the lion's share. That's why we only take 15%.</p>
+                <div class="revenue-stats">
+                    <div class="revenue-stat">
+                        <div class="revenue-stat-value">85%</div>
+                        <div class="revenue-stat-label">Your Revenue</div>
+                    </div>
+                    <div class="revenue-stat">
+                        <div class="revenue-stat-value">$50</div>
+                        <div class="revenue-stat-label">Min Payout</div>
+                    </div>
+                    <div class="revenue-stat">
+                        <div class="revenue-stat-value">0</div>
+                        <div class="revenue-stat-label">Hidden Fees</div>
+                    </div>
+                </div>
             </div>
-            <div class="stat">
-                <div class="stat-number">0</div>
-                <div class="stat-label">Content Restrictions</div>
-            </div>
-            <div class="stat">
-                <div class="stat-number">100%</div>
-                <div class="stat-label">Audience Ownership</div>
+            <div class="revenue-visual">
+                <h3 style="margin-bottom: 25px;">Revenue Split</h3>
+                <div class="split-bar">
+                    <div class="split-creator">85% You</div>
+                    <div class="split-platform">15%</div>
+                </div>
+                <div class="split-labels">
+                    <span class="split-label">Creator keeps</span>
+                    <span class="split-label">Platform</span>
+                </div>
+                <p style="color: #888; font-size: 14px; margin-top: 25px;">Example: On a $9.99 subscription, you earn $8.49</p>
             </div>
         </div>
     </section>
 
-    <!-- CTA Section -->
     <section class="cta-section">
-        <h2 class="cta-title">READY TO GO <span>UNCAGED</span>?</h2>
-        <p class="cta-desc">Be the first to know when we launch. Early supporters get exclusive benefits.</p>
-        <form class="email-form" id="<form class="email-form" id="emailForm2" action="https://formspree.io/f/mdaznzvg" method="POST">">
-<input type="email" class="email-input" placeholder="Enter your email" required id="emailInput2" name="email">
-            <button type="submit" class="submit-btn">Get Early Access</button>
-        </form>
+        <h2 class="cta-title">Ready to Unleash Your Content?</h2>
+        <p class="cta-subtitle">Join creators who are earning more and creating without limits.</p>
+        <a href="signup.html" class="btn btn-primary btn-large">Create Your Account</a>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
-        <div class="footer-logo">UNCAGED</div>
-        <div class="footer-links">
-            <a href="#">About</a>
-            <a href="#">For Creators</a>
-            <a href="#">Contact</a>
-            <a href="#">Privacy</a>
-            <a href="#">Terms</a>
+        <div class="footer-content">
+            <div class="footer-brand">
+                <a href="index.html" class="logo">UNCAGED</a>
+                <p>The video platform for creators without limits. Share your authentic content and keep more of what you earn.</p>
+            </div>
+            <div class="footer-links">
+                <h4>Platform</h4>
+                <a href="browse.html">Browse</a>
+                <a href="upload.html">Upload</a>
+                <a href="dashboard.html">Dashboard</a>
+            </div>
+            <div class="footer-links">
+                <h4>Company</h4>
+                <a href="#">About</a>
+                <a href="#">Careers</a>
+                <a href="#">Press</a>
+            </div>
+            <div class="footer-links">
+                <h4>Legal</h4>
+                <a href="terms.html">Terms of Service</a>
+                <a href="privacy.html">Privacy Policy</a>
+                <a href="dmca.html">DMCA Policy</a>
+            </div>
         </div>
-        <p class="footer-copy">© 2026 Uncaged. All rights reserved.</p>
+        <div class="footer-bottom">
+            <span>© 2026 Uncaged. All rights reserved.</span>
+            <span>Made for creators, by creators.</span>
+        </div>
     </footer>
 
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('authButtons').style.display = 'none';
+                document.getElementById('userMenu').classList.add('show');
+                const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
+                document.getElementById('userAvatar').textContent = initial;
+            } else {
+                document.getElementById('authButtons').style.display = 'flex';
+                document.getElementById('userMenu').classList.remove('show');
+            }
+        });
     </script>
-</script>
-    
 </body>
 </html>
