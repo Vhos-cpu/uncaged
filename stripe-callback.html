@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNCAGED | Connecting...</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #0D0D0D;
+            color: #FFFFFF;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            text-align: center;
+            padding: 40px;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 36px;
+            letter-spacing: 3px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 40px;
+        }
+
+        .status-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            font-size: 40px;
+        }
+
+        .status-icon.loading {
+            background: rgba(99, 91, 255, 0.2);
+        }
+
+        .status-icon.success {
+            background: rgba(40, 167, 69, 0.2);
+        }
+
+        .status-icon.error {
+            background: rgba(220, 53, 69, 0.2);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(99, 91, 255, 0.3);
+            border-top-color: #635BFF;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #888;
+            margin-bottom: 30px;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
+            color: #000;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: transform 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn.secondary {
+            background: #1A1A1A;
+            color: #FFFFFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="logo">UNCAGED</div>
+
+        <!-- Loading State -->
+        <div id="loadingState">
+            <div class="status-icon loading">
+                <div class="spinner"></div>
+            </div>
+            <h1>Connecting Your Account...</h1>
+            <p>Please wait while we complete your Stripe setup.</p>
+        </div>
+
+        <!-- Success State -->
+        <div id="successState" style="display: none;">
+            <div class="status-icon success">✓</div>
+            <h1>Successfully Connected!</h1>
+            <p>Your bank account is now linked. You'll start receiving payouts automatically.</p>
+            <a href="dashboard.html" class="btn">Go to Dashboard</a>
+        </div>
+
+        <!-- Error State -->
+        <div id="errorState" style="display: none;">
+            <div class="status-icon error">✕</div>
+            <h1>Connection Failed</h1>
+            <p id="errorMessage">Something went wrong. Please try again.</p>
+            <a href="stripe-connect.html" class="btn">Try Again</a>
+            <a href="dashboard.html" class="btn secondary" style="margin-left: 10px;">Go to Dashboard</a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // Get URL parameters
+        const urlParams = new URLSearchParams(window.location.search);
+        const code = urlParams.get('code');
+        const state = urlParams.get('state'); // This should be the user ID
+        const error = urlParams.get('error');
+        const errorDescription = urlParams.get('error_description');
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Check for errors from Stripe
+            if (error) {
+                showError(errorDescription || 'Authorization was denied or cancelled.');
+                return;
+            }
+
+            // Check if we have an authorization code
+            if (!code) {
+                showError('No authorization code received from Stripe.');
+                return;
+            }
+
+            // Verify the state matches the current user
+            if (state && state !== user.uid) {
+                showError('Session mismatch. Please try connecting again.');
+                return;
+            }
+
+            try {
+                // In production, you would send this code to your backend
+                // Your backend would then exchange it for an access token with Stripe
+                // and save the connected account ID to Firebase
+                
+                // Example of what your backend would do:
+                // 1. POST to https://connect.stripe.com/oauth/token
+                //    with code, client_secret, grant_type=authorization_code
+                // 2. Receive stripe_user_id (the connected account ID)
+                // 3. Save to Firebase
+
+                // For demo, we'll simulate a successful connection
+                // In production, replace this with an actual API call to your backend
+                
+                /*
+                const response = await fetch('/api/stripe/connect', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ code, userId: user.uid })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Failed to connect account');
+                }
+                
+                const data = await response.json();
+                */
+
+                // Simulated successful response
+                const simulatedStripeAccountId = 'acct_' + Math.random().toString(36).substr(2, 16);
+                
+                // Update user document in Firebase
+                await updateDoc(doc(db, 'users', user.uid), {
+                    stripeConnectId: simulatedStripeAccountId,
+                    stripeConnectedAt: new Date(),
+                    bankLast4: '0529', // This would come from Stripe in production
+                    payoutSchedule: 'monthly'
+                });
+
+                showSuccess();
+
+            } catch (err) {
+                console.error('Error completing Stripe connection:', err);
+                showError('Failed to complete connection. Please try again.');
+            }
+        });
+
+        function showSuccess() {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('successState').style.display = 'block';
+        }
+
+        function showError(message) {
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = message;
+        }
+    </script>
+</body>
+</html>
