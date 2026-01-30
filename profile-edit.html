@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNCAGED | Edit Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: #0D0D0D; color: #FFFFFF; min-height: 100vh; }
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; z-index: 1000; border-bottom: 1px solid #1A1A1A; }
+        .header-left { display: flex; align-items: center; gap: 30px; }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .nav-links { display: flex; gap: 25px; }
+        .nav-link { color: #888; text-decoration: none; font-size: 14px; font-weight: 500; }
+        .nav-link:hover, .nav-link.active { color: #FFFFFF; }
+        .header-right { display: flex; align-items: center; gap: 15px; }
+        .upload-btn { display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); color: #000; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 14px; }
+        .profile-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); border: none; color: #000; font-weight: 700; cursor: pointer; }
+        .dashboard-container { display: flex; padding-top: 60px; min-height: 100vh; }
+        .sidebar { width: 250px; background: #0A0A0A; padding: 30px 20px; border-right: 1px solid #1A1A1A; position: fixed; top: 60px; bottom: 0; left: 0; overflow-y: auto; }
+        .sidebar-section { margin-bottom: 30px; }
+        .sidebar-title { color: #666; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: #888; text-decoration: none; border-radius: 8px; margin-bottom: 5px; transition: all 0.2s; }
+        .sidebar-link:hover { background: #1A1A1A; color: #FFFFFF; }
+        .sidebar-link.active { background: rgba(245, 166, 35, 0.1); color: #F5A623; }
+        .sidebar-link span { font-size: 18px; }
+        .main-content { flex: 1; margin-left: 250px; padding: 30px; max-width: 900px; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; }
+        .view-profile-btn { padding: 10px 20px; background: transparent; border: 1px solid #F5A623; color: #F5A623; border-radius: 8px; text-decoration: none; font-weight: 500; }
+        .banner-section { margin-bottom: 30px; }
+        .banner-preview { width: 100%; height: 200px; background: linear-gradient(135deg, #1A1A1A 0%, #2A2A2A 100%); border-radius: 12px; position: relative; overflow: hidden; border: 2px dashed #2A2A2A; cursor: pointer; }
+        .banner-preview:hover { border-color: #F5A623; }
+        .banner-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .banner-overlay { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(0,0,0,0.5); opacity: 0; transition: opacity 0.2s; }
+        .banner-preview:hover .banner-overlay { opacity: 1; }
+        .banner-overlay span { font-size: 40px; margin-bottom: 10px; }
+        .banner-help { color: #888; font-size: 13px; margin-top: 10px; }
+        .avatar-section { display: flex; align-items: flex-start; gap: 30px; margin-bottom: 30px; margin-top: -60px; padding-left: 30px; }
+        .avatar-preview { width: 120px; height: 120px; border-radius: 50%; background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); border: 4px solid #0D0D0D; position: relative; cursor: pointer; overflow: hidden; display: flex; align-items: center; justify-content: center; font-size: 48px; font-weight: 700; }
+        .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .avatar-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.6); opacity: 0; transition: opacity 0.2s; border-radius: 50%; }
+        .avatar-preview:hover .avatar-overlay { opacity: 1; }
+        .avatar-overlay span { font-size: 24px; }
+        .avatar-info { padding-top: 70px; }
+        .avatar-info h3 { margin-bottom: 5px; }
+        .avatar-info p { color: #888; font-size: 13px; }
+        .profile-form { background: #1A1A1A; border-radius: 12px; padding: 30px; border: 1px solid #2A2A2A; }
+        .form-section { margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid #2A2A2A; }
+        .form-section:last-child { margin-bottom: 0; padding-bottom: 0; border-bottom: none; }
+        .form-section-title { font-size: 16px; font-weight: 600; margin-bottom: 20px; color: #F5A623; }
+        .form-group { margin-bottom: 20px; }
+        .form-label { display: block; color: #888; font-size: 14px; margin-bottom: 8px; }
+        .form-input { width: 100%; padding: 12px 15px; background: #0D0D0D; border: 1px solid #2A2A2A; border-radius: 8px; color: #FFFFFF; font-size: 14px; }
+        .form-input:focus { outline: none; border-color: #F5A623; }
+        .form-textarea { min-height: 120px; resize: vertical; font-family: inherit; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .form-help { color: #666; font-size: 12px; margin-top: 5px; }
+        .char-count { color: #888; font-size: 12px; text-align: right; margin-top: 5px; }
+        .social-input { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; }
+        .social-icon { width: 40px; height: 40px; background: #0D0D0D; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+        .social-input input { flex: 1; }
+        .btn-group { display: flex; gap: 15px; justify-content: flex-end; margin-top: 30px; }
+        .btn { padding: 12px 30px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; border: none; }
+        .btn-primary { background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); color: #000; }
+        .btn-secondary { background: transparent; border: 1px solid #2A2A2A; color: #FFFFFF; }
+        .hidden-input { display: none; }
+        @media (max-width: 768px) { .sidebar { display: none; } .main-content { margin-left: 0; } .form-row { grid-template-columns: 1fr; } .avatar-section { flex-direction: column; align-items: center; margin-top: -40px; padding-left: 0; } .avatar-info { padding-top: 20px; text-align: center; } }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-left">
+            <a href="index.html" class="logo">UNCAGED</a>
+            <nav class="nav-links">
+                <a href="browse.html" class="nav-link">Browse</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </nav>
+        </div>
+        <div class="header-right">
+            <a href="upload.html" class="upload-btn"><span>+</span><span>Upload</span></a>
+            <button class="profile-btn" id="profileBtn">V</button>
+        </div>
+    </header>
+    <div class="dashboard-container">
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <div class="sidebar-title">Dashboard</div>
+                <a href="dashboard.html" class="sidebar-link"><span>📊</span> Overview</a>
+                <a href="my-videos.html" class="sidebar-link"><span>📹</span> My Videos</a>
+                <a href="analytics.html" class="sidebar-link"><span>📈</span> Analytics</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Monetization</div>
+                <a href="earnings.html" class="sidebar-link"><span>💰</span> Earnings</a>
+                <a href="payouts.html" class="sidebar-link"><span>💳</span> Payouts</a>
+                <a href="subscriptions.html" class="sidebar-link"><span>🎁</span> Subscriptions</a>
+            </div>
+            <div class="sidebar-section">
+                <div class="sidebar-title">Settings</div>
+                <a href="profile-edit.html" class="sidebar-link active"><span>👤</span> Profile</a>
+                <a href="stripe-connect.html" class="sidebar-link"><span>🔗</span> Stripe Connect</a>
+                <a href="settings.html" class="sidebar-link"><span>⚙️</span> Settings</a>
+            </div>
+        </aside>
+        <main class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Edit Profile</h1>
+                <a href="creator.html" class="view-profile-btn">View Public Profile</a>
+            </div>
+            <div class="banner-section">
+                <div class="banner-preview" onclick="document.getElementById('bannerInput').click()">
+                    <img id="bannerPreview" src="" style="display: none;">
+                    <div class="banner-overlay"><span>📷</span><p>Click to upload banner</p></div>
+                </div>
+                <p class="banner-help">Recommended: 1500 x 500 pixels. Max file size: 5MB</p>
+                <input type="file" id="bannerInput" class="hidden-input" accept="image/*">
+            </div>
+            <div class="avatar-section">
+                <div class="avatar-preview" onclick="document.getElementById('avatarInput').click()">
+                    <span id="avatarInitial">V</span>
+                    <img id="avatarPreview" src="" style="display: none;">
+                    <div class="avatar-overlay"><span>📷</span></div>
+                </div>
+                <div class="avatar-info"><h3>Profile Photo</h3><p>Click to upload. Square images work best.</p></div>
+                <input type="file" id="avatarInput" class="hidden-input" accept="image/*">
+            </div>
+            <div class="profile-form">
+                <div class="form-section">
+                    <h3 class="form-section-title">Basic Info</h3>
+                    <div class="form-row">
+                        <div class="form-group"><label class="form-label">Display Name</label><input type="text" class="form-input" id="displayName" placeholder="Your name"></div>
+                        <div class="form-group"><label class="form-label">Username</label><input type="text" class="form-input" id="username" placeholder="@username"><p class="form-help">uncaged.com/@username</p></div>
+                    </div>
+                    <div class="form-group"><label class="form-label">Bio</label><textarea class="form-input form-textarea" id="bio" placeholder="Tell fans about yourself..." maxlength="500"></textarea><p class="char-count"><span id="bioCount">0</span>/500</p></div>
+                    <div class="form-row">
+                        <div class="form-group"><label class="form-label">Location</label><input type="text" class="form-input" id="location" placeholder="City, Country"></div>
+                        <div class="form-group"><label class="form-label">Website</label><input type="url" class="form-input" id="website" placeholder="https://yourwebsite.com"></div>
+                    </div>
+                </div>
+                <div class="form-section">
+                    <h3 class="form-section-title">Social Links</h3>
+                    <div class="social-input"><div class="social-icon">📸</div><input type="text" class="form-input" id="instagram" placeholder="Instagram username"></div>
+                    <div class="social-input"><div class="social-icon">🐦</div><input type="text" class="form-input" id="twitter" placeholder="Twitter/X username"></div>
+                    <div class="social-input"><div class="social-icon">📺</div><input type="text" class="form-input" id="youtube" placeholder="YouTube channel URL"></div>
+                    <div class="social-input"><div class="social-icon">🎵</div><input type="text" class="form-input" id="tiktok" placeholder="TikTok username"></div>
+                </div>
+                <div class="form-section">
+                    <h3 class="form-section-title">Content Categories</h3>
+                    <div class="form-group"><label class="form-label">What type of content do you create?</label><input type="text" class="form-input" id="categories" placeholder="e.g., Travel, Nightlife, Lifestyle"><p class="form-help">Separate categories with commas</p></div>
+                </div>
+                <div class="btn-group">
+                    <button class="btn btn-secondary" onclick="window.location.reload()">Cancel</button>
+                    <button class="btn btn-primary" onclick="saveProfile()">Save Changes</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, updateProfile } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        const firebaseConfig = { apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ", authDomain: "uncaged-85b49.firebaseapp.com", projectId: "uncaged-85b49", storageBucket: "uncaged-85b49.firebasestorage.app", messagingSenderId: "957750920887", appId: "1:957750920887:web:9af4d847dad76c876d2f32" };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        let currentUser = null;
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) { window.location.href = 'login.html'; return; }
+            currentUser = user;
+            const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
+            document.getElementById('profileBtn').textContent = initial;
+            document.getElementById('avatarInitial').textContent = initial;
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists()) {
+                const data = userDoc.data();
+                document.getElementById('displayName').value = data.displayName || user.displayName || '';
+                document.getElementById('username').value = data.username || '';
+                document.getElementById('bio').value = data.bio || '';
+                document.getElementById('location').value = data.location || '';
+                document.getElementById('website').value = data.website || '';
+                document.getElementById('instagram').value = data.instagram || '';
+                document.getElementById('twitter').value = data.twitter || '';
+                document.getElementById('youtube').value = data.youtube || '';
+                document.getElementById('tiktok').value = data.tiktok || '';
+                document.getElementById('categories').value = data.categories || '';
+                document.getElementById('bioCount').textContent = (data.bio || '').length;
+                if (data.avatarUrl) { document.getElementById('avatarPreview').src = data.avatarUrl; document.getElementById('avatarPreview').style.display = 'block'; document.getElementById('avatarInitial').style.display = 'none'; }
+                if (data.bannerUrl) { document.getElementById('bannerPreview').src = data.bannerUrl; document.getElementById('bannerPreview').style.display = 'block'; }
+            } else { document.getElementById('displayName').value = user.displayName || ''; }
+        });
+        document.getElementById('bio').addEventListener('input', function() { document.getElementById('bioCount').textContent = this.value.length; });
+        document.getElementById('avatarInput').addEventListener('change', function(e) { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { document.getElementById('avatarPreview').src = e.target.result; document.getElementById('avatarPreview').style.display = 'block'; document.getElementById('avatarInitial').style.display = 'none'; }; reader.readAsDataURL(file); } });
+        document.getElementById('bannerInput').addEventListener('change', function(e) { const file = e.target.files[0]; if (file) { const reader = new FileReader(); reader.onload = function(e) { document.getElementById('bannerPreview').src = e.target.result; document.getElementById('bannerPreview').style.display = 'block'; }; reader.readAsDataURL(file); } });
+        window.saveProfile = async function() {
+            if (!currentUser) return;
+            const profileData = { displayName: document.getElementById('displayName').value, username: document.getElementById('username').value, bio: document.getElementById('bio').value, location: document.getElementById('location').value, website: document.getElementById('website').value, instagram: document.getElementById('instagram').value, twitter: document.getElementById('twitter').value, youtube: document.getElementById('youtube').value, tiktok: document.getElementById('tiktok').value, categories: document.getElementById('categories').value, updatedAt: new Date() };
+            try {
+                await setDoc(doc(db, 'users', currentUser.uid), profileData, { merge: true });
+                if (profileData.displayName) { await updateProfile(currentUser, { displayName: profileData.displayName }); }
+                alert('Profile saved successfully!');
+            } catch (error) { console.error('Error:', error); alert('Error saving profile.'); }
+        };
+    </script>
+</body>
+</html>
