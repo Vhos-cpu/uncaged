@@ -3,517 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNCAGED | Connect Your Bank</title>
+    <title>UNCAGED | Connect with Stripe</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: #0D0D0D;
-            color: #FFFFFF;
-            min-height: 100vh;
-        }
-
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: rgba(13, 13, 13, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            z-index: 1000;
-            border-bottom: 1px solid #1A1A1A;
-        }
-
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 28px;
-            letter-spacing: 3px;
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-
-        .back-btn {
-            color: #888;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            transition: color 0.2s;
-        }
-
-        .back-btn:hover {
-            color: #FFFFFF;
-        }
-
-        .main-content {
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 100px 20px 60px;
-        }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .page-header h1 {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 42px;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-
-        .page-header p {
-            color: #888;
-            font-size: 16px;
-        }
-
-        /* Status Card */
-        .status-card {
-            background: #1A1A1A;
-            border-radius: 16px;
-            padding: 30px;
-            margin-bottom: 30px;
-            border: 1px solid #2A2A2A;
-        }
-
-        .status-header {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .status-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-        }
-
-        .status-icon.pending {
-            background: rgba(255, 193, 7, 0.2);
-        }
-
-        .status-icon.connected {
-            background: rgba(40, 167, 69, 0.2);
-        }
-
-        .status-icon.error {
-            background: rgba(220, 53, 69, 0.2);
-        }
-
-        .status-title {
-            font-size: 20px;
-            font-weight: 600;
-        }
-
-        .status-subtitle {
-            color: #888;
-            font-size: 14px;
-        }
-
-        /* Benefits */
-        .benefits {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin-bottom: 30px;
-        }
-
-        .benefit-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 15px;
-            padding: 15px;
-            background: #0D0D0D;
-            border-radius: 10px;
-        }
-
-        .benefit-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: rgba(245, 166, 35, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            flex-shrink: 0;
-        }
-
-        .benefit-text h4 {
-            font-size: 15px;
-            margin-bottom: 4px;
-        }
-
-        .benefit-text p {
-            color: #888;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        /* Connect Button */
-        .connect-btn {
-            width: 100%;
-            padding: 16px;
-            background: #635BFF;
-            border: none;
-            border-radius: 10px;
-            color: #FFFFFF;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            transition: background 0.2s, transform 0.2s;
-        }
-
-        .connect-btn:hover {
-            background: #5851DB;
-            transform: translateY(-2px);
-        }
-
-        .connect-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .connect-btn svg {
-            width: 20px;
-            height: 20px;
-        }
-
-        /* Stripe Logo */
-        .stripe-logo {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            margin-top: 20px;
-            color: #888;
-            font-size: 13px;
-        }
-
-        .stripe-logo svg {
-            height: 20px;
-        }
-
-        /* Connected State */
-        .connected-info {
-            background: rgba(40, 167, 69, 0.1);
-            border: 1px solid rgba(40, 167, 69, 0.3);
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 20px;
-        }
-
-        .connected-info h3 {
-            color: #28A745;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .account-details {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-
-        .account-row {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-        }
-
-        .account-row span:first-child {
-            color: #888;
-        }
-
-        /* FAQ Section */
-        .faq-section {
-            margin-top: 40px;
-        }
-
-        .faq-title {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #888;
-        }
-
-        .faq-item {
-            background: #1A1A1A;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            overflow: hidden;
-        }
-
-        .faq-question {
-            padding: 15px 20px;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 500;
-        }
-
-        .faq-question:hover {
-            background: #222;
-        }
-
-        .faq-answer {
-            padding: 0 20px 15px;
-            color: #888;
-            font-size: 14px;
-            line-height: 1.6;
-            display: none;
-        }
-
-        .faq-item.open .faq-answer {
-            display: block;
-        }
-
-        .faq-item.open .faq-arrow {
-            transform: rotate(180deg);
-        }
-
-        .faq-arrow {
-            transition: transform 0.2s;
-        }
-
-        /* Loading Spinner */
-        .spinner {
-            width: 20px;
-            height: 20px;
-            border: 2px solid rgba(255,255,255,0.3);
-            border-top-color: #FFFFFF;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Disconnect Link */
-        .disconnect-link {
-            display: block;
-            text-align: center;
-            margin-top: 15px;
-            color: #888;
-            font-size: 13px;
-            text-decoration: none;
-        }
-
-        .disconnect-link:hover {
-            color: #DC3545;
-        }
-
-        /* Error message */
-        .error-message {
-            background: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.3);
-            border-radius: 8px;
-            padding: 15px;
-            margin-bottom: 20px;
-            color: #DC3545;
-            display: none;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background: #0D0D0D; color: #FFFFFF; min-height: 100vh; }
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(13,13,13,0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; z-index: 1000; border-bottom: 1px solid #1A1A1A; }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; background: linear-gradient(135deg, #F5A623, #D4880F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .container { max-width: 600px; margin: 0 auto; padding: 100px 20px 40px; text-align: center; }
+        .title { font-family: 'Bebas Neue', sans-serif; font-size: 42px; margin-bottom: 15px; }
+        .desc { color: #888; font-size: 16px; margin-bottom: 40px; }
+        .connect-btn { display: inline-block; padding: 16px 40px; background: #635BFF; color: #FFF; border: none; border-radius: 8px; font-size: 18px; font-weight: 600; cursor: pointer; text-decoration: none; }
+        .connect-btn:hover { background: #5851DB; }
+        .connect-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .error-box { background: rgba(220,53,69,0.1); border: 1px solid rgba(220,53,69,0.3); border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #DC3545; display: none; }
+        .success-box { background: rgba(40,167,69,0.1); border: 1px solid rgba(40,167,69,0.3); border-radius: 8px; padding: 15px; margin-bottom: 20px; color: #28A745; display: none; }
+        .back-link { display: inline-block; margin-top: 30px; color: #888; text-decoration: none; }
     </style>
 </head>
 <body>
     <header class="header">
         <a href="index.html" class="logo">UNCAGED</a>
-        <a href="dashboard.html" class="back-btn">← Back to Dashboard</a>
     </header>
-
-    <main class="main-content">
-        <div class="page-header">
-            <h1>💳 GET PAID</h1>
-            <p>Connect your bank account to receive your earnings</p>
-        </div>
-
-        <div class="error-message" id="errorMessage"></div>
-
-        <!-- Not Connected State -->
-        <div id="notConnectedState">
-            <div class="status-card">
-                <div class="status-header">
-                    <div class="status-icon pending">⏳</div>
-                    <div>
-                        <div class="status-title">Not Connected</div>
-                        <div class="status-subtitle">Connect your bank to start receiving payouts</div>
-                    </div>
-                </div>
-
-                <div class="benefits">
-                    <div class="benefit-item">
-                        <div class="benefit-icon">💰</div>
-                        <div class="benefit-text">
-                            <h4>Keep 85% of Everything</h4>
-                            <p>Industry-leading revenue split. Your earnings go directly to your bank.</p>
-                        </div>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">⚡</div>
-                        <div class="benefit-text">
-                            <h4>Automatic Payouts</h4>
-                            <p>Get paid automatically every month. No invoices, no chasing payments.</p>
-                        </div>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">🌍</div>
-                        <div class="benefit-text">
-                            <h4>Global Support</h4>
-                            <p>Receive payments in 40+ countries. Multiple currencies supported.</p>
-                        </div>
-                    </div>
-                    <div class="benefit-item">
-                        <div class="benefit-icon">🔒</div>
-                        <div class="benefit-text">
-                            <h4>Bank-Level Security</h4>
-                            <p>Powered by Stripe. Your financial data is encrypted and secure.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="connect-btn" id="connectBtn">
-                    <svg viewBox="0 0 60 25" fill="currentColor">
-                        <path d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a10.7 10.7 0 0 1-4.56 1.02c-4.14 0-6.98-2.73-6.98-6.9 0-3.78 2.54-6.9 6.42-6.9 3.72 0 5.97 2.73 5.97 6.9 0 .33-.02.83-.04.96zm-5.97-5.58c-1.2 0-2.15.98-2.28 2.57h4.46c-.03-1.59-.98-2.57-2.18-2.57zM40.95 20.3c-1.44 0-2.32-.6-2.9-1.04l-.02 4.63-4.12.87V6.57h3.76l.08 1.02a4.7 4.7 0 0 1 3.4-1.33c3.07 0 5.28 2.73 5.28 6.93 0 4.56-2.4 7.11-5.48 7.11zm-.7-10.56c-1.04 0-1.84.45-2.22.95v5.28c.4.49 1.16.95 2.2.95 1.68 0 2.64-1.66 2.64-3.6 0-1.93-.96-3.58-2.62-3.58zM28.24 5.57c-1.35 0-2.45-1.1-2.45-2.45 0-1.35 1.1-2.45 2.45-2.45 1.35 0 2.45 1.1 2.45 2.45 0 1.35-1.1 2.45-2.45 2.45zm-2.06 14.51V6.57h4.12v13.51h-4.12zM19.25 20.3c-2.02 0-3.5-.7-4.56-1.46l1.02-2.83c.83.6 2.32 1.35 3.54 1.35.85 0 1.37-.33 1.37-.87 0-.6-.6-.87-1.68-1.27l-1.16-.43c-1.97-.73-3.2-1.73-3.2-3.76 0-2.4 1.93-4.25 5.15-4.25 1.8 0 3.2.56 4.1 1.2l-1.04 2.73c-.7-.47-1.8-.98-2.95-.98-.8 0-1.22.33-1.22.78 0 .52.5.77 1.6 1.16l1.14.42c2.17.8 3.32 1.93 3.32 3.92 0 2.4-1.95 4.3-5.43 4.3zM6.43 20.3C2.37 20.3 0 17.35 0 13.37c0-4.14 2.5-7.05 6.25-7.05 2.24 0 3.68.7 4.68 1.6l-1.58 2.65c-.7-.57-1.55-.94-2.67-.94-1.68 0-2.67 1.35-2.67 3.58 0 2.3 1.04 3.73 2.82 3.73 1.1 0 1.93-.37 2.72-1.02l1.35 2.55c-1.12 1.12-2.73 1.83-4.47 1.83z"/>
-                    </svg>
-                    Connect with Stripe
-                </button>
-
-                <div class="stripe-logo">
-                    <span>Secure payments powered by</span>
-                    <svg viewBox="0 0 60 25" fill="#635BFF">
-                        <path d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a10.7 10.7 0 0 1-4.56 1.02c-4.14 0-6.98-2.73-6.98-6.9 0-3.78 2.54-6.9 6.42-6.9 3.72 0 5.97 2.73 5.97 6.9 0 .33-.02.83-.04.96zm-5.97-5.58c-1.2 0-2.15.98-2.28 2.57h4.46c-.03-1.59-.98-2.57-2.18-2.57zM40.95 20.3c-1.44 0-2.32-.6-2.9-1.04l-.02 4.63-4.12.87V6.57h3.76l.08 1.02a4.7 4.7 0 0 1 3.4-1.33c3.07 0 5.28 2.73 5.28 6.93 0 4.56-2.4 7.11-5.48 7.11zm-.7-10.56c-1.04 0-1.84.45-2.22.95v5.28c.4.49 1.16.95 2.2.95 1.68 0 2.64-1.66 2.64-3.6 0-1.93-.96-3.58-2.62-3.58zM28.24 5.57c-1.35 0-2.45-1.1-2.45-2.45 0-1.35 1.1-2.45 2.45-2.45 1.35 0 2.45 1.1 2.45 2.45 0 1.35-1.1 2.45-2.45 2.45zm-2.06 14.51V6.57h4.12v13.51h-4.12zM19.25 20.3c-2.02 0-3.5-.7-4.56-1.46l1.02-2.83c.83.6 2.32 1.35 3.54 1.35.85 0 1.37-.33 1.37-.87 0-.6-.6-.87-1.68-1.27l-1.16-.43c-1.97-.73-3.2-1.73-3.2-3.76 0-2.4 1.93-4.25 5.15-4.25 1.8 0 3.2.56 4.1 1.2l-1.04 2.73c-.7-.47-1.8-.98-2.95-.98-.8 0-1.22.33-1.22.78 0 .52.5.77 1.6 1.16l1.14.42c2.17.8 3.32 1.93 3.32 3.92 0 2.4-1.95 4.3-5.43 4.3zM6.43 20.3C2.37 20.3 0 17.35 0 13.37c0-4.14 2.5-7.05 6.25-7.05 2.24 0 3.68.7 4.68 1.6l-1.58 2.65c-.7-.57-1.55-.94-2.67-.94-1.68 0-2.67 1.35-2.67 3.58 0 2.3 1.04 3.73 2.82 3.73 1.1 0 1.93-.37 2.72-1.02l1.35 2.55c-1.12 1.12-2.73 1.83-4.47 1.83z"/>
-                    </svg>
-                </div>
-            </div>
-        </div>
-
-        <!-- Connected State (hidden by default) -->
-        <div id="connectedState" style="display: none;">
-            <div class="status-card">
-                <div class="status-header">
-                    <div class="status-icon connected">✓</div>
-                    <div>
-                        <div class="status-title">Connected</div>
-                        <div class="status-subtitle">Your bank account is linked and ready for payouts</div>
-                    </div>
-                </div>
-
-                <div class="connected-info">
-                    <h3>✓ Payout Account Active</h3>
-                    <div class="account-details">
-                        <div class="account-row">
-                            <span>Account ID</span>
-                            <span id="accountId">acct_****</span>
-                        </div>
-                        <div class="account-row">
-                            <span>Payout Schedule</span>
-                            <span>Monthly (1st of month)</span>
-                        </div>
-                        <div class="account-row">
-                            <span>Revenue Split</span>
-                            <span id="revenueSplit">85%</span>
-                        </div>
-                        <div class="account-row">
-                            <span>Status</span>
-                            <span style="color: #28A745;">Active</span>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="connect-btn" onclick="window.open('https://dashboard.stripe.com/', '_blank')" style="background: #1A1A1A;">
-                    Open Stripe Dashboard →
-                </button>
-
-                <a href="#" class="disconnect-link" id="disconnectLink">
-                    Disconnect Account
-                </a>
-            </div>
-        </div>
-
-        <!-- FAQ -->
-        <div class="faq-section">
-            <h3 class="faq-title">Frequently Asked Questions</h3>
-            
-            <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-                    When do I get paid?
-                    <span class="faq-arrow">▼</span>
-                </div>
-                <div class="faq-answer">
-                    Payouts are processed automatically on the 1st of each month. Funds typically arrive in your bank account within 2-3 business days. You can also request an early payout from your dashboard if your balance exceeds $50.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-                    What's the revenue split?
-                    <span class="faq-arrow">▼</span>
-                </div>
-                <div class="faq-answer">
-                    You keep 85% of all earnings from subscriptions, tips, and pay-per-view content. Uncaged takes 15%. Stripe's processing fee (2.9% + $0.30) is deducted from the total before the split.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-                    Which countries are supported?
-                    <span class="faq-arrow">▼</span>
-                </div>
-                <div class="faq-answer">
-                    Stripe Connect supports creators in 40+ countries including the US, Canada, UK, most of Europe, Australia, and many others. During the connection process, Stripe will confirm if your country is supported.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-                    Is my information secure?
-                    <span class="faq-arrow">▼</span>
-                </div>
-                <div class="faq-answer">
-                    Yes. Stripe is a PCI Level 1 certified payment processor (the highest security standard). Your bank details are encrypted and stored by Stripe, not by Uncaged. We never see your full account numbers.
-                </div>
-            </div>
-
-            <div class="faq-item">
-                <div class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-                    What information do I need to provide?
-                    <span class="faq-arrow">▼</span>
-                </div>
-                <div class="faq-answer">
-                    Stripe will ask for: your legal name, date of birth, address, last 4 digits of SSN (US) or equivalent ID, and bank account details. This is required by financial regulations to verify your identity.
-                </div>
-            </div>
-        </div>
-    </main>
+    <div class="container">
+        <h1 class="title">💳 Get Paid with Stripe</h1>
+        <p class="desc">Connect your bank account to receive your earnings. You keep 85% of everything.</p>
+        <div id="successBox" class="success-box">✅ Stripe already connected!</div>
+        <div id="errorBox" class="error-box"></div>
+        <button class="connect-btn" id="connectBtn" disabled>Loading...</button>
+        <br>
+        <a href="dashboard.html" class="back-link">← Back to Dashboard</a>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
@@ -534,66 +54,43 @@
         const db = getFirestore(app);
 
         let currentUser = null;
+        const btn = document.getElementById('connectBtn');
+        const errorBox = document.getElementById('errorBox');
+        const successBox = document.getElementById('successBox');
 
         onAuthStateChanged(auth, async (user) => {
             if (!user) {
                 window.location.href = 'login.html';
                 return;
             }
-
             currentUser = user;
             
-            // Check if user has Stripe connected
-            try {
-                const userDoc = await getDoc(doc(db, 'users', user.uid));
-                if (userDoc.exists()) {
-                    const userData = userDoc.data();
-                    if (userData.stripeConnectId) {
-                        showConnectedState(userData);
-                    }
-                }
-            } catch (error) {
-                console.log('No user document yet');
+            // Check if already connected
+            const userDoc = await getDoc(doc(db, 'users', user.uid));
+            if (userDoc.exists() && userDoc.data().stripeConnectId) {
+                successBox.style.display = 'block';
+                btn.textContent = 'Update Stripe Account';
+            } else {
+                btn.textContent = 'Connect with Stripe';
             }
+            btn.disabled = false;
         });
 
-        function showConnectedState(userData) {
-            document.getElementById('notConnectedState').style.display = 'none';
-            document.getElementById('connectedState').style.display = 'block';
-            
-            if (userData.stripeConnectId) {
-                const shortId = userData.stripeConnectId.substring(0, 10) + '****';
-                document.getElementById('accountId').textContent = shortId;
+        btn.addEventListener('click', async () => {
+            if (!currentUser) {
+                errorBox.textContent = 'Please log in first';
+                errorBox.style.display = 'block';
+                return;
             }
-            if (userData.revenueSplit) {
-                document.getElementById('revenueSplit').textContent = userData.revenueSplit + '%';
-            }
-        }
 
-        function showError(message) {
-            const errorDiv = document.getElementById('errorMessage');
-            errorDiv.textContent = message;
-            errorDiv.style.display = 'block';
-        }
-
-        function hideError() {
-            document.getElementById('errorMessage').style.display = 'none';
-        }
-
-        // Connect button click handler
-        document.getElementById('connectBtn').addEventListener('click', async function() {
-            const btn = this;
             btn.disabled = true;
-            btn.innerHTML = '<div class="spinner"></div> Connecting...';
-            hideError();
+            btn.textContent = 'Connecting...';
+            errorBox.style.display = 'none';
 
             try {
-                // Call our API to create a Stripe Connect account
                 const response = await fetch('/api/create-connect-account', {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         userId: currentUser.uid,
                         email: currentUser.email
@@ -602,44 +99,24 @@
 
                 const data = await response.json();
 
-                if (data.success && data.url) {
-                    // Redirect to Stripe's onboarding
-                    window.location.href = data.url;
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to connect');
+                }
+
+                if (data.success && data.onboardingUrl) {
+                    await updateDoc(doc(db, 'users', currentUser.uid), {
+                        stripeConnectId: data.accountId
+                    });
+                    window.location.href = data.onboardingUrl;
                 } else {
-                    throw new Error(data.error || 'Failed to create connect account');
+                    throw new Error('Invalid response');
                 }
 
             } catch (error) {
-                console.error('Error:', error);
-                showError('Unable to connect to Stripe. Please try again. Error: ' + error.message);
+                errorBox.textContent = 'Error: ' + error.message;
+                errorBox.style.display = 'block';
                 btn.disabled = false;
-                btn.innerHTML = `
-                    <svg viewBox="0 0 60 25" fill="currentColor">
-                        <path d="M59.64 14.28h-8.06c.19 1.93 1.6 2.55 3.2 2.55 1.64 0 2.96-.37 4.05-.95v3.32a10.7 10.7 0 0 1-4.56 1.02c-4.14 0-6.98-2.73-6.98-6.9 0-3.78 2.54-6.9 6.42-6.9 3.72 0 5.97 2.73 5.97 6.9 0 .33-.02.83-.04.96zm-5.97-5.58c-1.2 0-2.15.98-2.28 2.57h4.46c-.03-1.59-.98-2.57-2.18-2.57zM40.95 20.3c-1.44 0-2.32-.6-2.9-1.04l-.02 4.63-4.12.87V6.57h3.76l.08 1.02a4.7 4.7 0 0 1 3.4-1.33c3.07 0 5.28 2.73 5.28 6.93 0 4.56-2.4 7.11-5.48 7.11zm-.7-10.56c-1.04 0-1.84.45-2.22.95v5.28c.4.49 1.16.95 2.2.95 1.68 0 2.64-1.66 2.64-3.6 0-1.93-.96-3.58-2.62-3.58zM28.24 5.57c-1.35 0-2.45-1.1-2.45-2.45 0-1.35 1.1-2.45 2.45-2.45 1.35 0 2.45 1.1 2.45 2.45 0 1.35-1.1 2.45-2.45 2.45zm-2.06 14.51V6.57h4.12v13.51h-4.12zM19.25 20.3c-2.02 0-3.5-.7-4.56-1.46l1.02-2.83c.83.6 2.32 1.35 3.54 1.35.85 0 1.37-.33 1.37-.87 0-.6-.6-.87-1.68-1.27l-1.16-.43c-1.97-.73-3.2-1.73-3.2-3.76 0-2.4 1.93-4.25 5.15-4.25 1.8 0 3.2.56 4.1 1.2l-1.04 2.73c-.7-.47-1.8-.98-2.95-.98-.8 0-1.22.33-1.22.78 0 .52.5.77 1.6 1.16l1.14.42c2.17.8 3.32 1.93 3.32 3.92 0 2.4-1.95 4.3-5.43 4.3zM6.43 20.3C2.37 20.3 0 17.35 0 13.37c0-4.14 2.5-7.05 6.25-7.05 2.24 0 3.68.7 4.68 1.6l-1.58 2.65c-.7-.57-1.55-.94-2.67-.94-1.68 0-2.67 1.35-2.67 3.58 0 2.3 1.04 3.73 2.82 3.73 1.1 0 1.93-.37 2.72-1.02l1.35 2.55c-1.12 1.12-2.73 1.83-4.47 1.83z"/>
-                    </svg>
-                    Connect with Stripe
-                `;
-            }
-        });
-
-        // Disconnect handler
-        document.getElementById('disconnectLink').addEventListener('click', async function(e) {
-            e.preventDefault();
-            if (!confirm('Are you sure you want to disconnect your Stripe account? You will stop receiving payouts until you reconnect.')) {
-                return;
-            }
-
-            try {
-                await updateDoc(doc(db, 'users', currentUser.uid), {
-                    stripeConnectId: null
-                });
-                
-                document.getElementById('connectedState').style.display = 'none';
-                document.getElementById('notConnectedState').style.display = 'block';
-                alert('Stripe account disconnected.');
-            } catch (error) {
-                console.error('Error disconnecting:', error);
-                alert('Error disconnecting. Please try again.');
+                btn.textContent = 'Try Again';
             }
         });
     </script>
