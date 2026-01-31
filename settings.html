@@ -6,451 +6,106 @@
     <title>UNCAGED | Settings</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'DM Sans', sans-serif; background: #0D0D0D; color: #FFFFFF; min-height: 100vh; }
-        
-        .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(13, 13, 13, 0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; z-index: 1000; border-bottom: 1px solid #1A1A1A; }
-        .header-left { display: flex; align-items: center; gap: 30px; }
-        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
-        .nav-links { display: flex; gap: 25px; }
-        .nav-link { color: #888; text-decoration: none; font-size: 14px; font-weight: 500; }
-        .nav-link:hover, .nav-link.active { color: #FFFFFF; }
-        .header-right { display: flex; align-items: center; gap: 15px; }
-        .upload-btn { display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); color: #000; padding: 8px 16px; border-radius: 20px; text-decoration: none; font-weight: 600; font-size: 14px; }
-        .profile-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); border: none; color: #000; font-weight: 700; cursor: pointer; }
-
-        .dashboard-container { display: flex; padding-top: 60px; min-height: 100vh; }
-        
-        .sidebar { width: 250px; background: #0A0A0A; padding: 30px 20px; border-right: 1px solid #1A1A1A; position: fixed; top: 60px; bottom: 0; left: 0; overflow-y: auto; }
-        .sidebar-section { margin-bottom: 30px; }
-        .sidebar-title { color: #666; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 15px; color: #888; text-decoration: none; border-radius: 8px; margin-bottom: 5px; transition: all 0.2s; }
-        .sidebar-link:hover { background: #1A1A1A; color: #FFFFFF; }
-        .sidebar-link.active { background: rgba(245, 166, 35, 0.1); color: #F5A623; }
-        .sidebar-link span { font-size: 18px; }
-
-        .main-content { flex: 1; margin-left: 250px; padding: 30px; max-width: 900px; }
-        .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; margin-bottom: 30px; }
-
-        /* Settings Sections */
-        .settings-section { background: #1A1A1A; border-radius: 12px; padding: 25px; border: 1px solid #2A2A2A; margin-bottom: 20px; }
-        .settings-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid #2A2A2A; }
-        .settings-title { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        .settings-title span { font-size: 20px; }
-
-        /* Form Elements */
-        .form-group { margin-bottom: 20px; }
-        .form-label { display: block; color: #888; font-size: 14px; margin-bottom: 8px; }
-        .form-input { width: 100%; padding: 12px 15px; background: #0D0D0D; border: 1px solid #2A2A2A; border-radius: 8px; color: #FFFFFF; font-size: 14px; transition: border-color 0.2s; }
-        .form-input:focus { outline: none; border-color: #F5A623; }
-        .form-input:disabled { opacity: 0.6; cursor: not-allowed; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        .form-help { color: #666; font-size: 12px; margin-top: 5px; }
-
-        /* Toggle Switch */
-        .toggle-row { display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid #2A2A2A; }
-        .toggle-row:last-child { border-bottom: none; }
-        .toggle-info h4 { margin-bottom: 5px; }
-        .toggle-info p { color: #888; font-size: 13px; }
-        .toggle-switch { position: relative; width: 50px; height: 26px; }
-        .toggle-switch input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #2A2A2A; border-radius: 26px; transition: 0.3s; }
-        .toggle-slider:before { position: absolute; content: ""; height: 20px; width: 20px; left: 3px; bottom: 3px; background: #FFFFFF; border-radius: 50%; transition: 0.3s; }
-        .toggle-switch input:checked + .toggle-slider { background: #F5A623; }
-        .toggle-switch input:checked + .toggle-slider:before { transform: translateX(24px); }
-
-        /* Buttons */
-        .btn { padding: 12px 24px; border-radius: 8px; font-weight: 600; font-size: 14px; cursor: pointer; transition: all 0.2s; border: none; }
-        .btn-primary { background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%); color: #000; }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3); }
-        .btn-secondary { background: transparent; border: 1px solid #2A2A2A; color: #FFFFFF; }
-        .btn-secondary:hover { background: #2A2A2A; }
-        .btn-danger { background: transparent; border: 1px solid #DC3545; color: #DC3545; }
-        .btn-danger:hover { background: rgba(220, 53, 69, 0.1); }
-        .btn-group { display: flex; gap: 10px; margin-top: 20px; }
-
-        /* Connected Accounts */
-        .connected-account { display: flex; align-items: center; gap: 15px; padding: 15px; background: #0D0D0D; border-radius: 10px; margin-bottom: 10px; }
-        .account-icon { width: 45px; height: 45px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 24px; }
-        .account-icon.google { background: #4285F4; }
-        .account-icon.apple { background: #000; border: 1px solid #333; }
-        .account-icon.stripe { background: #635BFF; }
-        .account-info { flex: 1; }
-        .account-info h4 { margin-bottom: 3px; }
-        .account-info p { color: #888; font-size: 13px; }
-        .account-status { padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
-        .account-status.connected { background: rgba(40, 167, 69, 0.2); color: #28A745; }
-        .account-status.not-connected { background: rgba(108, 117, 125, 0.2); color: #6C757D; }
-
-        /* Danger Zone */
-        .danger-zone { border-color: rgba(220, 53, 69, 0.3); }
-        .danger-zone .settings-title { color: #DC3545; }
-
-        @media (max-width: 768px) { 
-            .sidebar { display: none; } 
-            .main-content { margin-left: 0; } 
-            .form-row { grid-template-columns: 1fr; }
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg-primary:#0D0D0D;--bg-secondary:#1A1A1A;--bg-tertiary:#242424;--accent-gold:#F5A623;--text-primary:#FFFFFF;--text-secondary:#B3B3B3;--text-muted:#666666;--border-color:#2A2A2A}
+        body{font-family:'DM Sans',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh}
+        .header{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(13,13,13,0.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 30px;z-index:1000;border-bottom:1px solid var(--border-color)}
+        .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(135deg,var(--accent-gold),#D4880F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+        .nav-links{display:flex;gap:25px}
+        .nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px}
+        .profile-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-gold),#D4880F);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;cursor:pointer;font-size:14px;border:none;position:relative}
+        .dropdown{position:absolute;top:calc(100% + 10px);right:0;background:var(--bg-secondary);border-radius:12px;padding:10px 0;min-width:200px;box-shadow:0 10px 40px rgba(0,0,0,0.5);display:none;border:1px solid var(--border-color)}
+        .dropdown.show{display:block}
+        .dropdown a{display:block;padding:12px 20px;color:var(--text-secondary);text-decoration:none;font-size:14px}
+        .dropdown a:hover{background:var(--bg-tertiary);color:var(--text-primary)}
+        .dropdown .divider{height:1px;background:var(--border-color);margin:8px 0}
+        .page-container{display:flex;min-height:100vh}
+        .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--bg-secondary);padding:80px 0 20px;border-right:1px solid var(--border-color)}
+        .sidebar a{display:flex;align-items:center;gap:12px;padding:12px 20px;color:var(--text-secondary);text-decoration:none;font-size:14px}
+        .sidebar a:hover{background:var(--bg-tertiary)}
+        .sidebar a.active{background:rgba(245,166,35,0.1);color:var(--accent-gold);border-left:3px solid var(--accent-gold)}
+        .sidebar a svg{width:20px;height:20px}
+        .sidebar .divider{height:1px;background:var(--border-color);margin:15px 20px}
+        .main{margin-left:240px;padding:80px 30px 40px;flex:1;max-width:800px}
+        .page-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;margin-bottom:30px}
+        .settings-section{background:var(--bg-secondary);border-radius:12px;padding:25px;margin-bottom:20px}
+        .settings-section h3{font-size:18px;margin-bottom:20px;padding-bottom:15px;border-bottom:1px solid var(--border-color)}
+        .form-group{margin-bottom:20px}
+        .form-group label{display:block;margin-bottom:8px;font-size:14px;color:var(--text-secondary)}
+        .form-group input{width:100%;padding:14px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:10px;color:var(--text-primary);font-size:14px}
+        .form-group input:focus{outline:none;border-color:var(--accent-gold)}
+        .form-group input:disabled{opacity:0.6}
+        .btn-save{background:linear-gradient(135deg,var(--accent-gold),#D4880F);color:#000;padding:12px 24px;border:none;border-radius:10px;font-weight:600;cursor:pointer}
+        .btn-danger{background:transparent;border:1px solid #DC3545;color:#DC3545;padding:12px 24px;border-radius:10px;cursor:pointer}
+        .btn-danger:hover{background:#DC3545;color:#fff}
+        .success-msg{background:rgba(40,167,69,0.1);border:1px solid #28A745;color:#28A745;padding:12px;border-radius:8px;margin-bottom:20px;display:none}
+        @media(max-width:1024px){.sidebar{width:70px}.sidebar a span{display:none}.sidebar a{justify-content:center}.main{margin-left:70px}}
+        @media(max-width:768px){.sidebar{display:none}.main{margin-left:0;padding:70px 15px 20px}}
     </style>
 </head>
 <body>
     <header class="header">
-        <div class="header-left">
+        <div style="display:flex;align-items:center;gap:30px">
             <a href="index.html" class="logo">UNCAGED</a>
-            <nav class="nav-links">
-                <a href="browse.html" class="nav-link">Browse</a>
-                <a href="dashboard.html" class="nav-link">Dashboard</a>
-            </nav>
+            <nav class="nav-links"><a href="browse.html">Browse</a><a href="dashboard.html">Dashboard</a></nav>
         </div>
-        <div class="header-right">
-            <a href="upload.html" class="upload-btn"><span>+</span><span>Upload</span></a>
-            <button class="profile-btn" id="profileBtn">V</button>
-        </div>
+        <button class="profile-btn" id="profileBtn">V
+            <div class="dropdown" id="profileDropdown">
+                <a href="dashboard.html">Dashboard</a><a href="my-videos.html">My Videos</a><a href="earnings.html">Earnings</a>
+                <div class="divider"></div><a href="stripe-connect.html">Get Paid</a><a href="settings.html">Settings</a>
+                <div class="divider"></div><a href="#" id="logoutBtn">Log Out</a>
+            </div>
+        </button>
     </header>
-
-    <div class="dashboard-container">
+    <div class="page-container">
         <aside class="sidebar">
-            <div class="sidebar-section">
-                <div class="sidebar-title">Dashboard</div>
-                <a href="dashboard.html" class="sidebar-link"><span>📊</span> Overview</a>
-                <a href="my-videos.html" class="sidebar-link"><span>📹</span> My Videos</a>
-                <a href="analytics.html" class="sidebar-link"><span>📈</span> Analytics</a>
-            </div>
-            <div class="sidebar-section">
-                <div class="sidebar-title">Monetization</div>
-                <a href="earnings.html" class="sidebar-link"><span>💰</span> Earnings</a>
-                <a href="payouts.html" class="sidebar-link"><span>💳</span> Payouts</a>
-                <a href="subscriptions.html" class="sidebar-link"><span>🎁</span> Subscriptions</a>
-            </div>
-            <div class="sidebar-section">
-                <div class="sidebar-title">Settings</div>
-                <a href="profile-edit.html" class="sidebar-link"><span>👤</span> Profile</a>
-                <a href="stripe-connect.html" class="sidebar-link"><span>🔗</span> Stripe Connect</a>
-                <a href="settings.html" class="sidebar-link active"><span>⚙️</span> Settings</a>
-            </div>
+            <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Dashboard</span></a>
+            <a href="my-videos.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><span>My Videos</span></a>
+            <a href="analytics.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analytics</span></a>
+            <a href="earnings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Earnings</span></a>
+            <div class="divider"></div>
+            <a href="stripe-connect.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Get Paid</span></a>
+            <a href="settings.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></a>
         </aside>
-
-        <main class="main-content">
+        <main class="main">
             <h1 class="page-title">Settings</h1>
-
-            <!-- Account Settings -->
+            <div class="success-msg" id="successMsg">Settings saved!</div>
             <div class="settings-section">
-                <div class="settings-header">
-                    <h2 class="settings-title"><span>👤</span> Account Settings</h2>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" class="form-input" id="emailInput" disabled>
-                        <p class="form-help">Contact support to change your email</p>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Phone Number</label>
-                        <input type="tel" class="form-input" id="phoneInput" placeholder="+1 (555) 000-0000">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Username</label>
-                    <input type="text" class="form-input" id="usernameInput" placeholder="@username">
-                    <p class="form-help">Your unique identifier on Uncaged</p>
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="saveAccountSettings()">Save Changes</button>
-                </div>
+                <h3>Profile</h3>
+                <form id="profileForm">
+                    <div class="form-group"><label>Display Name</label><input type="text" id="displayName" placeholder="Your name"></div>
+                    <div class="form-group"><label>Email</label><input type="email" id="email" disabled></div>
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </form>
             </div>
-
-            <!-- Password -->
             <div class="settings-section">
-                <div class="settings-header">
-                    <h2 class="settings-title"><span>🔒</span> Password & Security</h2>
-                </div>
-                <div class="form-row">
-                    <div class="form-group">
-                        <label class="form-label">Current Password</label>
-                        <input type="password" class="form-input" id="currentPassword" placeholder="Enter current password">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">New Password</label>
-                        <input type="password" class="form-input" id="newPassword" placeholder="Enter new password">
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Confirm New Password</label>
-                    <input type="password" class="form-input" id="confirmPassword" placeholder="Confirm new password">
-                </div>
-                <div class="btn-group">
-                    <button class="btn btn-primary" onclick="changePassword()">Update Password</button>
-                </div>
+                <h3>Channel</h3>
+                <form id="channelForm">
+                    <div class="form-group"><label>Channel Description</label><input type="text" id="channelDesc" placeholder="Tell viewers about your channel"></div>
+                    <button type="submit" class="btn-save">Save Channel</button>
+                </form>
             </div>
-
-            <!-- Connected Accounts -->
             <div class="settings-section">
-                <div class="settings-header">
-                    <h2 class="settings-title"><span>🔗</span> Connected Accounts</h2>
-                </div>
-                <div class="connected-account">
-                    <div class="account-icon google">G</div>
-                    <div class="account-info">
-                        <h4>Google</h4>
-                        <p id="googleEmail">Not connected</p>
-                    </div>
-                    <span class="account-status not-connected" id="googleStatus">Not Connected</span>
-                </div>
-                <div class="connected-account">
-                    <div class="account-icon apple"></div>
-                    <div class="account-info">
-                        <h4>Apple</h4>
-                        <p>Sign in with Apple</p>
-                    </div>
-                    <span class="account-status not-connected">Not Connected</span>
-                </div>
-                <div class="connected-account">
-                    <div class="account-icon stripe">S</div>
-                    <div class="account-info">
-                        <h4>Stripe</h4>
-                        <p id="stripeStatus">Connect to receive payments</p>
-                    </div>
-                    <a href="stripe-connect.html" class="account-status not-connected" id="stripeConnectStatus" style="text-decoration: none;">Connect</a>
-                </div>
-            </div>
-
-            <!-- Notifications -->
-            <div class="settings-section">
-                <div class="settings-header">
-                    <h2 class="settings-title"><span>🔔</span> Notifications</h2>
-                </div>
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>Email Notifications</h4>
-                        <p>Receive emails about new subscribers and tips</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked id="emailNotifications">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>New Subscriber Alerts</h4>
-                        <p>Get notified when someone subscribes to your channel</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked id="subAlerts">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>Tip Notifications</h4>
-                        <p>Get notified when you receive a tip</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked id="tipAlerts">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>Payout Notifications</h4>
-                        <p>Get notified about payout status</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked id="payoutAlerts">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>Marketing Emails</h4>
-                        <p>Receive tips and updates from Uncaged</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" id="marketingEmails">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Privacy -->
-            <div class="settings-section">
-                <div class="settings-header">
-                    <h2 class="settings-title"><span>🛡️</span> Privacy</h2>
-                </div>
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>Show Subscriber Count</h4>
-                        <p>Display your subscriber count on your profile</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked id="showSubCount">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>Show Video View Counts</h4>
-                        <p>Display view counts on your videos</p>
-                    </div>
-                    <label class="toggle-switch">
-                        <input type="checkbox" checked id="showViewCount">
-                        <span class="toggle-slider"></span>
-                    </label>
-                </div>
-            </div>
-
-            <!-- Danger Zone -->
-            <div class="settings-section danger-zone">
-                <div class="settings-header">
-                    <h2 class="settings-title"><span>⚠️</span> Danger Zone</h2>
-                </div>
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>Deactivate Account</h4>
-                        <p>Temporarily disable your account. You can reactivate anytime.</p>
-                    </div>
-                    <button class="btn btn-secondary" onclick="deactivateAccount()">Deactivate</button>
-                </div>
-                <div class="toggle-row">
-                    <div class="toggle-info">
-                        <h4>Delete Account</h4>
-                        <p>Permanently delete your account and all data. This cannot be undone.</p>
-                    </div>
-                    <button class="btn btn-danger" onclick="deleteAccount()">Delete Account</button>
-                </div>
+                <h3>Danger Zone</h3>
+                <p style="color:var(--text-muted);margin-bottom:15px">Permanently delete your account and all data.</p>
+                <button class="btn-danger" id="deleteBtn">Delete Account</button>
             </div>
         </main>
     </div>
-
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, updatePassword, EmailAuthProvider, reauthenticateWithCredential } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
-            authDomain: "uncaged-85b49.firebaseapp.com",
-            projectId: "uncaged-85b49",
-            storageBucket: "uncaged-85b49.firebasestorage.app",
-            messagingSenderId: "957750920887",
-            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let currentUser = null;
-
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            currentUser = user;
-            const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
-            document.getElementById('profileBtn').textContent = initial;
-
-            // Populate form
-            document.getElementById('emailInput').value = user.email;
-
-            // Check provider
-            user.providerData.forEach(provider => {
-                if (provider.providerId === 'google.com') {
-                    document.getElementById('googleEmail').textContent = user.email;
-                    document.getElementById('googleStatus').textContent = 'Connected';
-                    document.getElementById('googleStatus').classList.remove('not-connected');
-                    document.getElementById('googleStatus').classList.add('connected');
-                }
-            });
-
-            // Load user data
-            const userDoc = await getDoc(doc(db, 'users', user.uid));
-            if (userDoc.exists()) {
-                const data = userDoc.data();
-                document.getElementById('usernameInput').value = data.username || '';
-                document.getElementById('phoneInput').value = data.phone || '';
-
-                if (data.stripeConnectId) {
-                    document.getElementById('stripeStatus').textContent = 'Connected';
-                    document.getElementById('stripeConnectStatus').textContent = 'Connected';
-                    document.getElementById('stripeConnectStatus').classList.remove('not-connected');
-                    document.getElementById('stripeConnectStatus').classList.add('connected');
-                }
-            }
-        });
-
-        window.saveAccountSettings = async function() {
-            if (!currentUser) return;
-
-            try {
-                await updateDoc(doc(db, 'users', currentUser.uid), {
-                    username: document.getElementById('usernameInput').value,
-                    phone: document.getElementById('phoneInput').value
-                });
-                alert('Settings saved successfully!');
-            } catch (error) {
-                console.error('Error saving settings:', error);
-                alert('Error saving settings. Please try again.');
-            }
-        };
-
-        window.changePassword = async function() {
-            const currentPw = document.getElementById('currentPassword').value;
-            const newPw = document.getElementById('newPassword').value;
-            const confirmPw = document.getElementById('confirmPassword').value;
-
-            if (!currentPw || !newPw || !confirmPw) {
-                alert('Please fill in all password fields.');
-                return;
-            }
-
-            if (newPw !== confirmPw) {
-                alert('New passwords do not match.');
-                return;
-            }
-
-            if (newPw.length < 6) {
-                alert('Password must be at least 6 characters.');
-                return;
-            }
-
-            try {
-                const credential = EmailAuthProvider.credential(currentUser.email, currentPw);
-                await reauthenticateWithCredential(currentUser, credential);
-                await updatePassword(currentUser, newPw);
-                alert('Password updated successfully!');
-                document.getElementById('currentPassword').value = '';
-                document.getElementById('newPassword').value = '';
-                document.getElementById('confirmPassword').value = '';
-            } catch (error) {
-                console.error('Error changing password:', error);
-                if (error.code === 'auth/wrong-password') {
-                    alert('Current password is incorrect.');
-                } else {
-                    alert('Error changing password. Please try again.');
-                }
-            }
-        };
-
-        window.deactivateAccount = function() {
-            if (confirm('Are you sure you want to deactivate your account?\n\nYour profile will be hidden and you won\'t receive any earnings until you reactivate.')) {
-                alert('Account deactivation coming soon.\n\nContact support@uncaged.com to deactivate your account.');
-            }
-        };
-
-        window.deleteAccount = function() {
-            if (confirm('⚠️ WARNING: This will permanently delete your account!\n\nAll your videos, earnings, and data will be lost forever.\n\nAre you absolutely sure?')) {
-                if (confirm('This is your final warning. Type DELETE in the next prompt to confirm.')) {
-                    const confirmation = prompt('Type DELETE to confirm account deletion:');
-                    if (confirmation === 'DELETE') {
-                        alert('Account deletion coming soon.\n\nContact support@uncaged.com to delete your account.');
-                    } else {
-                        alert('Account deletion cancelled.');
-                    }
-                }
-            }
-        };
+        import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import{getAuth,onAuthStateChanged,signOut,updateProfile,deleteUser}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import{getFirestore,doc,updateDoc,deleteDoc}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        const app=initializeApp({apiKey:"AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",authDomain:"uncaged-85b49.firebaseapp.com",projectId:"uncaged-85b49",storageBucket:"uncaged-85b49.firebasestorage.app",messagingSenderId:"957750920887",appId:"1:957750920887:web:9af4d847dad76c876d2f32"});
+        const auth=getAuth(app),db=getFirestore(app);let currentUser=null;
+        onAuthStateChanged(auth,u=>{if(!u){location.href='login.html';return}currentUser=u;document.getElementById('profileBtn').childNodes[0].textContent=(u.displayName||u.email)[0].toUpperCase();document.getElementById('displayName').value=u.displayName||'';document.getElementById('email').value=u.email});
+        document.getElementById('profileBtn').onclick=e=>{e.stopPropagation();document.getElementById('profileDropdown').classList.toggle('show')};
+        document.onclick=()=>document.getElementById('profileDropdown').classList.remove('show');
+        document.querySelectorAll('.dropdown').forEach(d=>d.onclick=e=>e.stopPropagation());
+        document.getElementById('logoutBtn').onclick=async e=>{e.preventDefault();await signOut(auth);location.href='index.html'};
+        document.getElementById('profileForm').onsubmit=async e=>{e.preventDefault();const name=document.getElementById('displayName').value;await updateProfile(currentUser,{displayName:name});await updateDoc(doc(db,'users',currentUser.uid),{displayName:name});document.getElementById('successMsg').style.display='block';setTimeout(()=>document.getElementById('successMsg').style.display='none',3000)};
+        document.getElementById('channelForm').onsubmit=async e=>{e.preventDefault();await updateDoc(doc(db,'users',currentUser.uid),{channelDescription:document.getElementById('channelDesc').value});document.getElementById('successMsg').style.display='block';setTimeout(()=>document.getElementById('successMsg').style.display='none',3000)};
+        document.getElementById('deleteBtn').onclick=async()=>{if(!confirm('Delete your account? This cannot be undone.'))return;try{await deleteDoc(doc(db,'users',currentUser.uid));await deleteUser(currentUser);location.href='index.html'}catch(e){alert('Error: '+e.message)}};
     </script>
 </body>
 </html>

@@ -6,451 +6,102 @@
     <title>UNCAGED | Search</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg-primary: #0D0D0D;
-            --bg-secondary: #1A1A1A;
-            --bg-tertiary: #242424;
-            --accent-gold: #F5A623;
-            --accent-gold-dark: #D4880F;
-            --text-primary: #FFFFFF;
-            --text-secondary: #B3B3B3;
-            --text-muted: #666666;
-            --border-color: #2A2A2A;
-        }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
-
-        /* Header */
-        .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(13,13,13,0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; z-index: 1000; border-bottom: 1px solid var(--border-color); }
-        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
-        .search-bar { display: flex; align-items: center; background: var(--bg-secondary); border-radius: 25px; padding: 8px 16px; width: 500px; border: 2px solid transparent; transition: border-color 0.3s; }
-        .search-bar:focus-within { border-color: var(--accent-gold); }
-        .search-bar input { background: none; border: none; color: var(--text-primary); font-size: 14px; width: 100%; outline: none; }
-        .search-bar input::placeholder { color: var(--text-muted); }
-        .search-bar svg { color: var(--text-muted); margin-right: 10px; flex-shrink: 0; }
-        .search-btn { background: var(--accent-gold); border: none; padding: 6px 12px; border-radius: 15px; margin-left: 10px; cursor: pointer; }
-        .search-btn svg { color: #000; margin: 0; }
-        .auth-buttons { display: flex; gap: 15px; align-items: center; }
-        .btn-login { color: var(--text-primary); text-decoration: none; font-size: 14px; }
-        .btn-signup { background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); color: #000; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 14px; }
-        .profile-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; cursor: pointer; font-size: 14px; }
-        .upload-btn { background: var(--bg-tertiary); color: var(--text-primary); padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 6px; }
-        #authButtons, #loggedInState { display: none; }
-
-        /* Main Content */
-        .main-content { max-width: 1200px; margin: 0 auto; padding: 80px 30px 40px; }
-
-        /* Search Header */
-        .search-header { margin-bottom: 30px; }
-        .search-query { font-size: 20px; color: var(--text-secondary); }
-        .search-query span { color: var(--text-primary); font-weight: 600; }
-        .results-count { color: var(--text-muted); font-size: 14px; margin-top: 5px; }
-
-        /* Tabs */
-        .search-tabs { display: flex; gap: 5px; margin-bottom: 25px; border-bottom: 1px solid var(--border-color); }
-        .tab-btn { padding: 12px 20px; background: none; border: none; color: var(--text-secondary); cursor: pointer; font-size: 14px; position: relative; transition: color 0.3s; }
-        .tab-btn:hover { color: var(--text-primary); }
-        .tab-btn.active { color: var(--text-primary); }
-        .tab-btn.active::after { content: ''; position: absolute; bottom: -1px; left: 0; right: 0; height: 2px; background: var(--accent-gold); }
-        .tab-count { background: var(--bg-tertiary); padding: 2px 8px; border-radius: 10px; font-size: 12px; margin-left: 8px; }
-
-        /* Filters */
-        .filters-bar { display: flex; gap: 15px; margin-bottom: 25px; flex-wrap: wrap; }
-        .filter-select { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 8px 12px; color: var(--text-primary); font-size: 13px; cursor: pointer; }
-        .filter-select:focus { outline: none; border-color: var(--accent-gold); }
-
-        /* Videos List */
-        .videos-list { display: flex; flex-direction: column; gap: 20px; }
-        .video-row { display: flex; gap: 15px; padding: 15px; background: var(--bg-secondary); border-radius: 12px; cursor: pointer; transition: background 0.3s; }
-        .video-row:hover { background: var(--bg-tertiary); }
-        .video-row-thumb { width: 360px; height: 200px; background: var(--bg-tertiary); border-radius: 8px; overflow: hidden; flex-shrink: 0; position: relative; }
-        .video-row-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .video-row-duration { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
-        .video-row-info { flex: 1; padding: 5px 0; }
-        .video-row-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; line-height: 1.3; }
-        .video-row-stats { color: var(--text-muted); font-size: 13px; margin-bottom: 12px; }
-        .video-row-creator { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
-        .creator-avatar-sm { width: 28px; height: 28px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; font-size: 12px; }
-        .creator-name-sm { color: var(--text-secondary); font-size: 13px; }
-        .creator-name-sm:hover { color: var(--text-primary); }
-        .video-row-desc { color: var(--text-muted); font-size: 13px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-
-        /* Creators List */
-        .creators-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; }
-        .creator-card { background: var(--bg-secondary); border-radius: 12px; padding: 25px; text-align: center; cursor: pointer; transition: transform 0.3s, background 0.3s; }
-        .creator-card:hover { transform: translateY(-5px); background: var(--bg-tertiary); }
-        .creator-avatar-lg { width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; font-size: 28px; margin: 0 auto 15px; }
-        .creator-card-name { font-size: 16px; font-weight: 600; margin-bottom: 5px; }
-        .creator-card-subs { color: var(--text-muted); font-size: 13px; margin-bottom: 15px; }
-        .creator-card-btn { background: var(--accent-gold); color: #000; border: none; padding: 8px 20px; border-radius: 20px; font-weight: 600; font-size: 13px; cursor: pointer; }
-
-        /* Loading & Empty States */
-        .loading { text-align: center; padding: 60px 20px; }
-        .loading-spinner { width: 40px; height: 40px; border: 3px solid var(--border-color); border-top-color: var(--accent-gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .empty-state { text-align: center; padding: 80px 20px; }
-        .empty-state svg { width: 80px; height: 80px; color: var(--text-muted); margin-bottom: 20px; }
-        .empty-state h2 { font-size: 24px; margin-bottom: 10px; }
-        .empty-state p { color: var(--text-muted); margin-bottom: 20px; }
-
-        /* Responsive */
-        @media (max-width: 900px) {
-            .video-row { flex-direction: column; }
-            .video-row-thumb { width: 100%; height: auto; padding-top: 56.25%; position: relative; }
-            .video-row-thumb img { position: absolute; top: 0; left: 0; }
-        }
-        @media (max-width: 768px) {
-            .header { padding: 0 15px; }
-            .search-bar { width: 200px; }
-            .main-content { padding: 70px 15px 20px; }
-        }
-        @media (max-width: 480px) {
-            .search-bar { display: none; }
-        }
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg-primary:#0D0D0D;--bg-secondary:#1A1A1A;--bg-tertiary:#242424;--accent-gold:#F5A623;--text-primary:#FFFFFF;--text-secondary:#B3B3B3;--text-muted:#666666;--border-color:#2A2A2A}
+        body{font-family:'DM Sans',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh}
+        .header{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(13,13,13,0.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 30px;z-index:1000;border-bottom:1px solid var(--border-color)}
+        .header-left{display:flex;align-items:center;gap:30px}
+        .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(135deg,var(--accent-gold),#D4880F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+        .nav-links{display:flex;gap:25px}
+        .nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px}
+        .search-form{display:flex;align-items:center;background:var(--bg-secondary);border-radius:25px;padding:8px 16px;width:400px;border:2px solid var(--accent-gold)}
+        .search-form input{background:none;border:none;color:var(--text-primary);font-size:14px;width:100%;outline:none}
+        .search-form input::placeholder{color:var(--text-muted)}
+        .search-form button{background:none;border:none;cursor:pointer;color:var(--text-muted);display:flex}
+        .header-right{display:flex;align-items:center;gap:15px}
+        .profile-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-gold),#D4880F);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;cursor:pointer;font-size:14px;border:none;position:relative}
+        .dropdown{position:absolute;top:calc(100% + 10px);right:0;background:var(--bg-secondary);border-radius:12px;padding:10px 0;min-width:200px;box-shadow:0 10px 40px rgba(0,0,0,0.5);display:none;border:1px solid var(--border-color)}
+        .dropdown.show{display:block}
+        .dropdown a{display:block;padding:12px 20px;color:var(--text-secondary);text-decoration:none;font-size:14px}
+        .dropdown a:hover{background:var(--bg-tertiary);color:var(--text-primary)}
+        .dropdown .divider{height:1px;background:var(--border-color);margin:8px 0}
+        .auth-logged-out,.auth-logged-in{display:none;align-items:center;gap:15px}
+        .btn-login{color:var(--text-primary);text-decoration:none;font-size:14px}
+        .btn-signup{background:linear-gradient(135deg,var(--accent-gold),#D4880F);color:#000;padding:10px 20px;border-radius:25px;text-decoration:none;font-weight:600;font-size:14px}
+        .main-content{max-width:1200px;margin:0 auto;padding:80px 30px 40px}
+        .search-header h1{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:2px;margin-bottom:5px}
+        .search-header p{color:var(--text-muted);margin-bottom:30px}
+        .videos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+        .video-card{cursor:pointer;transition:transform 0.3s}
+        .video-card:hover{transform:translateY(-5px)}
+        .video-thumb{position:relative;width:100%;padding-top:56.25%;background:var(--bg-secondary);border-radius:12px;overflow:hidden}
+        .video-thumb img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
+        .video-info{padding:12px 0;display:flex;gap:12px}
+        .creator-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-gold),#D4880F);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;font-size:14px;flex-shrink:0}
+        .video-details{flex:1}
+        .video-title{font-size:15px;font-weight:600;margin-bottom:6px}
+        .video-creator,.video-stats{color:var(--text-muted);font-size:13px}
+        .empty-state{text-align:center;padding:80px 20px}
+        .empty-state h2{margin-bottom:10px}
+        .empty-state p{color:var(--text-muted)}
+        .loading-spinner{width:40px;height:40px;border:3px solid var(--border-color);border-top-color:var(--accent-gold);border-radius:50%;animation:spin 1s linear infinite;margin:60px auto}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        @media(max-width:768px){.main-content{padding:70px 15px 20px}.header{padding:0 15px}.search-form{width:200px}}
+        @media(max-width:480px){.search-form{width:150px}}
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
-        <a href="index.html" class="logo">UNCAGED</a>
-        <form class="search-bar" id="searchForm">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input type="text" placeholder="Search videos, creators..." id="searchInput">
-            <button type="submit" class="search-btn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            </button>
+        <div class="header-left">
+            <a href="index.html" class="logo">UNCAGED</a>
+            <nav class="nav-links"><a href="browse.html">Browse</a><a href="dashboard.html">Dashboard</a></nav>
+        </div>
+        <form class="search-form" id="searchForm">
+            <input type="text" placeholder="Search videos..." id="searchInput">
+            <button type="submit"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
         </form>
-        <div class="auth-buttons">
-            <div id="authButtons">
+        <div class="header-right">
+            <div class="auth-logged-out" id="authLoggedOut">
                 <a href="login.html" class="btn-login">Log In</a>
                 <a href="signup.html" class="btn-signup">Get Started</a>
             </div>
-            <div id="loggedInState">
-                <a href="upload.html" class="upload-btn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    Upload
-                </a>
-                <div class="profile-btn" id="profileBtn">V</div>
+            <div class="auth-logged-in" id="authLoggedIn">
+                <button class="profile-btn" id="profileBtn">V
+                    <div class="dropdown" id="profileDropdown">
+                        <a href="dashboard.html">Dashboard</a><a href="my-videos.html">My Videos</a><a href="earnings.html">Earnings</a>
+                        <div class="divider"></div><a href="stripe-connect.html">Get Paid</a><a href="settings.html">Settings</a>
+                        <div class="divider"></div><a href="#" id="logoutBtn">Log Out</a>
+                    </div>
+                </button>
             </div>
         </div>
     </header>
-
-    <!-- Main Content -->
     <main class="main-content">
-        <!-- Search Header -->
         <div class="search-header">
-            <div class="search-query">Search results for <span id="queryDisplay">""</span></div>
-            <div class="results-count" id="resultsCount">0 results</div>
+            <h1 id="searchTitle">Search Results</h1>
+            <p id="searchSubtitle">Loading...</p>
         </div>
-
-        <!-- Tabs -->
-        <div class="search-tabs">
-            <button class="tab-btn active" data-tab="videos">
-                Videos <span class="tab-count" id="videosCount">0</span>
-            </button>
-            <button class="tab-btn" data-tab="creators">
-                Creators <span class="tab-count" id="creatorsCount">0</span>
-            </button>
-        </div>
-
-        <!-- Filters -->
-        <div class="filters-bar" id="filtersBar">
-            <select class="filter-select" id="sortFilter">
-                <option value="relevance">Sort by: Relevance</option>
-                <option value="date">Upload date (newest)</option>
-                <option value="views">View count</option>
-            </select>
-            <select class="filter-select" id="dateFilter">
-                <option value="all">Any time</option>
-                <option value="today">Today</option>
-                <option value="week">This week</option>
-                <option value="month">This month</option>
-                <option value="year">This year</option>
-            </select>
-        </div>
-
-        <!-- Results Container -->
-        <div id="resultsContainer">
-            <div class="loading">
-                <div class="loading-spinner"></div>
-                Searching...
-            </div>
-        </div>
+        <div class="videos-grid" id="videosGrid"><div class="loading-spinner"></div></div>
     </main>
-
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
-            authDomain: "uncaged-85b49.firebaseapp.com",
-            projectId: "uncaged-85b49",
-            storageBucket: "uncaged-85b49.firebasestorage.app",
-            messagingSenderId: "957750920887",
-            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let allVideos = [];
-        let allCreators = [];
-        let currentTab = 'videos';
-        let searchQuery = '';
-
-        // Get query from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        searchQuery = urlParams.get('q') || '';
-        document.getElementById('searchInput').value = searchQuery;
-        document.getElementById('queryDisplay').textContent = `"${searchQuery}"`;
-
-        // Format numbers
-        function formatNumber(num) {
-            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-            return num.toString();
-        }
-
-        // Format date
-        function formatDate(timestamp) {
-            if (!timestamp) return '';
-            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-            const now = new Date();
-            const diff = now - date;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            if (days === 0) return 'Today';
-            if (days === 1) return 'Yesterday';
-            if (days < 7) return `${days} days ago`;
-            if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
-            if (days < 365) return `${Math.floor(days / 30)} months ago`;
-            return `${Math.floor(days / 365)} years ago`;
-        }
-
-        // Auth state
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById('authButtons').style.display = 'none';
-                document.getElementById('loggedInState').style.display = 'flex';
-                document.getElementById('loggedInState').style.alignItems = 'center';
-                document.getElementById('loggedInState').style.gap = '15px';
-                const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
-                document.getElementById('profileBtn').textContent = initial;
-            } else {
-                document.getElementById('authButtons').style.display = 'flex';
-                document.getElementById('loggedInState').style.display = 'none';
-            }
-        });
-
-        // Search form
-        document.getElementById('searchForm').addEventListener('submit', (e) => {
-            e.preventDefault();
-            const query = document.getElementById('searchInput').value.trim();
-            if (query) {
-                window.location.href = `search.html?q=${encodeURIComponent(query)}`;
-            }
-        });
-
-        // Perform search
-        async function performSearch() {
-            if (!searchQuery) {
-                document.getElementById('resultsContainer').innerHTML = `
-                    <div class="empty-state">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-                        <h2>Enter a search term</h2>
-                        <p>Search for videos, creators, and more</p>
-                    </div>
-                `;
-                return;
-            }
-
-            const searchLower = searchQuery.toLowerCase();
-
-            try {
-                // Search videos
-                const videosQuery = query(
-                    collection(db, 'videos'),
-                    where('visibility', '==', 'public'),
-                    limit(100)
-                );
-                const videosSnapshot = await getDocs(videosQuery);
-                
-                allVideos = [];
-                videosSnapshot.forEach(doc => {
-                    const data = doc.data();
-                    const title = (data.title || '').toLowerCase();
-                    const desc = (data.description || '').toLowerCase();
-                    const creator = (data.creatorName || '').toLowerCase();
-                    const tags = (data.tags || []).join(' ').toLowerCase();
-                    
-                    if (title.includes(searchLower) || desc.includes(searchLower) || 
-                        creator.includes(searchLower) || tags.includes(searchLower)) {
-                        allVideos.push({ id: doc.id, ...data });
-                    }
-                });
-
-                // Search creators
-                const usersQuery = query(collection(db, 'users'), limit(100));
-                const usersSnapshot = await getDocs(usersQuery);
-                
-                allCreators = [];
-                usersSnapshot.forEach(doc => {
-                    const data = doc.data();
-                    const name = (data.displayName || data.username || '').toLowerCase();
-                    
-                    if (name.includes(searchLower)) {
-                        allCreators.push({ id: doc.id, ...data });
-                    }
-                });
-
-                // Update counts
-                document.getElementById('videosCount').textContent = allVideos.length;
-                document.getElementById('creatorsCount').textContent = allCreators.length;
-                document.getElementById('resultsCount').textContent = `${allVideos.length + allCreators.length} results`;
-
-                // Render results
-                renderResults();
-
-            } catch (error) {
-                console.error('Search error:', error);
-                document.getElementById('resultsContainer').innerHTML = `
-                    <div class="empty-state">
-                        <h2>Search error</h2>
-                        <p>${error.message}</p>
-                    </div>
-                `;
-            }
-        }
-
-        // Render results
-        function renderResults() {
-            const container = document.getElementById('resultsContainer');
-            const sortBy = document.getElementById('sortFilter').value;
-            const dateFilter = document.getElementById('dateFilter').value;
-
-            if (currentTab === 'videos') {
-                document.getElementById('filtersBar').style.display = 'flex';
-                
-                let videos = [...allVideos];
-
-                // Date filter
-                if (dateFilter !== 'all') {
-                    const now = new Date();
-                    videos = videos.filter(v => {
-                        if (!v.createdAt) return false;
-                        const date = v.createdAt.toDate ? v.createdAt.toDate() : new Date(v.createdAt);
-                        const diff = now - date;
-                        const days = diff / (1000 * 60 * 60 * 24);
-                        
-                        switch (dateFilter) {
-                            case 'today': return days < 1;
-                            case 'week': return days < 7;
-                            case 'month': return days < 30;
-                            case 'year': return days < 365;
-                            default: return true;
-                        }
-                    });
-                }
-
-                // Sort
-                if (sortBy === 'date') {
-                    videos.sort((a, b) => {
-                        const dateA = a.createdAt?.toDate?.() || new Date(0);
-                        const dateB = b.createdAt?.toDate?.() || new Date(0);
-                        return dateB - dateA;
-                    });
-                } else if (sortBy === 'views') {
-                    videos.sort((a, b) => (b.views || 0) - (a.views || 0));
-                }
-
-                if (videos.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
-                            <h2>No videos found</h2>
-                            <p>Try different keywords or remove filters</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let html = '<div class="videos-list">';
-                videos.forEach(video => {
-                    const thumb = video.thumbnail || `https://vz-fa698983-d99.b-cdn.net/${video.bunnyVideoId || video.id}/thumbnail.jpg`;
-                    const initial = (video.creatorName || 'C')[0].toUpperCase();
-                    
-                    html += `
-                        <div class="video-row" onclick="window.location.href='watch.html?v=${video.id}'">
-                            <div class="video-row-thumb">
-                                <img src="${thumb}" alt="${video.title}" onerror="this.style.display='none'">
-                            </div>
-                            <div class="video-row-info">
-                                <div class="video-row-title">${video.title || 'Untitled'}</div>
-                                <div class="video-row-stats">${formatNumber(video.views || 0)} views • ${formatDate(video.createdAt)}</div>
-                                <div class="video-row-creator" onclick="event.stopPropagation(); window.location.href='creator.html?id=${video.creatorId}'">
-                                    <div class="creator-avatar-sm">${initial}</div>
-                                    <span class="creator-name-sm">${video.creatorName || 'Creator'}</span>
-                                </div>
-                                <div class="video-row-desc">${video.description || 'No description'}</div>
-                            </div>
-                        </div>
-                    `;
-                });
-                html += '</div>';
-                container.innerHTML = html;
-
-            } else {
-                // Creators tab
-                document.getElementById('filtersBar').style.display = 'none';
-
-                if (allCreators.length === 0) {
-                    container.innerHTML = `
-                        <div class="empty-state">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                            <h2>No creators found</h2>
-                            <p>Try different keywords</p>
-                        </div>
-                    `;
-                    return;
-                }
-
-                let html = '<div class="creators-list">';
-                allCreators.forEach(creator => {
-                    const name = creator.displayName || creator.username || 'Creator';
-                    const initial = name[0].toUpperCase();
-                    
-                    html += `
-                        <div class="creator-card" onclick="window.location.href='creator.html?id=${creator.id}'">
-                            <div class="creator-avatar-lg">${initial}</div>
-                            <div class="creator-card-name">${name}</div>
-                            <div class="creator-card-subs">${formatNumber(creator.subscribers || 0)} subscribers</div>
-                            <button class="creator-card-btn" onclick="event.stopPropagation(); window.location.href='subscribe.html?creator=${creator.id}'">Subscribe</button>
-                        </div>
-                    `;
-                });
-                html += '</div>';
-                container.innerHTML = html;
-            }
-        }
-
-        // Tab switching
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentTab = btn.dataset.tab;
-                renderResults();
-            });
-        });
-
-        // Filters
-        document.getElementById('sortFilter').addEventListener('change', renderResults);
-        document.getElementById('dateFilter').addEventListener('change', renderResults);
-
-        // Start search
-        performSearch();
+        import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import{getFirestore,collection,query,where,getDocs}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        const app=initializeApp({apiKey:"AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",authDomain:"uncaged-85b49.firebaseapp.com",projectId:"uncaged-85b49",storageBucket:"uncaged-85b49.firebasestorage.app",messagingSenderId:"957750920887",appId:"1:957750920887:web:9af4d847dad76c876d2f32"});
+        const auth=getAuth(app),db=getFirestore(app);
+        const params=new URLSearchParams(location.search);
+        const q=params.get('q')||'';
+        document.getElementById('searchInput').value=q;
+        document.getElementById('searchTitle').textContent='Results for "'+q+'"';
+        function fmt(n){if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return n.toString()}
+        onAuthStateChanged(auth,u=>{if(u){document.getElementById('authLoggedOut').style.display='none';document.getElementById('authLoggedIn').style.display='flex';document.getElementById('profileBtn').childNodes[0].textContent=(u.displayName||u.email)[0].toUpperCase()}else{document.getElementById('authLoggedOut').style.display='flex';document.getElementById('authLoggedIn').style.display='none'}});
+        document.getElementById('profileBtn').onclick=e=>{e.stopPropagation();document.getElementById('profileDropdown').classList.toggle('show')};
+        document.onclick=()=>document.getElementById('profileDropdown').classList.remove('show');
+        document.querySelectorAll('.dropdown').forEach(d=>d.onclick=e=>e.stopPropagation());
+        document.getElementById('logoutBtn').onclick=async e=>{e.preventDefault();await signOut(auth);location.href='index.html'};
+        document.getElementById('searchForm').onsubmit=e=>{e.preventDefault();const newQ=document.getElementById('searchInput').value.trim();if(newQ)location.href='search.html?q='+encodeURIComponent(newQ)};
+        async function search(){const grid=document.getElementById('videosGrid');if(!q){grid.innerHTML='<div class="empty-state"><h2>Enter a search term</h2></div>';document.getElementById('searchSubtitle').textContent='';return}try{const snap=await getDocs(query(collection(db,'videos'),where('visibility','==','public')));let results=[];const searchLower=q.toLowerCase();snap.forEach(d=>{const v=d.data();const title=(v.title||'').toLowerCase();const desc=(v.description||'').toLowerCase();const creator=(v.creatorName||'').toLowerCase();const tags=(v.tags||[]).join(' ').toLowerCase();if(title.includes(searchLower)||desc.includes(searchLower)||creator.includes(searchLower)||tags.includes(searchLower)){results.push({id:d.id,...v})}});document.getElementById('searchSubtitle').textContent=results.length+' videos found';if(!results.length){grid.innerHTML='<div class="empty-state"><h2>No results found</h2><p>Try different keywords</p></div>';return}grid.innerHTML=results.map(v=>{const thumb=v.thumbnail||'https://vz-fa698983-d99.b-cdn.net/'+(v.bunnyVideoId||v.id)+'/thumbnail.jpg';return'<div class="video-card" onclick="location.href=\'watch.html?v='+v.id+'\'"><div class="video-thumb"><img src="'+thumb+'" onerror="this.style.display=\'none\'"></div><div class="video-info"><div class="creator-avatar">'+(v.creatorName||'C')[0].toUpperCase()+'</div><div class="video-details"><div class="video-title">'+(v.title||'Untitled')+'</div><div class="video-creator">'+(v.creatorName||'Creator')+'</div><div class="video-stats">'+fmt(v.views||0)+' views</div></div></div></div>'}).join('')}catch(e){grid.innerHTML='<div class="empty-state"><h2>Error</h2><p>'+e.message+'</p></div>'}}
+        search();
     </script>
 </body>
 </html>
