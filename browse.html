@@ -3,339 +3,282 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNCAGED | Browse</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Browse - UNCAGED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg-primary: #0D0D0D;
-            --bg-secondary: #1A1A1A;
-            --bg-tertiary: #242424;
-            --accent-gold: #F5A623;
-            --accent-gold-dark: #D4880F;
-            --text-primary: #FFFFFF;
-            --text-secondary: #B3B3B3;
-            --text-muted: #666666;
-            --border-color: #2A2A2A;
-        }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
-
-        /* Header */
-        .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(13,13,13,0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; z-index: 1000; border-bottom: 1px solid var(--border-color); }
-        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
-        .search-bar { display: flex; align-items: center; background: var(--bg-secondary); border-radius: 25px; padding: 8px 16px; width: 400px; }
-        .search-bar input { background: none; border: none; color: var(--text-primary); font-size: 14px; width: 100%; outline: none; }
-        .search-bar svg { color: var(--text-muted); margin-right: 10px; }
-        .auth-buttons { display: flex; gap: 15px; align-items: center; }
-        .btn-login { color: var(--text-primary); text-decoration: none; font-size: 14px; }
-        .btn-signup { background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); color: #000; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 14px; }
-        .profile-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; cursor: pointer; font-size: 14px; position: relative; }
-        .upload-btn { background: var(--bg-tertiary); color: var(--text-primary); padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 6px; }
-        .upload-btn:hover { background: var(--border-color); }
-        #authButtons, #loggedInState { display: none; }
-
-        /* Profile Dropdown */
-        .profile-dropdown { position: absolute; top: 100%; right: 0; margin-top: 10px; background: var(--bg-secondary); border-radius: 12px; padding: 10px 0; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: none; }
-        .profile-dropdown.show { display: block; }
-        .profile-dropdown a { display: block; padding: 10px 20px; color: var(--text-secondary); text-decoration: none; font-size: 14px; }
-        .profile-dropdown a:hover { background: var(--bg-tertiary); color: var(--text-primary); }
-        .profile-dropdown .divider { height: 1px; background: var(--border-color); margin: 10px 0; }
-
-        /* Main Content */
-        .main-content { max-width: 1600px; margin: 0 auto; padding: 80px 30px 40px; }
-
-        /* Categories */
-        .categories { display: flex; gap: 10px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 10px; }
-        .category-btn { padding: 8px 16px; background: var(--bg-secondary); border: none; border-radius: 20px; color: var(--text-secondary); cursor: pointer; font-size: 13px; white-space: nowrap; transition: all 0.3s; }
-        .category-btn:hover { background: var(--bg-tertiary); }
-        .category-btn.active { background: var(--accent-gold); color: #000; }
-
-        /* Videos Grid */
-        .videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
-        .video-card { cursor: pointer; transition: transform 0.3s; }
-        .video-card:hover { transform: translateY(-5px); }
-        .video-thumb { position: relative; width: 100%; padding-top: 56.25%; background: var(--bg-secondary); border-radius: 12px; overflow: hidden; }
-        .video-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
-        .video-duration { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
-        .video-info { padding: 12px 0; display: flex; gap: 12px; }
-        .creator-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; font-size: 14px; flex-shrink: 0; }
-        .video-details { flex: 1; }
-        .video-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-        .video-creator { color: var(--text-muted); font-size: 13px; margin-bottom: 4px; }
-        .video-creator:hover { color: var(--text-secondary); }
-        .video-stats { color: var(--text-muted); font-size: 12px; }
-
-        /* Loading & Empty States */
-        .loading { text-align: center; padding: 60px 20px; }
-        .loading-spinner { width: 40px; height: 40px; border: 3px solid var(--border-color); border-top-color: var(--accent-gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .empty-state { text-align: center; padding: 100px 20px; }
-        .empty-state h2 { font-size: 24px; margin-bottom: 10px; }
-        .empty-state p { color: var(--text-muted); margin-bottom: 20px; }
-        .empty-state a { color: var(--accent-gold); text-decoration: none; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .header { padding: 0 15px; }
-            .search-bar { width: 200px; }
-            .main-content { padding: 70px 15px 20px; }
-            .videos-grid { grid-template-columns: 1fr; }
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'DM Sans',sans-serif;background:#0D0D0D;color:#FFF;min-height:100vh}
+        .navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:#1A1A1A;border-bottom:1px solid #2A2A2A;position:sticky;top:0;z-index:100}
+        .logo{font-family:'Bebas Neue',sans-serif;font-size:2rem;background:linear-gradient(135deg,#F5A623,#D4880F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+        .nav-links{display:flex;align-items:center;gap:1.5rem}
+        .nav-links a{color:#B3B3B3;text-decoration:none;font-weight:500}.nav-links a:hover{color:#F5A623}
+        .search-box{display:flex;background:#242424;border-radius:24px;overflow:hidden;border:1px solid #2A2A2A}
+        .search-box input{background:none;border:none;padding:0.5rem 1rem;color:#FFF;width:250px;font-family:'DM Sans',sans-serif}
+        .search-box input:focus{outline:none}
+        .search-box button{background:none;border:none;padding:0.5rem 1rem;color:#B3B3B3;cursor:pointer}
+        .profile-dropdown{position:relative}
+        .profile-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#D4880F);border:none;cursor:pointer;font-weight:600;color:#0D0D0D}
+        .dropdown-menu{position:absolute;top:50px;right:0;background:#1A1A1A;border:1px solid #2A2A2A;border-radius:8px;min-width:200px;display:none;z-index:200}
+        .dropdown-menu.show{display:block}
+        .dropdown-menu a{display:block;padding:.8rem 1rem;color:#B3B3B3;text-decoration:none}
+        .dropdown-menu a:hover{background:#242424;color:#F5A623}
+        
+        .main-content{max-width:1400px;margin:0 auto;padding:2rem}
+        .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+        .page-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem}
+        
+        .filters-bar{display:flex;gap:1rem;align-items:center;flex-wrap:wrap}
+        .filter-select{padding:0.6rem 1rem;background:#1A1A1A;border:1px solid #2A2A2A;border-radius:8px;color:#FFF;font-family:'DM Sans',sans-serif;cursor:pointer}
+        .filter-select:focus{outline:none;border-color:#F5A623}
+        
+        .categories{display:flex;gap:0.75rem;margin-bottom:2rem;overflow-x:auto;padding-bottom:0.5rem}
+        .category-btn{padding:0.6rem 1.25rem;background:#1A1A1A;border:1px solid #2A2A2A;border-radius:20px;color:#B3B3B3;cursor:pointer;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:all 0.2s}
+        .category-btn:hover,.category-btn.active{border-color:#F5A623;color:#F5A623;background:rgba(245,166,35,0.1)}
+        
+        .section{margin-bottom:3rem}
+        .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem}
+        .section-title{font-family:'Bebas Neue',sans-serif;font-size:1.5rem}
+        .see-all{color:#F5A623;text-decoration:none;font-weight:500}
+        .see-all:hover{text-decoration:underline}
+        
+        .videos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1.5rem}
+        
+        .video-card{background:#1A1A1A;border-radius:12px;overflow:hidden;transition:transform 0.2s,box-shadow 0.2s;border:1px solid transparent}
+        .video-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,0,0,0.3);border-color:#2A2A2A}
+        .video-card a{text-decoration:none;color:inherit}
+        .thumbnail{position:relative;aspect-ratio:16/9;background:#242424}
+        .thumbnail img{width:100%;height:100%;object-fit:cover}
+        .video-info{padding:1rem}
+        .video-header{display:flex;gap:0.75rem}
+        .creator-avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#D4880F);display:flex;align-items:center;justify-content:center;font-weight:600;font-size:0.85rem;color:#0D0D0D;flex-shrink:0;text-decoration:none}
+        .video-details{flex:1;min-width:0}
+        .video-title{font-weight:600;margin-bottom:0.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.3}
+        .video-meta{color:#666;font-size:0.85rem}
+        .creator-name{color:#B3B3B3;text-decoration:none}
+        .creator-name:hover{color:#F5A623}
+        
+        .trending-badge{position:absolute;top:8px;left:8px;background:linear-gradient(135deg,#F5A623,#D4880F);color:#0D0D0D;padding:0.25rem 0.5rem;border-radius:4px;font-size:0.75rem;font-weight:600}
+        
+        .loading{text-align:center;padding:4rem}
+        .spinner{width:40px;height:40px;border:3px solid #2A2A2A;border-top-color:#F5A623;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        
+        .empty-state{text-align:center;padding:4rem;color:#666}
+        .empty-state-icon{font-size:4rem;margin-bottom:1rem}
+        
+        @media(max-width:768px){
+            .navbar{padding:1rem}
+            .search-box{display:none}
+            .main-content{padding:1rem}
+            .page-header{flex-direction:column;align-items:flex-start}
+            .videos-grid{grid-template-columns:1fr}
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header class="header">
+    <nav class="navbar">
         <a href="index.html" class="logo">UNCAGED</a>
-        <div class="search-bar">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <div class="search-box">
             <input type="text" placeholder="Search videos..." id="searchInput">
+            <button id="searchBtn">🔍</button>
         </div>
-        <div class="auth-buttons">
-            <div id="authButtons">
-                <a href="login.html" class="btn-login">Log In</a>
-                <a href="signup.html" class="btn-signup">Get Started</a>
-            </div>
-            <div id="loggedInState">
-                <a href="upload.html" class="upload-btn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-                    Upload
-                </a>
-                <div class="profile-btn" id="profileBtn">
-                    V
-                    <div class="profile-dropdown" id="profileDropdown">
-                        <a href="dashboard.html">Dashboard</a>
-                        <a href="my-videos.html">My Videos</a>
-                        <a href="earnings.html">Earnings</a>
-                        <div class="divider"></div>
-                        <a href="settings.html">Settings</a>
-                        <a href="#" id="logoutBtn">Log Out</a>
-                    </div>
+        <div class="nav-links">
+            <a href="upload.html">Upload</a>
+            <div class="profile-dropdown">
+                <button class="profile-btn" id="profileBtn">?</button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="my-videos.html">My Videos</a>
+                    <a href="history.html">History</a>
+                    <a href="notifications.html">Notifications</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="#" id="logoutBtn">Log Out</a>
                 </div>
             </div>
         </div>
-    </header>
+    </nav>
 
-    <!-- Main Content -->
     <main class="main-content">
-        <!-- Categories -->
-        <div class="categories">
-            <button class="category-btn active" data-category="all">All</button>
-            <button class="category-btn" data-category="gaming">Gaming</button>
-            <button class="category-btn" data-category="music">Music</button>
-            <button class="category-btn" data-category="entertainment">Entertainment</button>
-            <button class="category-btn" data-category="sports">Sports</button>
-            <button class="category-btn" data-category="education">Education</button>
-            <button class="category-btn" data-category="lifestyle">Lifestyle</button>
-            <button class="category-btn" data-category="tech">Tech</button>
-            <button class="category-btn" data-category="travel">Travel</button>
+        <div class="page-header">
+            <h1 class="page-title">Browse Videos</h1>
+            <div class="filters-bar">
+                <select class="filter-select" id="sortSelect">
+                    <option value="recent">Newest</option>
+                    <option value="views">Most Viewed</option>
+                    <option value="likes">Most Liked</option>
+                    <option value="trending">Trending</option>
+                </select>
+            </div>
         </div>
 
-        <!-- Videos Grid -->
-        <div class="videos-grid" id="videosGrid">
-            <div class="loading">
-                <div class="loading-spinner"></div>
-                Loading videos...
-            </div>
+        <div class="categories" id="categories">
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="entertainment">🎬 Entertainment</button>
+            <button class="category-btn" data-category="music">🎵 Music</button>
+            <button class="category-btn" data-category="gaming">🎮 Gaming</button>
+            <button class="category-btn" data-category="sports">⚽ Sports</button>
+            <button class="category-btn" data-category="education">📚 Education</button>
+            <button class="category-btn" data-category="howto">💡 How-to</button>
+            <button class="category-btn" data-category="travel">✈️ Travel</button>
+            <button class="category-btn" data-category="comedy">😂 Comedy</button>
+            <button class="category-btn" data-category="news">📰 News</button>
+            <button class="category-btn" data-category="science">🔬 Science</button>
+        </div>
+
+        <div class="loading" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading videos...</p>
+        </div>
+
+        <div id="contentArea" style="display:none">
+            <section class="section" id="trendingSection">
+                <div class="section-header">
+                    <h2 class="section-title">🔥 Trending Now</h2>
+                </div>
+                <div class="videos-grid" id="trendingGrid"></div>
+            </section>
+
+            <section class="section" id="allVideosSection">
+                <div class="section-header">
+                    <h2 class="section-title" id="sectionTitle">All Videos</h2>
+                </div>
+                <div class="videos-grid" id="videosGrid"></div>
+            </section>
+        </div>
+
+        <div class="empty-state" id="emptyState" style="display:none">
+            <div class="empty-state-icon">📹</div>
+            <h2>No videos found</h2>
+            <p>Be the first to upload in this category!</p>
         </div>
     </main>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, query, where, orderBy, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import{getFirestore,collection,getDocs,query,where,orderBy,limit}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
-            authDomain: "uncaged-85b49.firebaseapp.com",
-            projectId: "uncaged-85b49",
-            storageBucket: "uncaged-85b49.firebasestorage.app",
-            messagingSenderId: "957750920887",
-            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
-        };
+        const firebaseConfig={apiKey:"AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",authDomain:"uncaged-85b49.firebaseapp.com",projectId:"uncaged-85b49",storageBucket:"uncaged-85b49.firebasestorage.app",messagingSenderId:"957750920887",appId:"1:957750920887:web:9af4d847dad76c876d2f32"};
+        const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+        
+        const $=id=>document.getElementById(id);
+        let allVideos=[];
+        let currentCategory='all';
+        let currentSort='recent';
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+        onAuthStateChanged(auth,user=>{
+            if(user)$('profileBtn').textContent=(user.displayName||user.email)[0].toUpperCase();
+        });
 
-        let allVideos = [];
-        let currentCategory = 'all';
+        $('profileBtn').onclick=()=>$('dropdownMenu').classList.toggle('show');
+        document.onclick=e=>{if(!e.target.closest('.profile-dropdown'))$('dropdownMenu').classList.remove('show');};
+        $('logoutBtn').onclick=async e=>{e.preventDefault();await signOut(auth);window.location.href='index.html';};
 
-        // Format numbers
-        function formatNumber(num) {
-            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
-            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
-            return num.toString();
-        }
+        $('searchBtn').onclick=()=>{const q=$('searchInput').value.trim();if(q)window.location.href=`search.html?q=${encodeURIComponent(q)}`;};
+        $('searchInput').onkeypress=e=>{if(e.key==='Enter'){const q=$('searchInput').value.trim();if(q)window.location.href=`search.html?q=${encodeURIComponent(q)}`;}};
 
-        // Format date
-        function formatDate(timestamp) {
-            if (!timestamp) return '';
-            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-            const now = new Date();
-            const diff = now - date;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            if (days === 0) return 'Today';
-            if (days === 1) return 'Yesterday';
-            if (days < 7) return `${days} days ago`;
-            if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
-            if (days < 365) return `${Math.floor(days / 30)} months ago`;
-            return `${Math.floor(days / 365)} years ago`;
-        }
+        document.querySelectorAll('.category-btn').forEach(btn=>{
+            btn.onclick=()=>{
+                document.querySelectorAll('.category-btn').forEach(b=>b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCategory=btn.dataset.category;
+                displayVideos();
+            };
+        });
 
-        // Auth state
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                document.getElementById('authButtons').style.display = 'none';
-                document.getElementById('loggedInState').style.display = 'flex';
-                document.getElementById('loggedInState').style.alignItems = 'center';
-                document.getElementById('loggedInState').style.gap = '15px';
-                
-                const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
-                document.getElementById('profileBtn').childNodes[0].textContent = initial;
-            } else {
-                document.getElementById('authButtons').style.display = 'flex';
-                document.getElementById('loggedInState').style.display = 'none';
+        $('sortSelect').onchange=()=>{currentSort=$('sortSelect').value;displayVideos();};
+
+        async function loadVideos(){
+            try{
+                const q=query(collection(db,'videos'),where('visibility','==','public'),where('status','==','active'));
+                const snap=await getDocs(q);
+                allVideos=snap.docs.map(d=>({id:d.id,...d.data()}));
+                displayVideos();
+            }catch(err){
+                console.error(err);
+                $('loadingState').style.display='none';
+                $('emptyState').style.display='block';
             }
-        });
+        }
 
-        // Profile dropdown
-        document.getElementById('profileBtn').addEventListener('click', (e) => {
-            e.stopPropagation();
-            document.getElementById('profileDropdown').classList.toggle('show');
-        });
-
-        document.addEventListener('click', () => {
-            document.getElementById('profileDropdown').classList.remove('show');
-        });
-
-        // Logout
-        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
-            e.preventDefault();
-            await signOut(auth);
-            window.location.href = 'index.html';
-        });
-
-        // Load videos
-        async function loadVideos() {
-            const grid = document.getElementById('videosGrid');
+        function displayVideos(){
+            let filtered=currentCategory==='all'?[...allVideos]:allVideos.filter(v=>v.category===currentCategory);
             
-            try {
-                // Simple query for public videos
-                const videosQuery = query(
-                    collection(db, 'videos'),
-                    where('visibility', '==', 'public'),
-                    limit(50)
-                );
-
-                const snapshot = await getDocs(videosQuery);
-                allVideos = [];
-                
-                snapshot.forEach(doc => {
-                    allVideos.push({ id: doc.id, ...doc.data() });
-                });
-
-                // Sort by createdAt in JavaScript (avoids index requirement)
-                allVideos.sort((a, b) => {
-                    const dateA = a.createdAt?.toDate?.() || new Date(a.createdAt) || new Date(0);
-                    const dateB = b.createdAt?.toDate?.() || new Date(b.createdAt) || new Date(0);
-                    return dateB - dateA;
-                });
-
-                renderVideos();
-
-            } catch (error) {
-                console.error('Error loading videos:', error);
-                grid.innerHTML = `
-                    <div class="empty-state">
-                        <h2>Error loading videos</h2>
-                        <p>${error.message}</p>
-                        <a href="#" onclick="location.reload()">Try again</a>
-                    </div>
-                `;
-            }
-        }
-
-        // Render videos
-        function renderVideos() {
-            const grid = document.getElementById('videosGrid');
-            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
-
-            // Filter videos
-            let filteredVideos = allVideos.filter(video => {
-                // Filter by category
-                if (currentCategory !== 'all') {
-                    const tags = video.tags || [];
-                    const category = video.category || '';
-                    if (!tags.includes(currentCategory) && category.toLowerCase() !== currentCategory) {
-                        return false;
-                    }
-                }
-                // Filter by search
-                if (searchTerm) {
-                    const title = (video.title || '').toLowerCase();
-                    const desc = (video.description || '').toLowerCase();
-                    const creator = (video.creatorName || '').toLowerCase();
-                    if (!title.includes(searchTerm) && !desc.includes(searchTerm) && !creator.includes(searchTerm)) {
-                        return false;
-                    }
-                }
-                return true;
+            // Calculate trending score (views + likes in last 7 days weighted)
+            const now=new Date();
+            const weekAgo=new Date(now.getTime()-7*24*60*60*1000);
+            filtered.forEach(v=>{
+                const isRecent=v.createdAt?.toDate()>=weekAgo;
+                v.trendingScore=(v.views||0)*0.5+(v.likes||0)*2+(isRecent?1000:0);
             });
 
-            if (filteredVideos.length === 0) {
-                grid.innerHTML = `
-                    <div class="empty-state">
-                        <h2>No videos found</h2>
-                        <p>${searchTerm ? 'Try a different search term.' : 'Be the first to upload!'}</p>
-                        <a href="upload.html">Upload a video →</a>
-                    </div>
-                `;
+            // Sort
+            if(currentSort==='recent')filtered.sort((a,b)=>(b.createdAt?.toDate()||0)-(a.createdAt?.toDate()||0));
+            else if(currentSort==='views')filtered.sort((a,b)=>(b.views||0)-(a.views||0));
+            else if(currentSort==='likes')filtered.sort((a,b)=>(b.likes||0)-(a.likes||0));
+            else if(currentSort==='trending')filtered.sort((a,b)=>b.trendingScore-a.trendingScore);
+
+            $('loadingState').style.display='none';
+
+            if(filtered.length===0){
+                $('contentArea').style.display='none';
+                $('emptyState').style.display='block';
                 return;
             }
 
-            let html = '';
-            filteredVideos.forEach(video => {
-                // Use document ID for the watch link - this is the key fix!
-                const videoLink = `watch.html?v=${video.id}`;
-                const creatorLink = `creator.html?id=${video.creatorId}`;
-                const thumb = video.thumbnail || `https://vz-fa698983-d99.b-cdn.net/${video.bunnyVideoId || video.id}/thumbnail.jpg`;
-                const initial = (video.creatorName || 'C')[0].toUpperCase();
+            $('emptyState').style.display='none';
+            $('contentArea').style.display='block';
 
-                html += `
-                    <div class="video-card" onclick="window.location.href='${videoLink}'">
-                        <div class="video-thumb">
-                            <img src="${thumb}" alt="${video.title}" onerror="this.style.display='none'">
-                        </div>
-                        <div class="video-info">
-                            <div class="creator-avatar" onclick="event.stopPropagation(); window.location.href='${creatorLink}'">${initial}</div>
-                            <div class="video-details">
-                                <div class="video-title">${video.title || 'Untitled'}</div>
-                                <div class="video-creator" onclick="event.stopPropagation(); window.location.href='${creatorLink}'">${video.creatorName || 'Creator'}</div>
-                                <div class="video-stats">${formatNumber(video.views || 0)} views • ${formatDate(video.createdAt)}</div>
-                            </div>
-                        </div>
-                    </div>
-                `;
-            });
+            // Trending section (top 4 by trending score)
+            const trending=[...allVideos].sort((a,b)=>b.trendingScore-a.trendingScore).slice(0,4);
+            if(currentCategory==='all'&&currentSort==='recent'){
+                $('trendingSection').style.display='block';
+                $('trendingGrid').innerHTML=trending.map(v=>renderVideoCard(v,true)).join('');
+            }else{
+                $('trendingSection').style.display='none';
+            }
 
-            grid.innerHTML = html;
+            // Update section title
+            const categoryNames={all:'All Videos',entertainment:'Entertainment',music:'Music',gaming:'Gaming',sports:'Sports',education:'Education',howto:'How-to & Style',travel:'Travel',comedy:'Comedy',news:'News',science:'Science & Tech'};
+            $('sectionTitle').textContent=categoryNames[currentCategory]||'Videos';
+
+            // Main grid
+            $('videosGrid').innerHTML=filtered.map(v=>renderVideoCard(v,false)).join('');
         }
 
-        // Category buttons
-        document.querySelectorAll('.category-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentCategory = btn.dataset.category;
-                renderVideos();
-            });
-        });
+        function renderVideoCard(v,showTrending){
+            return`
+                <div class="video-card">
+                    <a href="watch.html?v=${v.id}">
+                        <div class="thumbnail">
+                            ${showTrending?'<span class="trending-badge">🔥 Trending</span>':''}
+                            <img src="${v.thumbnail||'https://via.placeholder.com/320x180/242424/666?text=Video'}" alt="${v.title||'Video'}" onerror="this.src='https://via.placeholder.com/320x180/242424/666?text=Video'">
+                        </div>
+                        <div class="video-info">
+                            <div class="video-header">
+                                <a href="creator.html?id=${v.creatorId}" class="creator-avatar">${(v.creatorName||'?')[0].toUpperCase()}</a>
+                                <div class="video-details">
+                                    <h3 class="video-title">${v.title||'Untitled'}</h3>
+                                    <div class="video-meta">
+                                        <a href="creator.html?id=${v.creatorId}" class="creator-name">${v.creatorName||'Unknown'}</a><br>
+                                        ${(v.views||0).toLocaleString()} views • ${getTimeAgo(v.createdAt?.toDate())}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `;
+        }
 
-        // Search
-        document.getElementById('searchInput').addEventListener('input', renderVideos);
+        function getTimeAgo(date){
+            if(!date)return'';
+            const s=Math.floor((new Date()-date)/1000);
+            const i={year:31536000,month:2592000,week:604800,day:86400,hour:3600,minute:60};
+            for(const[u,v]of Object.entries(i)){const n=Math.floor(s/v);if(n>=1)return`${n} ${u}${n!==1?'s':''} ago`;}
+            return'Just now';
+        }
 
-        // Load videos on page load
         loadVideos();
     </script>
 </body>

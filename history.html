@@ -3,339 +3,259 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNCAGED | Watch History</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Watch History - UNCAGED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
-        :root{--bg-primary:#0D0D0D;--bg-secondary:#1A1A1A;--bg-tertiary:#242424;--accent-gold:#F5A623;--text-primary:#FFFFFF;--text-secondary:#B3B3B3;--text-muted:#666666;--border-color:#2A2A2A}
-        body{font-family:'DM Sans',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh}
-        .header{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(13,13,13,0.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 30px;z-index:1000;border-bottom:1px solid var(--border-color)}
-        .header-left{display:flex;align-items:center;gap:30px}
-        .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(135deg,var(--accent-gold),#D4880F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-        .nav-links{display:flex;gap:25px}
-        .nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px}
-        .nav-links a:hover{color:var(--text-primary)}
-        .header-right{display:flex;align-items:center;gap:15px}
-        .profile-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-gold),#D4880F);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;cursor:pointer;font-size:14px;border:none;position:relative}
-        .dropdown{position:absolute;top:calc(100% + 10px);right:0;background:var(--bg-secondary);border-radius:12px;padding:10px 0;min-width:200px;box-shadow:0 10px 40px rgba(0,0,0,0.5);display:none;border:1px solid var(--border-color)}
-        .dropdown.show{display:block}
-        .dropdown a{display:block;padding:12px 20px;color:var(--text-secondary);text-decoration:none;font-size:14px}
-        .dropdown a:hover{background:var(--bg-tertiary);color:var(--text-primary)}
-        .dropdown .divider{height:1px;background:var(--border-color);margin:8px 0}
-
-        .main{max-width:1200px;margin:0 auto;padding:80px 30px 40px}
-        .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
-        .page-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px}
-        .clear-btn{background:none;border:1px solid var(--border-color);color:var(--text-secondary);padding:8px 16px;border-radius:20px;cursor:pointer;font-size:13px}
-        .clear-btn:hover{background:var(--bg-secondary);color:var(--text-primary)}
-
-        .search-filter{display:flex;gap:15px;margin-bottom:25px}
-        .search-input{flex:1;max-width:400px;padding:10px 15px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:8px;color:var(--text-primary);font-size:14px}
-        .search-input:focus{outline:none;border-color:var(--accent-gold)}
-
-        .history-list{display:flex;flex-direction:column;gap:15px}
-        .date-group{margin-bottom:25px}
-        .date-label{font-size:14px;font-weight:600;color:var(--text-muted);margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--border-color)}
+        body{font-family:'DM Sans',sans-serif;background:#0D0D0D;color:#FFF;min-height:100vh}
+        .navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:#1A1A1A;border-bottom:1px solid #2A2A2A;position:sticky;top:0;z-index:100}
+        .logo{font-family:'Bebas Neue',sans-serif;font-size:2rem;background:linear-gradient(135deg,#F5A623,#D4880F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+        .nav-links{display:flex;align-items:center;gap:1.5rem}
+        .nav-links a{color:#B3B3B3;text-decoration:none;font-weight:500}.nav-links a:hover{color:#F5A623}
+        .profile-dropdown{position:relative}
+        .profile-btn{width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#D4880F);border:none;cursor:pointer;font-weight:600;color:#0D0D0D}
+        .dropdown-menu{position:absolute;top:50px;right:0;background:#1A1A1A;border:1px solid #2A2A2A;border-radius:8px;min-width:200px;display:none;z-index:200}
+        .dropdown-menu.show{display:block}
+        .dropdown-menu a{display:block;padding:.8rem 1rem;color:#B3B3B3;text-decoration:none}
+        .dropdown-menu a:hover{background:#242424;color:#F5A623}
         
-        .history-item{display:flex;gap:15px;background:var(--bg-secondary);border-radius:10px;padding:12px;cursor:pointer;transition:background 0.2s}
-        .history-item:hover{background:var(--bg-tertiary)}
-        .history-thumb{width:180px;height:100px;background:var(--bg-tertiary);border-radius:8px;overflow:hidden;flex-shrink:0;position:relative}
-        .history-thumb img{width:100%;height:100%;object-fit:cover}
-        .watch-progress{position:absolute;bottom:0;left:0;right:0;height:4px;background:rgba(0,0,0,0.5)}
-        .watch-progress-bar{height:100%;background:var(--accent-gold)}
-        .history-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center}
-        .history-title{font-size:15px;font-weight:600;margin-bottom:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
-        .history-creator{color:var(--text-muted);font-size:13px;margin-bottom:4px}
-        .history-meta{color:var(--text-muted);font-size:12px}
-        .history-actions{display:flex;flex-direction:column;justify-content:center;gap:8px}
-        .history-actions button{padding:6px 12px;background:var(--bg-tertiary);border:none;border-radius:6px;color:var(--text-secondary);cursor:pointer;font-size:12px}
-        .history-actions button:hover{background:var(--border-color);color:var(--text-primary)}
-        .history-actions button.remove:hover{background:rgba(220,53,69,0.2);color:#DC3545}
-
-        .empty-state{text-align:center;padding:80px 20px}
-        .empty-state svg{width:80px;height:80px;color:var(--text-muted);margin-bottom:20px}
-        .empty-state h2{font-size:22px;margin-bottom:10px}
-        .empty-state p{color:var(--text-muted);margin-bottom:20px}
-        .empty-state a{color:var(--accent-gold);text-decoration:none}
-
-        .loading{text-align:center;padding:60px}
-        .loading-spinner{width:40px;height:40px;border:3px solid var(--border-color);border-top-color:var(--accent-gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 15px}
+        .main-content{max-width:1000px;margin:0 auto;padding:2rem}
+        .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:2rem;flex-wrap:wrap;gap:1rem}
+        .page-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem}
+        .clear-btn{padding:0.5rem 1rem;background:transparent;border:1px solid #F44336;border-radius:8px;color:#F44336;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+        .clear-btn:hover{background:#F44336;color:#FFF}
+        
+        .tabs{display:flex;gap:1rem;margin-bottom:2rem}
+        .tab{padding:0.6rem 1.25rem;background:#1A1A1A;border:1px solid #2A2A2A;border-radius:20px;color:#B3B3B3;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s}
+        .tab:hover,.tab.active{border-color:#F5A623;color:#F5A623}
+        
+        .history-list{display:flex;flex-direction:column;gap:0.5rem}
+        .date-group{margin-bottom:2rem}
+        .date-header{color:#666;font-size:0.9rem;margin-bottom:1rem;padding-bottom:0.5rem;border-bottom:1px solid #2A2A2A}
+        
+        .history-item{display:flex;gap:1rem;padding:0.75rem;background:#1A1A1A;border-radius:12px;border:1px solid #2A2A2A;transition:all 0.2s}
+        .history-item:hover{border-color:#333}
+        .history-thumb{width:180px;height:100px;border-radius:8px;object-fit:cover;background:#242424;flex-shrink:0}
+        .history-info{flex:1;min-width:0}
+        .history-title{font-weight:600;margin-bottom:0.25rem;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+        .history-title a{color:#FFF;text-decoration:none}
+        .history-title a:hover{color:#F5A623}
+        .history-creator{color:#B3B3B3;font-size:0.9rem;margin-bottom:0.25rem}
+        .history-creator a{color:#B3B3B3;text-decoration:none}
+        .history-creator a:hover{color:#F5A623}
+        .history-meta{color:#666;font-size:0.85rem}
+        .history-actions{display:flex;align-items:flex-start}
+        .remove-btn{padding:0.5rem;background:none;border:none;color:#666;cursor:pointer;font-size:1.2rem;transition:color 0.2s}
+        .remove-btn:hover{color:#F44336}
+        
+        .loading{text-align:center;padding:4rem}
+        .spinner{width:40px;height:40px;border:3px solid #2A2A2A;border-top-color:#F5A623;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem}
         @keyframes spin{to{transform:rotate(360deg)}}
-
-        @media(max-width:768px){.main{padding:70px 15px 20px}.page-header{flex-direction:column;gap:15px;align-items:flex-start}.history-item{flex-direction:column}.history-thumb{width:100%;height:auto;aspect-ratio:16/9}.history-actions{flex-direction:row;margin-top:10px}.nav-links{display:none}}
+        
+        .empty-state{text-align:center;padding:4rem}
+        .empty-state-icon{font-size:4rem;margin-bottom:1rem}
+        .empty-state-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;margin-bottom:0.5rem}
+        .empty-state-text{color:#666}
+        
+        .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:#1A1A1A;border:1px solid #2A2A2A;padding:1rem 1.5rem;border-radius:8px;transition:transform .3s;z-index:1001}
+        .toast.show{transform:translateX(-50%) translateY(0)}
+        .toast.success{border-color:#4CAF50}
+        
+        @media(max-width:768px){
+            .navbar{padding:1rem}
+            .main-content{padding:1rem}
+            .history-item{flex-direction:column}
+            .history-thumb{width:100%;height:auto;aspect-ratio:16/9}
+        }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-left">
-            <a href="index.html" class="logo">UNCAGED</a>
-            <nav class="nav-links">
-                <a href="browse.html">Browse</a>
-                <a href="subscriptions.html">Subscriptions</a>
-                <a href="history.html" style="color:var(--text-primary)">History</a>
-            </nav>
-        </div>
-        <div class="header-right">
-            <button class="profile-btn" id="profileBtn">V
-                <div class="dropdown" id="profileDropdown">
+    <nav class="navbar">
+        <a href="index.html" class="logo">UNCAGED</a>
+        <div class="nav-links">
+            <a href="browse.html">Browse</a>
+            <div class="profile-dropdown">
+                <button class="profile-btn" id="profileBtn">?</button>
+                <div class="dropdown-menu" id="dropdownMenu">
                     <a href="dashboard.html">Dashboard</a>
                     <a href="my-videos.html">My Videos</a>
-                    <div class="divider"></div>
-                    <a href="subscriptions.html">Subscriptions</a>
-                    <a href="history.html">History</a>
-                    <a href="playlists.html">Playlists</a>
-                    <div class="divider"></div>
+                    <a href="notifications.html">Notifications</a>
                     <a href="settings.html">Settings</a>
                     <a href="#" id="logoutBtn">Log Out</a>
                 </div>
-            </button>
-        </div>
-    </header>
-
-    <main class="main">
-        <div class="page-header">
-            <h1 class="page-title">Watch History</h1>
-            <button class="clear-btn" id="clearAllBtn">Clear All History</button>
-        </div>
-
-        <div class="search-filter">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search watch history...">
-        </div>
-
-        <div id="historyContent">
-            <div class="loading">
-                <div class="loading-spinner"></div>
-                <p>Loading history...</p>
             </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">History</h1>
+            <button class="clear-btn" id="clearBtn">Clear All</button>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" data-tab="history">Watch History</button>
+            <button class="tab" data-tab="watchlater">Watch Later</button>
+        </div>
+
+        <div class="loading" id="loadingState"><div class="spinner"></div><p>Loading...</p></div>
+        <div class="history-list" id="historyList" style="display:none"></div>
+        <div class="empty-state" id="emptyState" style="display:none">
+            <div class="empty-state-icon">📺</div>
+            <h2 class="empty-state-title">No watch history</h2>
+            <p class="empty-state-text">Videos you watch will appear here</p>
         </div>
     </main>
 
+    <div class="toast" id="toast"><span id="toastMessage"></span></div>
+
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, doc, getDoc, deleteDoc, orderBy, limit, addDoc, serverTimestamp, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import{getFirestore,collection,getDocs,query,where,orderBy,deleteDoc,doc,writeBatch}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-        const app = initializeApp({
-            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
-            authDomain: "uncaged-85b49.firebaseapp.com",
-            projectId: "uncaged-85b49",
-            storageBucket: "uncaged-85b49.firebasestorage.app",
-            messagingSenderId: "957750920887",
-            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
-        });
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        let currentUser = null;
-        let allHistory = [];
+        const firebaseConfig={apiKey:"AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",authDomain:"uncaged-85b49.firebaseapp.com",projectId:"uncaged-85b49",storageBucket:"uncaged-85b49.firebasestorage.app",messagingSenderId:"957750920887",appId:"1:957750920887:web:9af4d847dad76c876d2f32"};
+        const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+        
+        const $=id=>document.getElementById(id);
+        let currentUser=null,historyItems=[],watchLaterItems=[],currentTab='history';
 
-        function formatNumber(n) {
-            if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-            if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
-            return n.toString();
-        }
-
-        function formatDate(ts) {
-            if (!ts) return '';
-            const d = ts.toDate ? ts.toDate() : new Date(ts);
-            const now = new Date();
-            const diff = Math.floor((now - d) / (1000 * 60 * 60 * 24));
-            
-            if (diff === 0) return 'Today';
-            if (diff === 1) return 'Yesterday';
-            if (diff < 7) return diff + ' days ago';
-            
-            return d.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
-        }
-
-        function getDateGroup(ts) {
-            if (!ts) return 'Unknown';
-            const d = ts.toDate ? ts.toDate() : new Date(ts);
-            const now = new Date();
-            const diff = Math.floor((now - d) / (1000 * 60 * 60 * 24));
-            
-            if (diff === 0) return 'Today';
-            if (diff === 1) return 'Yesterday';
-            if (diff < 7) return 'This Week';
-            if (diff < 30) return 'This Month';
-            
-            return d.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-        }
-
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                location.href = 'login.html';
-                return;
-            }
-            currentUser = user;
-            document.getElementById('profileBtn').childNodes[0].textContent = (user.displayName || user.email)[0].toUpperCase();
-            loadHistory();
+        onAuthStateChanged(auth,async user=>{
+            if(!user){window.location.href='login.html';return;}
+            currentUser=user;
+            $('profileBtn').textContent=(user.displayName||user.email)[0].toUpperCase();
+            await loadData();
         });
 
-        // Dropdown
-        document.getElementById('profileBtn').onclick = (e) => {
-            e.stopPropagation();
-            document.getElementById('profileDropdown').classList.toggle('show');
+        $('profileBtn').onclick=()=>$('dropdownMenu').classList.toggle('show');
+        document.onclick=e=>{if(!e.target.closest('.profile-dropdown'))$('dropdownMenu').classList.remove('show');};
+        $('logoutBtn').onclick=async e=>{e.preventDefault();await signOut(auth);window.location.href='index.html';};
+
+        document.querySelectorAll('.tab').forEach(tab=>{
+            tab.onclick=()=>{
+                document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+                tab.classList.add('active');
+                currentTab=tab.dataset.tab;
+                displayItems();
+            };
+        });
+
+        $('clearBtn').onclick=async()=>{
+            if(!confirm('Clear all?'))return;
+            try{
+                const batch=writeBatch(db);
+                const items=currentTab==='history'?historyItems:watchLaterItems;
+                const collName=currentTab==='history'?'watchHistory':'watchLater';
+                items.forEach(item=>batch.delete(doc(db,collName,item.id)));
+                await batch.commit();
+                if(currentTab==='history')historyItems=[];else watchLaterItems=[];
+                displayItems();
+                showToast('Cleared!');
+            }catch(e){console.error(e);}
         };
-        document.onclick = () => document.getElementById('profileDropdown').classList.remove('show');
-        document.querySelectorAll('.dropdown').forEach(d => d.onclick = e => e.stopPropagation());
-        document.getElementById('logoutBtn').onclick = async (e) => {
-            e.preventDefault();
-            await signOut(auth);
-            location.href = 'index.html';
-        };
 
-        async function loadHistory() {
-            const container = document.getElementById('historyContent');
-            
-            try {
-                const snap = await getDocs(
-                    query(
-                        collection(db, 'watchHistory'),
-                        where('userId', '==', currentUser.uid),
-                        orderBy('watchedAt', 'desc'),
-                        limit(100)
-                    )
-                );
+        async function loadData(){
+            try{
+                const hq=query(collection(db,'watchHistory'),where('userId','==',currentUser.uid),orderBy('watchedAt','desc'));
+                const hsnap=await getDocs(hq);
+                historyItems=hsnap.docs.map(d=>({id:d.id,...d.data()}));
 
-                allHistory = [];
-                snap.forEach(d => allHistory.push({ id: d.id, ...d.data() }));
+                const wq=query(collection(db,'watchLater'),where('userId','==',currentUser.uid),orderBy('addedAt','desc'));
+                const wsnap=await getDocs(wq);
+                watchLaterItems=wsnap.docs.map(d=>({id:d.id,...d.data()}));
 
-                // If no history, show demo/empty state
-                if (allHistory.length === 0) {
-                    showEmptyState();
-                    return;
-                }
-
-                renderHistory();
-            } catch (e) {
-                console.error(e);
-                // If collection doesn't exist, show empty state
-                showEmptyState();
+                displayItems();
+            }catch(err){
+                console.error(err);
+                $('loadingState').style.display='none';
+                $('emptyState').style.display='block';
             }
         }
 
-        function showEmptyState() {
-            document.getElementById('historyContent').innerHTML = `
-                <div class="empty-state">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                    <h2>No watch history</h2>
-                    <p>Videos you watch will appear here</p>
-                    <a href="browse.html">Browse videos →</a>
-                </div>
-            `;
-        }
-
-        function renderHistory(searchTerm = '') {
-            const container = document.getElementById('historyContent');
-            let filtered = allHistory;
+        function displayItems(){
+            const items=currentTab==='history'?historyItems:watchLaterItems;
+            const timeField=currentTab==='history'?'watchedAt':'addedAt';
             
-            if (searchTerm) {
-                filtered = filtered.filter(h => 
-                    (h.videoTitle || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-                    (h.creatorName || '').toLowerCase().includes(searchTerm.toLowerCase())
-                );
-            }
+            $('loadingState').style.display='none';
 
-            if (filtered.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <h2>No results found</h2>
-                        <p>Try a different search term</p>
-                    </div>
-                `;
+            if(items.length===0){
+                $('historyList').style.display='none';
+                $('emptyState').style.display='block';
+                $('emptyState').querySelector('.empty-state-title').textContent=currentTab==='history'?'No watch history':'Watch Later is empty';
+                $('emptyState').querySelector('.empty-state-text').textContent=currentTab==='history'?'Videos you watch will appear here':'Save videos to watch later';
                 return;
             }
 
-            // Group by date
-            const groups = {};
-            filtered.forEach(h => {
-                const group = getDateGroup(h.watchedAt);
-                if (!groups[group]) groups[group] = [];
-                groups[group].push(h);
+            $('emptyState').style.display='none';
+            $('historyList').style.display='flex';
+
+            const groups={};
+            items.forEach(item=>{
+                const date=item[timeField]?.toDate();
+                if(!date)return;
+                const key=formatDateGroup(date);
+                if(!groups[key])groups[key]=[];
+                groups[key].push(item);
             });
 
-            let html = '';
-            for (const [groupName, items] of Object.entries(groups)) {
-                html += `
-                    <div class="date-group">
-                        <div class="date-label">${groupName}</div>
-                        <div class="history-list">
-                            ${items.map(h => {
-                                const thumb = h.thumbnail || `https://vz-fa698983-d99.b-cdn.net/${h.bunnyVideoId || h.videoId}/thumbnail.jpg`;
-                                const progress = h.progress || Math.floor(Math.random() * 100);
-                                return `
-                                    <div class="history-item" onclick="watchVideo('${h.videoId}')">
-                                        <div class="history-thumb">
-                                            <img src="${thumb}" onerror="this.style.display='none'">
-                                            <div class="watch-progress">
-                                                <div class="watch-progress-bar" style="width:${progress}%"></div>
-                                            </div>
-                                        </div>
-                                        <div class="history-info">
-                                            <div class="history-title">${h.videoTitle || 'Untitled'}</div>
-                                            <div class="history-creator">${h.creatorName || 'Creator'}</div>
-                                            <div class="history-meta">${formatNumber(h.views || 0)} views</div>
-                                        </div>
-                                        <div class="history-actions" onclick="event.stopPropagation()">
-                                            <button onclick="watchVideo('${h.videoId}')">Watch</button>
-                                            <button class="remove" onclick="removeItem('${h.id}')">Remove</button>
-                                        </div>
-                                    </div>
-                                `;
-                            }).join('')}
+            $('historyList').innerHTML=Object.entries(groups).map(([date,items])=>`
+                <div class="date-group">
+                    <div class="date-header">${date}</div>
+                    ${items.map(item=>`
+                        <div class="history-item">
+                            <a href="watch.html?v=${item.videoId}">
+                                <img src="${item.thumbnail||'https://via.placeholder.com/180x100/242424/666?text=Video'}" class="history-thumb" onerror="this.src='https://via.placeholder.com/180x100/242424/666?text=Video'">
+                            </a>
+                            <div class="history-info">
+                                <h3 class="history-title"><a href="watch.html?v=${item.videoId}">${item.videoTitle||'Untitled'}</a></h3>
+                                <p class="history-creator">${item.creatorName||'Unknown'}</p>
+                                <p class="history-meta">${getTimeAgo(item[timeField]?.toDate())}</p>
+                            </div>
+                            <div class="history-actions">
+                                <button class="remove-btn" data-id="${item.id}" title="Remove">✕</button>
+                            </div>
                         </div>
-                    </div>
-                `;
-            }
+                    `).join('')}
+                </div>
+            `).join('');
 
-            container.innerHTML = html;
+            document.querySelectorAll('.remove-btn').forEach(btn=>{
+                btn.onclick=async e=>{
+                    e.stopPropagation();
+                    const id=btn.dataset.id;
+                    const collName=currentTab==='history'?'watchHistory':'watchLater';
+                    try{
+                        await deleteDoc(doc(db,collName,id));
+                        if(currentTab==='history')historyItems=historyItems.filter(i=>i.id!==id);
+                        else watchLaterItems=watchLaterItems.filter(i=>i.id!==id);
+                        displayItems();
+                        showToast('Removed');
+                    }catch(e){console.error(e);}
+                };
+            });
         }
 
-        // Search
-        document.getElementById('searchInput').oninput = (e) => {
-            renderHistory(e.target.value);
-        };
-
-        // Watch video
-        window.watchVideo = (videoId) => {
-            location.href = `watch.html?v=${videoId}`;
-        };
-
-        // Remove item
-        window.removeItem = async (historyId) => {
-            try {
-                await deleteDoc(doc(db, 'watchHistory', historyId));
-                allHistory = allHistory.filter(h => h.id !== historyId);
-                if (allHistory.length === 0) {
-                    showEmptyState();
-                } else {
-                    renderHistory(document.getElementById('searchInput').value);
-                }
-            } catch (e) {
-                console.error(e);
-            }
-        };
-
-        // Clear all
-        document.getElementById('clearAllBtn').onclick = async () => {
-            if (!confirm('Clear all watch history? This cannot be undone.')) return;
+        function formatDateGroup(date){
+            const now=new Date();
+            const today=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+            const yesterday=new Date(today.getTime()-86400000);
+            const dateOnly=new Date(date.getFullYear(),date.getMonth(),date.getDate());
             
-            try {
-                const batch = writeBatch(db);
-                allHistory.forEach(h => {
-                    batch.delete(doc(db, 'watchHistory', h.id));
-                });
-                await batch.commit();
-                allHistory = [];
-                showEmptyState();
-            } catch (e) {
-                console.error(e);
-                alert('Error clearing history');
-            }
-        };
+            if(dateOnly.getTime()===today.getTime())return'Today';
+            if(dateOnly.getTime()===yesterday.getTime())return'Yesterday';
+            if(dateOnly.getTime()>today.getTime()-7*86400000)return'This Week';
+            return date.toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'});
+        }
+
+        function getTimeAgo(date){
+            if(!date)return'';
+            const s=Math.floor((new Date()-date)/1000);
+            const i={year:31536000,month:2592000,week:604800,day:86400,hour:3600,minute:60};
+            for(const[u,v]of Object.entries(i)){const n=Math.floor(s/v);if(n>=1)return`${n} ${u}${n!==1?'s':''} ago`;}
+            return'Just now';
+        }
+
+        function showToast(msg){$('toastMessage').textContent=msg;$('toast').className='toast success show';setTimeout(()=>$('toast').classList.remove('show'),3000);}
     </script>
 </body>
 </html>
