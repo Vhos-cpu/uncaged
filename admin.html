@@ -6,264 +6,139 @@
     <title>UNCAGED | Admin Panel</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        :root {
-            --bg-primary: #0D0D0D;
-            --bg-secondary: #1A1A1A;
-            --bg-tertiary: #242424;
-            --accent-gold: #F5A623;
-            --text-primary: #FFFFFF;
-            --text-secondary: #B3B3B3;
-            --text-muted: #666666;
-            --border-color: #2A2A2A;
-            --success: #28A745;
-            --danger: #DC3545;
-        }
-        body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
-        .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(13,13,13,0.95); backdrop-filter: blur(10px); display: flex; align-items: center; padding: 0 30px; z-index: 1000; border-bottom: 1px solid var(--border-color); gap: 20px; }
-        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; background: linear-gradient(135deg, var(--accent-gold), #D4880F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
-        .admin-badge { background: var(--danger); color: #fff; font-size: 11px; padding: 4px 10px; border-radius: 4px; font-weight: 600; }
-        .nav-tabs { display: flex; gap: 5px; margin-left: 40px; }
-        .nav-tab { padding: 8px 16px; background: var(--bg-secondary); border: none; border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 13px; }
-        .nav-tab:hover { background: var(--bg-tertiary); }
-        .nav-tab.active { background: var(--accent-gold); color: #000; }
-        .main-content { max-width: 1400px; margin: 0 auto; padding: 80px 30px 40px; }
-        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
-        .stat-card { background: var(--bg-secondary); border-radius: 12px; padding: 20px; }
-        .stat-value { font-size: 32px; font-weight: 700; margin-bottom: 5px; }
-        .stat-label { color: var(--text-muted); font-size: 13px; }
-        .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .section-title { font-size: 20px; font-weight: 600; }
-        .search-input { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 8px; padding: 10px 15px; color: var(--text-primary); font-size: 14px; width: 300px; }
-        .data-table { width: 100%; background: var(--bg-secondary); border-radius: 12px; overflow: hidden; }
-        .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
-        .data-table th { background: var(--bg-tertiary); color: var(--text-secondary); font-size: 12px; text-transform: uppercase; }
-        .data-table tr:last-child td { border-bottom: none; }
-        .video-cell { display: flex; align-items: center; gap: 12px; }
-        .video-thumb { width: 80px; height: 45px; background: var(--bg-tertiary); border-radius: 6px; overflow: hidden; }
-        .video-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .user-cell { display: flex; align-items: center; gap: 10px; }
-        .user-avatar { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-gold), #D4880F); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; font-size: 12px; }
-        .status-badge { padding: 4px 10px; border-radius: 12px; font-size: 12px; }
-        .status-badge.active, .status-badge.public { background: rgba(40,167,69,0.2); color: var(--success); }
-        .status-badge.banned, .status-badge.removed { background: rgba(220,53,69,0.2); color: var(--danger); }
-        .status-badge.pending { background: rgba(255,193,7,0.2); color: #FFC107; }
-        .action-btn { padding: 6px 12px; border-radius: 6px; border: none; cursor: pointer; font-size: 12px; margin-right: 5px; }
-        .action-btn.view { background: var(--bg-tertiary); color: var(--text-primary); }
-        .action-btn.remove { background: rgba(220,53,69,0.2); color: var(--danger); }
-        .action-btn.approve { background: rgba(40,167,69,0.2); color: var(--success); }
-        .empty-state { text-align: center; padding: 40px; color: var(--text-muted); }
-        .section { display: none; }
-        .section.active { display: block; }
-        @media (max-width: 1024px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
-        @media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr; } .nav-tabs { display: none; } }
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg-primary:#0D0D0D;--bg-secondary:#1A1A1A;--bg-tertiary:#242424;--accent-gold:#F5A623;--text-primary:#FFFFFF;--text-secondary:#B3B3B3;--text-muted:#666666;--border-color:#2A2A2A}
+        body{font-family:'DM Sans',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh}
+        .header{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(13,13,13,0.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 30px;z-index:1000;border-bottom:1px solid var(--border-color)}
+        .header-left{display:flex;align-items:center;gap:20px}
+        .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(135deg,var(--accent-gold),#D4880F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+        .admin-badge{background:#DC3545;color:#fff;padding:4px 10px;border-radius:4px;font-size:11px;font-weight:600}
+        .profile-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-gold),#D4880F);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;cursor:pointer;font-size:14px;border:none;position:relative}
+        .dropdown{position:absolute;top:calc(100% + 10px);right:0;background:var(--bg-secondary);border-radius:12px;padding:10px 0;min-width:200px;box-shadow:0 10px 40px rgba(0,0,0,0.5);display:none;border:1px solid var(--border-color)}
+        .dropdown.show{display:block}
+        .dropdown a{display:block;padding:12px 20px;color:var(--text-secondary);text-decoration:none;font-size:14px}
+        .dropdown a:hover{background:var(--bg-tertiary);color:var(--text-primary)}
+        .page-container{display:flex;min-height:100vh}
+        .sidebar{position:fixed;left:0;top:0;bottom:0;width:220px;background:var(--bg-secondary);padding:80px 0 20px;border-right:1px solid var(--border-color)}
+        .sidebar a{display:flex;align-items:center;gap:12px;padding:12px 20px;color:var(--text-secondary);text-decoration:none;font-size:14px}
+        .sidebar a:hover{background:var(--bg-tertiary)}
+        .sidebar a.active{background:rgba(245,166,35,0.1);color:var(--accent-gold);border-left:3px solid var(--accent-gold)}
+        .sidebar a svg{width:20px;height:20px}
+        .sidebar .section-label{padding:15px 20px 8px;color:var(--text-muted);font-size:11px;text-transform:uppercase}
+        .main{margin-left:220px;padding:80px 30px 40px;flex:1}
+        .page-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-bottom:25px}
+        .stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;margin-bottom:30px}
+        .stat-card{background:var(--bg-secondary);border-radius:12px;padding:20px}
+        .stat-card h3{color:var(--text-muted);font-size:12px;margin-bottom:8px}
+        .stat-card .value{font-size:28px;font-weight:700}
+        .stat-card.warning .value{color:#FFC107}
+        .tabs{display:flex;gap:5px;margin-bottom:20px}
+        .tab{padding:8px 16px;background:var(--bg-secondary);border:none;border-radius:6px;color:var(--text-secondary);cursor:pointer;font-size:13px}
+        .tab.active{background:var(--accent-gold);color:#000}
+        .search-bar{margin-bottom:20px}
+        .search-bar input{width:100%;max-width:400px;padding:10px 15px;background:var(--bg-secondary);border:1px solid var(--border-color);border-radius:8px;color:var(--text-primary);font-size:14px}
+        .data-table{width:100%;background:var(--bg-secondary);border-radius:12px;overflow:hidden}
+        .data-table th,.data-table td{padding:12px 15px;text-align:left;border-bottom:1px solid var(--border-color)}
+        .data-table th{background:var(--bg-tertiary);color:var(--text-muted);font-size:11px;text-transform:uppercase}
+        .data-table tr:last-child td{border-bottom:none}
+        .video-cell{display:flex;align-items:center;gap:10px}
+        .thumb-sm{width:70px;height:40px;background:var(--bg-tertiary);border-radius:4px;overflow:hidden}
+        .thumb-sm img{width:100%;height:100%;object-fit:cover}
+        .user-cell{display:flex;align-items:center;gap:8px}
+        .avatar-sm{width:28px;height:28px;border-radius:50%;background:var(--accent-gold);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#000}
+        .status{padding:3px 8px;border-radius:10px;font-size:10px;font-weight:600}
+        .status.active{background:rgba(40,167,69,0.2);color:#28A745}
+        .status.flagged{background:rgba(255,193,7,0.2);color:#FFC107}
+        .status.removed{background:rgba(220,53,69,0.2);color:#DC3545}
+        .actions{display:flex;gap:5px}
+        .actions button{padding:5px 10px;border-radius:4px;border:none;cursor:pointer;font-size:11px}
+        .actions .view{background:var(--bg-tertiary);color:var(--text-primary)}
+        .actions .flag{background:rgba(255,193,7,0.2);color:#FFC107}
+        .actions .approve{background:rgba(40,167,69,0.2);color:#28A745}
+        .actions .remove{background:rgba(220,53,69,0.2);color:#DC3545}
+        .empty{text-align:center;padding:40px;color:var(--text-muted)}
+        .report-card{background:var(--bg-secondary);border-radius:10px;padding:15px;margin-bottom:12px}
+        .report-header{display:flex;justify-content:space-between;margin-bottom:10px}
+        .report-type{font-size:11px;padding:3px 8px;border-radius:4px;background:rgba(220,53,69,0.2);color:#DC3545}
+        .report-content h4{font-size:14px;margin-bottom:5px}
+        .report-content p{color:var(--text-secondary);font-size:13px}
+        .report-actions{margin-top:12px;display:flex;gap:8px}
+        @media(max-width:1024px){.sidebar{width:60px}.sidebar a span,.sidebar .section-label{display:none}.sidebar a{justify-content:center}.main{margin-left:60px}.stats-grid{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:768px){.sidebar{display:none}.main{margin-left:0;padding:70px 15px 20px}.stats-grid{grid-template-columns:1fr}}
     </style>
 </head>
 <body>
     <header class="header">
-        <a href="index.html" class="logo">UNCAGED</a>
-        <span class="admin-badge">ADMIN</span>
-        <div class="nav-tabs">
-            <button class="nav-tab active" data-section="overview">Overview</button>
-            <button class="nav-tab" data-section="videos">Videos</button>
-            <button class="nav-tab" data-section="users">Users</button>
-            <button class="nav-tab" data-section="reports">Reports</button>
-        </div>
+        <div class="header-left"><a href="index.html" class="logo">UNCAGED</a><span class="admin-badge">ADMIN</span></div>
+        <button class="profile-btn" id="profileBtn">A<div class="dropdown" id="profileDropdown"><a href="dashboard.html">Dashboard</a><a href="admin.html">Admin</a><a href="#" id="logoutBtn">Log Out</a></div></button>
     </header>
-
-    <main class="main-content">
-        <!-- Overview -->
-        <div class="section active" id="section-overview">
-            <div class="stats-grid">
-                <div class="stat-card"><div class="stat-value" id="totalVideos">0</div><div class="stat-label">Total Videos</div></div>
-                <div class="stat-card"><div class="stat-value" id="totalUsers">0</div><div class="stat-label">Total Users</div></div>
-                <div class="stat-card"><div class="stat-value" id="totalViews">0</div><div class="stat-label">Total Views</div></div>
-                <div class="stat-card"><div class="stat-value" id="pendingReports">0</div><div class="stat-label">Pending Reports</div></div>
+    <div class="page-container">
+        <aside class="sidebar">
+            <div class="section-label">Overview</div>
+            <a href="#" class="active" data-section="overview"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Dashboard</span></a>
+            <div class="section-label">Content</div>
+            <a href="#" data-section="videos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><span>Videos</span></a>
+            <a href="#" data-section="reports"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg><span>Reports</span></a>
+            <div class="section-label">Users</div>
+            <a href="#" data-section="users"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg><span>Users</span></a>
+        </aside>
+        <main class="main">
+            <div id="section-overview">
+                <h1 class="page-title">Admin Dashboard</h1>
+                <div class="stats-grid">
+                    <div class="stat-card"><h3>Total Videos</h3><div class="value" id="statVideos">0</div></div>
+                    <div class="stat-card"><h3>Total Users</h3><div class="value" id="statUsers">0</div></div>
+                    <div class="stat-card warning"><h3>Pending Reports</h3><div class="value" id="statReports">0</div></div>
+                    <div class="stat-card"><h3>Total Views</h3><div class="value" id="statViews">0</div></div>
+                </div>
+                <h2 style="font-size:18px;margin-bottom:15px">Recent Videos</h2>
+                <table class="data-table"><thead><tr><th>Video</th><th>Creator</th><th>Views</th><th>Status</th></tr></thead><tbody id="recentTable"><tr><td colspan="4" class="empty">Loading...</td></tr></tbody></table>
             </div>
-            <div class="section-header"><h2 class="section-title">Recent Videos</h2></div>
-            <table class="data-table"><thead><tr><th>Video</th><th>Creator</th><th>Views</th><th>Status</th><th>Actions</th></tr></thead><tbody id="recentVideosBody"></tbody></table>
-        </div>
-
-        <!-- Videos -->
-        <div class="section" id="section-videos">
-            <div class="section-header"><h2 class="section-title">All Videos</h2><input type="text" class="search-input" placeholder="Search videos..." id="videoSearch"></div>
-            <table class="data-table"><thead><tr><th>Video</th><th>Creator</th><th>Views</th><th>Status</th><th>Uploaded</th><th>Actions</th></tr></thead><tbody id="allVideosBody"></tbody></table>
-        </div>
-
-        <!-- Users -->
-        <div class="section" id="section-users">
-            <div class="section-header"><h2 class="section-title">All Users</h2><input type="text" class="search-input" placeholder="Search users..." id="userSearch"></div>
-            <table class="data-table"><thead><tr><th>User</th><th>Email</th><th>Videos</th><th>Joined</th><th>Status</th><th>Actions</th></tr></thead><tbody id="allUsersBody"></tbody></table>
-        </div>
-
-        <!-- Reports -->
-        <div class="section" id="section-reports">
-            <div class="section-header"><h2 class="section-title">Content Reports</h2></div>
-            <table class="data-table"><thead><tr><th>Content</th><th>Reason</th><th>Reporter</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="reportsBody"></tbody></table>
-        </div>
-    </main>
-
+            <div id="section-videos" style="display:none">
+                <h1 class="page-title">Video Management</h1>
+                <div class="search-bar"><input type="text" id="videoSearch" placeholder="Search videos..."></div>
+                <table class="data-table"><thead><tr><th>Video</th><th>Creator</th><th>Views</th><th>Status</th><th>Actions</th></tr></thead><tbody id="videosTable"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody></table>
+            </div>
+            <div id="section-reports" style="display:none">
+                <h1 class="page-title">Content Reports</h1>
+                <div class="tabs"><button class="tab active" data-filter="pending">Pending</button><button class="tab" data-filter="all">All</button></div>
+                <div id="reportsList"><div class="empty">Loading...</div></div>
+            </div>
+            <div id="section-users" style="display:none">
+                <h1 class="page-title">User Management</h1>
+                <div class="search-bar"><input type="text" id="userSearch" placeholder="Search users..."></div>
+                <table class="data-table"><thead><tr><th>User</th><th>Email</th><th>Videos</th><th>Status</th><th>Actions</th></tr></thead><tbody id="usersTable"><tr><td colspan="5" class="empty">Loading...</td></tr></tbody></table>
+            </div>
+        </main>
+    </div>
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, getDocs, doc, updateDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
-            authDomain: "uncaged-85b49.firebaseapp.com",
-            projectId: "uncaged-85b49",
-            storageBucket: "uncaged-85b49.firebasestorage.app",
-            messagingSenderId: "957750920887",
-            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-
-        let allVideos = [], allUsers = [], allReports = [];
-
-        function formatDate(ts) {
-            if (!ts) return 'N/A';
-            const d = ts.toDate ? ts.toDate() : new Date(ts);
-            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        }
-
-        function formatNum(n) {
-            if (n >= 1000000) return (n/1000000).toFixed(1)+'M';
-            if (n >= 1000) return (n/1000).toFixed(1)+'K';
-            return n.toString();
-        }
-
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) { window.location.href = 'login.html'; return; }
-            await loadData();
-        });
-
-        async function loadData() {
-            const vSnap = await getDocs(collection(db, 'videos'));
-            allVideos = []; vSnap.forEach(d => allVideos.push({ id: d.id, ...d.data() }));
-            allVideos.sort((a,b) => (b.createdAt?.toDate?.() || 0) - (a.createdAt?.toDate?.() || 0));
-
-            const uSnap = await getDocs(collection(db, 'users'));
-            allUsers = []; uSnap.forEach(d => allUsers.push({ id: d.id, ...d.data() }));
-
-            try {
-                const rSnap = await getDocs(collection(db, 'reports'));
-                allReports = []; rSnap.forEach(d => allReports.push({ id: d.id, ...d.data() }));
-            } catch(e) { allReports = []; }
-
-            const totalViews = allVideos.reduce((s,v) => s + (v.views||0), 0);
-            document.getElementById('totalVideos').textContent = allVideos.length;
-            document.getElementById('totalUsers').textContent = allUsers.length;
-            document.getElementById('totalViews').textContent = formatNum(totalViews);
-            document.getElementById('pendingReports').textContent = allReports.filter(r => r.status === 'pending').length;
-
-            renderVideos('recentVideosBody', allVideos.slice(0,5));
-            renderVideos('allVideosBody', allVideos, true);
-            renderUsers();
-            renderReports();
-        }
-
-        function renderVideos(bodyId, videos, showDate = false) {
-            const body = document.getElementById(bodyId);
-            if (!videos.length) { body.innerHTML = '<tr><td colspan="6" class="empty-state">No videos</td></tr>'; return; }
-            body.innerHTML = videos.map(v => {
-                const thumb = v.thumbnail || `https://vz-fa698983-d99.b-cdn.net/${v.bunnyVideoId||v.id}/thumbnail.jpg`;
-                return `<tr>
-                    <td><div class="video-cell"><div class="video-thumb"><img src="${thumb}" onerror="this.style.display='none'"></div><span>${v.title||'Untitled'}</span></div></td>
-                    <td>${v.creatorName||'Unknown'}</td>
-                    <td>${formatNum(v.views||0)}</td>
-                    <td><span class="status-badge ${v.visibility||'public'}">${v.visibility||'public'}</span></td>
-                    ${showDate ? `<td>${formatDate(v.createdAt)}</td>` : ''}
-                    <td><button class="action-btn view" onclick="window.open('watch.html?v=${v.id}')">View</button><button class="action-btn remove" onclick="removeVideo('${v.id}')">Remove</button></td>
-                </tr>`;
-            }).join('');
-        }
-
-        function renderUsers() {
-            const body = document.getElementById('allUsersBody');
-            if (!allUsers.length) { body.innerHTML = '<tr><td colspan="6" class="empty-state">No users</td></tr>'; return; }
-            body.innerHTML = allUsers.map(u => {
-                const name = u.displayName || u.username || 'User';
-                const vCount = allVideos.filter(v => v.creatorId === u.id).length;
-                const status = u.banned ? 'banned' : 'active';
-                return `<tr>
-                    <td><div class="user-cell"><div class="user-avatar">${name[0].toUpperCase()}</div><span>${name}</span></div></td>
-                    <td>${u.email||'N/A'}</td>
-                    <td>${vCount}</td>
-                    <td>${formatDate(u.createdAt)}</td>
-                    <td><span class="status-badge ${status}">${status}</span></td>
-                    <td><button class="action-btn view" onclick="window.open('creator.html?id=${u.id}')">View</button><button class="action-btn ${u.banned?'approve':'remove'}" onclick="toggleBan('${u.id}',${!!u.banned})">${u.banned?'Unban':'Ban'}</button></td>
-                </tr>`;
-            }).join('');
-        }
-
-        function renderReports() {
-            const body = document.getElementById('reportsBody');
-            if (!allReports.length) { body.innerHTML = '<tr><td colspan="6" class="empty-state">No reports</td></tr>'; return; }
-            body.innerHTML = allReports.map(r => `<tr>
-                <td>${r.contentType||'Video'}: ${(r.contentId||'').substring(0,8)}...</td>
-                <td>${r.reason||'Not specified'}</td>
-                <td>${r.reporterName||'Anonymous'}</td>
-                <td>${formatDate(r.createdAt)}</td>
-                <td><span class="status-badge ${r.status||'pending'}">${r.status||'pending'}</span></td>
-                <td><button class="action-btn approve" onclick="resolveReport('${r.id}')">Resolve</button></td>
-            </tr>`).join('');
-        }
-
-        window.removeVideo = async (id) => {
-            if (!confirm('Remove this video?')) return;
-            await deleteDoc(doc(db, 'videos', id));
-            allVideos = allVideos.filter(v => v.id !== id);
-            renderVideos('recentVideosBody', allVideos.slice(0,5));
-            renderVideos('allVideosBody', allVideos, true);
-            document.getElementById('totalVideos').textContent = allVideos.length;
-        };
-
-        window.toggleBan = async (id, isBanned) => {
-            if (!confirm(isBanned ? 'Unban this user?' : 'Ban this user?')) return;
-            await updateDoc(doc(db, 'users', id), { banned: !isBanned });
-            const u = allUsers.find(x => x.id === id);
-            if (u) u.banned = !isBanned;
-            renderUsers();
-        };
-
-        window.resolveReport = async (id) => {
-            await updateDoc(doc(db, 'reports', id), { status: 'resolved' });
-            const r = allReports.find(x => x.id === id);
-            if (r) r.status = 'resolved';
-            renderReports();
-            document.getElementById('pendingReports').textContent = allReports.filter(r => r.status === 'pending').length;
-        };
-
-        // Tab switching
-        document.querySelectorAll('.nav-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById('section-' + tab.dataset.section).classList.add('active');
-            });
-        });
-
-        // Search
-        document.getElementById('videoSearch')?.addEventListener('input', (e) => {
-            const q = e.target.value.toLowerCase();
-            const filtered = allVideos.filter(v => (v.title||'').toLowerCase().includes(q) || (v.creatorName||'').toLowerCase().includes(q));
-            renderVideos('allVideosBody', filtered, true);
-        });
-
-        document.getElementById('userSearch')?.addEventListener('input', (e) => {
-            const q = e.target.value.toLowerCase();
-            const filtered = allUsers.filter(u => (u.displayName||u.username||'').toLowerCase().includes(q) || (u.email||'').toLowerCase().includes(q));
-            const body = document.getElementById('allUsersBody');
-            if (!filtered.length) { body.innerHTML = '<tr><td colspan="6" class="empty-state">No users found</td></tr>'; return; }
-            // Re-render with filtered
-            allUsers = filtered;
-            renderUsers();
-            allUsers = [...allUsers]; // Reset after render
-        });
+        import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import{getFirestore,collection,query,where,getDocs,doc,updateDoc,deleteDoc}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        const app=initializeApp({apiKey:"AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",authDomain:"uncaged-85b49.firebaseapp.com",projectId:"uncaged-85b49",storageBucket:"uncaged-85b49.firebasestorage.app",messagingSenderId:"957750920887",appId:"1:957750920887:web:9af4d847dad76c876d2f32"});
+        const auth=getAuth(app),db=getFirestore(app);
+        let allVideos=[],allUsers=[],allReports=[];
+        function fmt(n){if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return n.toString()}
+        function fmtDate(ts){if(!ts)return'';const d=ts.toDate?ts.toDate():new Date(ts);return d.toLocaleDateString('en-US',{month:'short',day:'numeric'})}
+        onAuthStateChanged(auth,u=>{if(!u){location.href='login.html';return}document.getElementById('profileBtn').childNodes[0].textContent=(u.displayName||u.email)[0].toUpperCase();loadOverview()});
+        document.getElementById('profileBtn').onclick=e=>{e.stopPropagation();document.getElementById('profileDropdown').classList.toggle('show')};
+        document.onclick=()=>document.getElementById('profileDropdown').classList.remove('show');
+        document.getElementById('logoutBtn').onclick=async e=>{e.preventDefault();await signOut(auth);location.href='index.html'};
+        document.querySelectorAll('.sidebar a[data-section]').forEach(link=>{link.onclick=e=>{e.preventDefault();document.querySelectorAll('.sidebar a').forEach(a=>a.classList.remove('active'));link.classList.add('active');document.querySelectorAll('[id^="section-"]').forEach(s=>s.style.display='none');document.getElementById('section-'+link.dataset.section).style.display='block';if(link.dataset.section==='videos')loadVideos();else if(link.dataset.section==='reports')loadReports();else if(link.dataset.section==='users')loadUsers()}});
+        async function loadOverview(){const[vSnap,uSnap,rSnap]=await Promise.all([getDocs(collection(db,'videos')),getDocs(collection(db,'users')),getDocs(query(collection(db,'reports'),where('status','==','pending')))]);let views=0;allVideos=[];vSnap.forEach(d=>{const v=d.data();allVideos.push({id:d.id,...v});views+=(v.views||0)});document.getElementById('statVideos').textContent=vSnap.size;document.getElementById('statUsers').textContent=uSnap.size;document.getElementById('statReports').textContent=rSnap.size;document.getElementById('statViews').textContent=fmt(views);document.getElementById('recentTable').innerHTML=allVideos.slice(0,5).map(v=>'<tr><td><div class="video-cell"><div class="thumb-sm"><img src="'+(v.thumbnail||'https://vz-fa698983-d99.b-cdn.net/'+(v.bunnyVideoId||v.id)+'/thumbnail.jpg')+'" onerror="this.style.display=\'none\'"></div><span>'+(v.title||'Untitled').substring(0,30)+'</span></div></td><td>'+(v.creatorName||'Unknown')+'</td><td>'+fmt(v.views||0)+'</td><td><span class="status '+(v.status||'active')+'">'+(v.status||'active')+'</span></td></tr>').join('')||'<tr><td colspan="4" class="empty">No videos</td></tr>'}
+        async function loadVideos(){const snap=await getDocs(collection(db,'videos'));allVideos=[];snap.forEach(d=>allVideos.push({id:d.id,...d.data()}));renderVideos()}
+        function renderVideos(search=''){let f=search?allVideos.filter(v=>(v.title||'').toLowerCase().includes(search.toLowerCase())):allVideos;document.getElementById('videosTable').innerHTML=f.map(v=>'<tr><td><div class="video-cell"><div class="thumb-sm"><img src="'+(v.thumbnail||'https://vz-fa698983-d99.b-cdn.net/'+(v.bunnyVideoId||v.id)+'/thumbnail.jpg')+'" onerror="this.style.display=\'none\'"></div><span>'+(v.title||'Untitled').substring(0,25)+'</span></div></td><td>'+(v.creatorName||'Unknown')+'</td><td>'+fmt(v.views||0)+'</td><td><span class="status '+(v.status||'active')+'">'+(v.status||'active')+'</span></td><td><div class="actions"><button class="view" onclick="window.open(\'watch.html?v='+v.id+'\')">View</button><button class="flag" onclick="flagVideo(\''+v.id+'\')">Flag</button><button class="remove" onclick="removeVideo(\''+v.id+'\')">Remove</button></div></td></tr>').join('')||'<tr><td colspan="5" class="empty">No videos</td></tr>'}
+        document.getElementById('videoSearch').oninput=e=>renderVideos(e.target.value);
+        window.flagVideo=async id=>{await updateDoc(doc(db,'videos',id),{status:'flagged'});loadVideos()};
+        window.removeVideo=async id=>{if(confirm('Delete this video?')){await deleteDoc(doc(db,'videos',id));loadVideos()}};
+        async function loadReports(filter='pending'){let q=filter==='all'?collection(db,'reports'):query(collection(db,'reports'),where('status','==','pending'));const snap=await getDocs(q);allReports=[];snap.forEach(d=>allReports.push({id:d.id,...d.data()}));document.getElementById('reportsList').innerHTML=allReports.map(r=>'<div class="report-card"><div class="report-header"><span class="report-type">'+(r.type||'Report')+'</span><span style="color:var(--text-muted);font-size:12px">'+fmtDate(r.createdAt)+'</span></div><div class="report-content"><h4>'+(r.videoTitle||'Reported Content')+'</h4><p>'+(r.reason||'No reason')+'</p></div><div class="report-actions"><button class="actions view" onclick="window.open(\'watch.html?v='+r.videoId+'\')">View</button><button class="actions approve" onclick="dismissReport(\''+r.id+'\')">Dismiss</button><button class="actions remove" onclick="actionReport(\''+r.id+'\',\''+r.videoId+'\')">Take Action</button></div></div>').join('')||'<div class="empty">No reports</div>'}
+        document.querySelectorAll('.tabs .tab').forEach(t=>{t.onclick=()=>{document.querySelectorAll('.tabs .tab').forEach(x=>x.classList.remove('active'));t.classList.add('active');loadReports(t.dataset.filter)}});
+        window.dismissReport=async id=>{await updateDoc(doc(db,'reports',id),{status:'reviewed'});loadReports()};
+        window.actionReport=async(rid,vid)=>{await updateDoc(doc(db,'videos',vid),{status:'flagged'});await updateDoc(doc(db,'reports',rid),{status:'reviewed'});loadReports()};
+        async function loadUsers(){const[uSnap,vSnap]=await Promise.all([getDocs(collection(db,'users')),getDocs(collection(db,'videos'))]);const vc={};vSnap.forEach(d=>{const v=d.data();vc[v.creatorId]=(vc[v.creatorId]||0)+1});allUsers=[];uSnap.forEach(d=>allUsers.push({id:d.id,...d.data(),videoCount:vc[d.id]||0}));renderUsers()}
+        function renderUsers(search=''){let f=search?allUsers.filter(u=>(u.displayName||u.email||'').toLowerCase().includes(search.toLowerCase())):allUsers;document.getElementById('usersTable').innerHTML=f.map(u=>'<tr><td><div class="user-cell"><div class="avatar-sm">'+(u.displayName||u.email||'?')[0].toUpperCase()+'</div><span>'+(u.displayName||'Unknown')+'</span></div></td><td>'+(u.email||'N/A')+'</td><td>'+u.videoCount+'</td><td><span class="status '+(u.status||'active')+'">'+(u.status||'active')+'</span></td><td><div class="actions"><button class="view" onclick="window.open(\'creator.html?id='+u.id+'\')">View</button><button class="'+(u.status==='suspended'?'approve':'flag')+'" onclick="toggleUser(\''+u.id+'\',\''+(u.status||'active')+'\')">'+(u.status==='suspended'?'Activate':'Suspend')+'</button></div></td></tr>').join('')||'<tr><td colspan="5" class="empty">No users</td></tr>'}
+        document.getElementById('userSearch').oninput=e=>renderUsers(e.target.value);
+        window.toggleUser=async(id,current)=>{await updateDoc(doc(db,'users',id),{status:current==='suspended'?'active':'suspended'});loadUsers()};
     </script>
 </body>
 </html>
