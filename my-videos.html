@@ -3,122 +3,736 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNCAGED | My Videos</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>My Videos - UNCAGED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        :root{--bg-primary:#0D0D0D;--bg-secondary:#1A1A1A;--bg-tertiary:#242424;--accent-gold:#F5A623;--text-primary:#FFFFFF;--text-secondary:#B3B3B3;--text-muted:#666666;--border-color:#2A2A2A}
-        body{font-family:'DM Sans',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh}
-        .header{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(13,13,13,0.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 30px;z-index:1000;border-bottom:1px solid var(--border-color)}
-        .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(135deg,var(--accent-gold),#D4880F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-        .nav-links{display:flex;gap:25px}
-        .nav-links a{color:var(--text-secondary);text-decoration:none;font-size:14px}
-        .profile-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-gold),#D4880F);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;cursor:pointer;font-size:14px;border:none;position:relative}
-        .dropdown{position:absolute;top:calc(100% + 10px);right:0;background:var(--bg-secondary);border-radius:12px;padding:10px 0;min-width:200px;box-shadow:0 10px 40px rgba(0,0,0,0.5);display:none;border:1px solid var(--border-color)}
-        .dropdown.show{display:block}
-        .dropdown a{display:block;padding:12px 20px;color:var(--text-secondary);text-decoration:none;font-size:14px}
-        .dropdown a:hover{background:var(--bg-tertiary);color:var(--text-primary)}
-        .dropdown .divider{height:1px;background:var(--border-color);margin:8px 0}
-        .page-container{display:flex;min-height:100vh}
-        .sidebar{position:fixed;left:0;top:0;bottom:0;width:240px;background:var(--bg-secondary);padding:80px 0 20px;border-right:1px solid var(--border-color)}
-        .sidebar a{display:flex;align-items:center;gap:12px;padding:12px 20px;color:var(--text-secondary);text-decoration:none;font-size:14px}
-        .sidebar a:hover{background:var(--bg-tertiary)}
-        .sidebar a.active{background:rgba(245,166,35,0.1);color:var(--accent-gold);border-left:3px solid var(--accent-gold)}
-        .sidebar a svg{width:20px;height:20px}
-        .sidebar .divider{height:1px;background:var(--border-color);margin:15px 20px}
-        .main{margin-left:240px;padding:80px 30px 40px;flex:1}
-        .page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:30px}
-        .page-title{font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px}
-        .upload-btn-lg{display:flex;align-items:center;gap:8px;background:linear-gradient(135deg,var(--accent-gold),#D4880F);color:#000;padding:12px 24px;border-radius:25px;text-decoration:none;font-weight:600}
-        .stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;margin-bottom:30px}
-        .stat-card{background:var(--bg-secondary);border-radius:12px;padding:20px}
-        .stat-value{font-size:28px;font-weight:700;margin-bottom:5px}
-        .stat-label{color:var(--text-muted);font-size:13px}
-        .filter-bar{display:flex;gap:10px;margin-bottom:25px;flex-wrap:wrap}
-        .filter-btn{padding:8px 16px;background:var(--bg-secondary);border:none;border-radius:20px;color:var(--text-secondary);cursor:pointer;font-size:13px}
-        .filter-btn.active{background:var(--accent-gold);color:#000}
-        .videos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
-        .video-card{background:var(--bg-secondary);border-radius:12px;overflow:hidden}
-        .video-thumb{position:relative;width:100%;padding-top:56.25%;background:var(--bg-tertiary)}
-        .video-thumb img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover}
-        .video-status{position:absolute;top:8px;left:8px;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600}
-        .video-status.public{background:#28A745;color:#fff}
-        .video-status.private{background:#DC3545;color:#fff}
-        .video-info{padding:15px}
-        .video-title{font-size:14px;font-weight:600;margin-bottom:8px}
-        .video-title a{color:var(--text-primary);text-decoration:none}
-        .video-stats{color:var(--text-muted);font-size:12px;margin-bottom:12px}
-        .video-actions{display:flex;gap:8px}
-        .video-actions button{padding:6px 12px;background:var(--bg-tertiary);border:none;border-radius:6px;color:var(--text-secondary);cursor:pointer;font-size:12px}
-        .video-actions button:hover{background:var(--border-color)}
-        .video-actions button.delete:hover{background:#DC3545;color:#fff}
-        .empty-state{text-align:center;padding:60px 20px}
-        .empty-state a{color:var(--accent-gold)}
-        .loading-spinner{width:40px;height:40px;border:3px solid var(--border-color);border-top-color:var(--accent-gold);border-radius:50%;animation:spin 1s linear infinite;margin:40px auto}
-        @keyframes spin{to{transform:rotate(360deg)}}
-        @media(max-width:1024px){.sidebar{width:70px}.sidebar a span{display:none}.sidebar a{justify-content:center}.main{margin-left:70px}}
-        @media(max-width:768px){.sidebar{display:none}.main{margin-left:0;padding:70px 15px 20px}.page-header{flex-direction:column;gap:15px;align-items:flex-start}.stats-row{grid-template-columns:1fr}}
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background-color: #0D0D0D;
+            color: #FFFFFF;
+            min-height: 100vh;
+        }
+
+        /* Navigation */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1A1A1A;
+            border-bottom: 1px solid #2A2A2A;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            background: linear-gradient(135deg, #F5A623, #D4880F);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            color: #B3B3B3;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #F5A623;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #F5A623, #D4880F);
+            color: #0D0D0D;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(245, 166, 35, 0.4);
+        }
+
+        .profile-dropdown {
+            position: relative;
+        }
+
+        .profile-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #F5A623, #D4880F);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: #0D0D0D;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: #1A1A1A;
+            border: 1px solid #2A2A2A;
+            border-radius: 8px;
+            min-width: 200px;
+            display: none;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+        }
+
+        .dropdown-menu.show {
+            display: block;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 0.8rem 1rem;
+            color: #B3B3B3;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background: #242424;
+            color: #F5A623;
+        }
+
+        /* Main Content */
+        .main-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: #FFFFFF;
+        }
+
+        .video-count {
+            color: #B3B3B3;
+            font-size: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .filter-select {
+            background: #1A1A1A;
+            border: 1px solid #2A2A2A;
+            color: #FFFFFF;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            cursor: pointer;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: #F5A623;
+        }
+
+        /* Video Grid */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .video-card {
+            background: #1A1A1A;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid #2A2A2A;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .video-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .thumbnail-container {
+            position: relative;
+            aspect-ratio: 16/9;
+            background: #242424;
+        }
+
+        .thumbnail {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .duration {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #FFFFFF;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+        }
+
+        .visibility-badge {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .visibility-badge.public {
+            background: rgba(76, 175, 80, 0.9);
+            color: #FFFFFF;
+        }
+
+        .visibility-badge.private {
+            background: rgba(244, 67, 54, 0.9);
+            color: #FFFFFF;
+        }
+
+        .visibility-badge.unlisted {
+            background: rgba(255, 152, 0, 0.9);
+            color: #FFFFFF;
+        }
+
+        .video-info {
+            padding: 1rem;
+        }
+
+        .video-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: #FFFFFF;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .video-meta {
+            display: flex;
+            gap: 1rem;
+            color: #666666;
+            font-size: 0.85rem;
+            margin-bottom: 1rem;
+        }
+
+        .video-meta span {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 0.6rem;
+            border: none;
+            border-radius: 6px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .edit-btn {
+            background: linear-gradient(135deg, #F5A623, #D4880F);
+            color: #0D0D0D;
+        }
+
+        .edit-btn:hover {
+            box-shadow: 0 4px 15px rgba(245, 166, 35, 0.4);
+        }
+
+        .view-btn {
+            background: #242424;
+            color: #FFFFFF;
+            border: 1px solid #2A2A2A;
+        }
+
+        .view-btn:hover {
+            border-color: #F5A623;
+            color: #F5A623;
+        }
+
+        .delete-btn {
+            background: transparent;
+            color: #F44336;
+            border: 1px solid #F44336;
+        }
+
+        .delete-btn:hover {
+            background: #F44336;
+            color: #FFFFFF;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 4rem 2rem;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .empty-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.8rem;
+            color: #FFFFFF;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-text {
+            color: #666666;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 4rem;
+            color: #B3B3B3;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #2A2A2A;
+            border-top-color: #F5A623;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Delete Modal */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal {
+            background: #1A1A1A;
+            border-radius: 12px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            border: 1px solid #2A2A2A;
+        }
+
+        .modal-title {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #F44336;
+        }
+
+        .modal-text {
+            color: #B3B3B3;
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 0.8rem;
+            border: none;
+            border-radius: 8px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .cancel-btn {
+            background: #242424;
+            color: #FFFFFF;
+        }
+
+        .confirm-delete-btn {
+            background: #F44336;
+            color: #FFFFFF;
+        }
+
+        .confirm-delete-btn:hover {
+            background: #D32F2F;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .main-content {
+                padding: 1rem;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .video-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .video-actions {
+                flex-wrap: wrap;
+            }
+
+            .action-btn {
+                flex: 1 1 45%;
+            }
+        }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div style="display:flex;align-items:center;gap:30px">
-            <a href="index.html" class="logo">UNCAGED</a>
-            <nav class="nav-links"><a href="browse.html">Browse</a><a href="dashboard.html">Dashboard</a></nav>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <a href="index.html" class="logo">UNCAGED</a>
+        <div class="nav-links">
+            <a href="browse.html">Browse</a>
+            <a href="dashboard.html">Dashboard</a>
+            <a href="upload.html" class="upload-btn">Upload</a>
+            <div class="profile-dropdown">
+                <button class="profile-btn" id="profileBtn">?</button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="my-videos.html">My Videos</a>
+                    <a href="analytics.html">Analytics</a>
+                    <a href="earnings.html">Earnings</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="#" id="logoutBtn">Log Out</a>
+                </div>
+            </div>
         </div>
-        <button class="profile-btn" id="profileBtn">V
-            <div class="dropdown" id="profileDropdown">
-                <a href="dashboard.html">Dashboard</a><a href="my-videos.html">My Videos</a><a href="earnings.html">Earnings</a>
-                <div class="divider"></div><a href="stripe-connect.html">Get Paid</a><a href="settings.html">Settings</a>
-                <div class="divider"></div><a href="#" id="logoutBtn">Log Out</a>
-            </div>
-        </button>
-    </header>
-    <div class="page-container">
-        <aside class="sidebar">
-            <a href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg><span>Dashboard</span></a>
-            <a href="my-videos.html" class="active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg><span>My Videos</span></a>
-            <a href="analytics.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analytics</span></a>
-            <a href="earnings.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg><span>Earnings</span></a>
-            <div class="divider"></div>
-            <a href="upload.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg><span>Upload</span></a>
-            <a href="stripe-connect.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg><span>Get Paid</span></a>
-        </aside>
-        <main class="main">
-            <div class="page-header">
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="page-header">
+            <div>
                 <h1 class="page-title">My Videos</h1>
-                <a href="upload.html" class="upload-btn-lg"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Upload New</a>
+                <p class="video-count" id="videoCount">Loading...</p>
             </div>
-            <div class="stats-row">
-                <div class="stat-card"><div class="stat-value" id="totalVideos">0</div><div class="stat-label">Total Videos</div></div>
-                <div class="stat-card"><div class="stat-value" id="totalViews">0</div><div class="stat-label">Total Views</div></div>
-                <div class="stat-card"><div class="stat-value" id="totalSubs">0</div><div class="stat-label">Subscribers</div></div>
+            <div class="header-actions">
+                <select class="filter-select" id="visibilityFilter">
+                    <option value="all">All Videos</option>
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                    <option value="unlisted">Unlisted</option>
+                </select>
+                <select class="filter-select" id="sortFilter">
+                    <option value="newest">Newest First</option>
+                    <option value="oldest">Oldest First</option>
+                    <option value="views">Most Views</option>
+                    <option value="likes">Most Likes</option>
+                </select>
             </div>
-            <div class="filter-bar">
-                <button class="filter-btn active" data-filter="all">All</button>
-                <button class="filter-btn" data-filter="public">Public</button>
-                <button class="filter-btn" data-filter="private">Private</button>
+        </div>
+
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <div class="spinner"></div>
+            <p>Loading your videos...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state" id="emptyState" style="display: none;">
+            <div class="empty-icon">🎬</div>
+            <h2 class="empty-title">No Videos Yet</h2>
+            <p class="empty-text">Upload your first video and start sharing your content with the world.</p>
+            <a href="upload.html" class="upload-btn">Upload Video</a>
+        </div>
+
+        <!-- Video Grid -->
+        <div class="video-grid" id="videoGrid"></div>
+    </main>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <h2 class="modal-title">Delete Video?</h2>
+            <p class="modal-text">Are you sure you want to delete "<span id="deleteVideoTitle"></span>"? This action cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="modal-btn cancel-btn" id="cancelDelete">Cancel</button>
+                <button class="modal-btn confirm-delete-btn" id="confirmDelete">Delete</button>
             </div>
-            <div class="videos-grid" id="videosGrid"><div class="loading-spinner"></div></div>
-        </main>
+        </div>
     </div>
+
+    <!-- Firebase SDK -->
     <script type="module">
-        import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-        import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import{getFirestore,collection,query,where,getDocs,deleteDoc,doc,getDoc}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-        const app=initializeApp({apiKey:"AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",authDomain:"uncaged-85b49.firebaseapp.com",projectId:"uncaged-85b49",storageBucket:"uncaged-85b49.firebasestorage.app",messagingSenderId:"957750920887",appId:"1:957750920887:web:9af4d847dad76c876d2f32"});
-        const auth=getAuth(app),db=getFirestore(app);
-        let allVideos=[],currentFilter='all';
-        function fmt(n){if(n>=1e6)return(n/1e6).toFixed(1)+'M';if(n>=1e3)return(n/1e3).toFixed(1)+'K';return n.toString()}
-        onAuthStateChanged(auth,async u=>{if(!u){location.href='login.html';return}document.getElementById('profileBtn').childNodes[0].textContent=(u.displayName||u.email)[0].toUpperCase();try{const uDoc=await getDoc(doc(db,'users',u.uid));if(uDoc.exists())document.getElementById('totalSubs').textContent=fmt(uDoc.data().subscribers||0)}catch(e){}loadVideos(u.uid)});
-        document.getElementById('profileBtn').onclick=e=>{e.stopPropagation();document.getElementById('profileDropdown').classList.toggle('show')};
-        document.onclick=()=>document.getElementById('profileDropdown').classList.remove('show');
-        document.querySelectorAll('.dropdown').forEach(d=>d.onclick=e=>e.stopPropagation());
-        document.getElementById('logoutBtn').onclick=async e=>{e.preventDefault();await signOut(auth);location.href='index.html'};
-        async function loadVideos(uid){const grid=document.getElementById('videosGrid');try{const snap=await getDocs(query(collection(db,'videos'),where('creatorId','==',uid)));allVideos=[];let views=0;snap.forEach(d=>{const v=d.data();allVideos.push({id:d.id,...v});views+=(v.views||0)});document.getElementById('totalVideos').textContent=allVideos.length;document.getElementById('totalViews').textContent=fmt(views);renderVideos()}catch(e){grid.innerHTML='<div class="empty-state">Error loading videos</div>'}}
-        function renderVideos(){const grid=document.getElementById('videosGrid');let filtered=currentFilter==='all'?allVideos:allVideos.filter(v=>(v.visibility||'public')===currentFilter);if(!filtered.length){grid.innerHTML='<div class="empty-state"><h3>No videos found</h3><p><a href="upload.html">Upload your first video</a></p></div>';return}grid.innerHTML=filtered.map(v=>{const thumb=v.thumbnail||'https://vz-fa698983-d99.b-cdn.net/'+(v.bunnyVideoId||v.id)+'/thumbnail.jpg';const vis=v.visibility||'public';return`<div class="video-card"><div class="video-thumb"><img src="${thumb}" onerror="this.style.display='none'"><span class="video-status ${vis}">${vis}</span></div><div class="video-info"><div class="video-title"><a href="watch.html?v=${v.id}">${v.title||'Untitled'}</a></div><div class="video-stats">${fmt(v.views||0)} views</div><div class="video-actions"><button onclick="location.href='watch.html?v=${v.id}'">View</button><button class="delete" onclick="deleteVideo('${v.id}')">Delete</button></div></div></div>`}).join('')}
-        window.deleteVideo=async id=>{if(!confirm('Delete this video?'))return;try{await deleteDoc(doc(db,'videos',id));allVideos=allVideos.filter(v=>v.id!==id);document.getElementById('totalVideos').textContent=allVideos.length;renderVideos()}catch(e){alert('Error: '+e.message)}};
-        document.querySelectorAll('.filter-btn').forEach(btn=>{btn.onclick=()=>{document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');currentFilter=btn.dataset.filter;renderVideos()}});
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import { getFirestore, collection, query, where, orderBy, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        let currentUser = null;
+        let allVideos = [];
+        let videoToDelete = null;
+
+        // DOM Elements
+        const loadingState = document.getElementById('loadingState');
+        const emptyState = document.getElementById('emptyState');
+        const videoGrid = document.getElementById('videoGrid');
+        const videoCount = document.getElementById('videoCount');
+        const visibilityFilter = document.getElementById('visibilityFilter');
+        const sortFilter = document.getElementById('sortFilter');
+        const deleteModal = document.getElementById('deleteModal');
+        const deleteVideoTitle = document.getElementById('deleteVideoTitle');
+        const profileBtn = document.getElementById('profileBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        // Auth State
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                currentUser = user;
+                profileBtn.textContent = user.displayName ? user.displayName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase();
+                loadVideos();
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Profile Dropdown
+        profileBtn.addEventListener('click', () => {
+            dropdownMenu.classList.toggle('show');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.profile-dropdown')) {
+                dropdownMenu.classList.remove('show');
+            }
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', async (e) => {
+            e.preventDefault();
+            await signOut(auth);
+            window.location.href = 'index.html';
+        });
+
+        // Load Videos
+        async function loadVideos() {
+            try {
+                const videosRef = collection(db, 'videos');
+                const q = query(
+                    videosRef,
+                    where('creatorId', '==', currentUser.uid),
+                    orderBy('createdAt', 'desc')
+                );
+
+                const snapshot = await getDocs(q);
+                allVideos = snapshot.docs.map(doc => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+
+                loadingState.style.display = 'none';
+                renderVideos();
+            } catch (error) {
+                console.error('Error loading videos:', error);
+                loadingState.innerHTML = '<p style="color: #F44336;">Error loading videos. Please try again.</p>';
+            }
+        }
+
+        // Render Videos
+        function renderVideos() {
+            let filtered = [...allVideos];
+
+            // Apply visibility filter
+            const visibility = visibilityFilter.value;
+            if (visibility !== 'all') {
+                filtered = filtered.filter(v => v.visibility === visibility);
+            }
+
+            // Apply sort
+            const sort = sortFilter.value;
+            switch (sort) {
+                case 'oldest':
+                    filtered.sort((a, b) => a.createdAt?.toMillis() - b.createdAt?.toMillis());
+                    break;
+                case 'views':
+                    filtered.sort((a, b) => (b.views || 0) - (a.views || 0));
+                    break;
+                case 'likes':
+                    filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0));
+                    break;
+                default:
+                    filtered.sort((a, b) => b.createdAt?.toMillis() - a.createdAt?.toMillis());
+            }
+
+            // Update count
+            videoCount.textContent = `${filtered.length} video${filtered.length !== 1 ? 's' : ''}`;
+
+            // Show empty state or grid
+            if (filtered.length === 0) {
+                emptyState.style.display = 'block';
+                videoGrid.style.display = 'none';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            videoGrid.style.display = 'grid';
+
+            videoGrid.innerHTML = filtered.map(video => {
+                const thumbnail = video.thumbnail || `https://vz-fa698983-d99.b-cdn.net/${video.bunnyVideoId}/thumbnail.jpg`;
+                const date = video.createdAt?.toDate().toLocaleDateString() || 'Unknown';
+                const views = video.views?.toLocaleString() || '0';
+                const likes = video.likes?.toLocaleString() || '0';
+
+                return `
+                    <div class="video-card" data-id="${video.id}">
+                        <div class="thumbnail-container">
+                            <img src="${thumbnail}" alt="${video.title}" class="thumbnail" onerror="this.src='https://via.placeholder.com/320x180/242424/666666?text=No+Thumbnail'">
+                            <span class="visibility-badge ${video.visibility || 'public'}">${video.visibility || 'public'}</span>
+                        </div>
+                        <div class="video-info">
+                            <h3 class="video-title">${video.title || 'Untitled'}</h3>
+                            <div class="video-meta">
+                                <span>👁 ${views} views</span>
+                                <span>❤️ ${likes} likes</span>
+                                <span>📅 ${date}</span>
+                            </div>
+                            <div class="video-actions">
+                                <a href="edit-video.html?v=${video.id}" class="action-btn edit-btn">Edit</a>
+                                <a href="watch.html?v=${video.id}" class="action-btn view-btn">View</a>
+                                <button class="action-btn delete-btn" onclick="openDeleteModal('${video.id}', '${video.title?.replace(/'/g, "\\'")}')">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Filter listeners
+        visibilityFilter.addEventListener('change', renderVideos);
+        sortFilter.addEventListener('change', renderVideos);
+
+        // Delete Modal Functions
+        window.openDeleteModal = function(videoId, title) {
+            videoToDelete = videoId;
+            deleteVideoTitle.textContent = title || 'Untitled';
+            deleteModal.classList.add('show');
+        };
+
+        document.getElementById('cancelDelete').addEventListener('click', () => {
+            deleteModal.classList.remove('show');
+            videoToDelete = null;
+        });
+
+        document.getElementById('confirmDelete').addEventListener('click', async () => {
+            if (!videoToDelete) return;
+
+            try {
+                await deleteDoc(doc(db, 'videos', videoToDelete));
+                allVideos = allVideos.filter(v => v.id !== videoToDelete);
+                renderVideos();
+                deleteModal.classList.remove('show');
+                videoToDelete = null;
+            } catch (error) {
+                console.error('Error deleting video:', error);
+                alert('Failed to delete video. Please try again.');
+            }
+        });
+
+        // Close modal on overlay click
+        deleteModal.addEventListener('click', (e) => {
+            if (e.target === deleteModal) {
+                deleteModal.classList.remove('show');
+                videoToDelete = null;
+            }
+        });
     </script>
 </body>
 </html>

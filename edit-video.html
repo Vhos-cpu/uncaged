@@ -3,481 +3,511 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UNCAGED | Edit Video</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Edit Video - UNCAGED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        *{margin:0;padding:0;box-sizing:border-box}
-        :root{--bg-primary:#0D0D0D;--bg-secondary:#1A1A1A;--bg-tertiary:#242424;--accent-gold:#F5A623;--text-primary:#FFFFFF;--text-secondary:#B3B3B3;--text-muted:#666666;--border-color:#2A2A2A}
-        body{font-family:'DM Sans',sans-serif;background:var(--bg-primary);color:var(--text-primary);min-height:100vh}
-        .header{position:fixed;top:0;left:0;right:0;height:60px;background:rgba(13,13,13,0.95);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:space-between;padding:0 30px;z-index:1000;border-bottom:1px solid var(--border-color)}
-        .header-left{display:flex;align-items:center;gap:20px}
-        .logo{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;background:linear-gradient(135deg,var(--accent-gold),#D4880F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
-        .back-btn{display:flex;align-items:center;gap:8px;color:var(--text-secondary);text-decoration:none;font-size:14px}
-        .back-btn:hover{color:var(--text-primary)}
-        .back-btn svg{width:20px;height:20px}
-        .profile-btn{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--accent-gold),#D4880F);display:flex;align-items:center;justify-content:center;font-weight:700;color:#000;cursor:pointer;font-size:14px;border:none;position:relative}
-        .dropdown{position:absolute;top:calc(100% + 10px);right:0;background:var(--bg-secondary);border-radius:12px;padding:10px 0;min-width:200px;box-shadow:0 10px 40px rgba(0,0,0,0.5);display:none;border:1px solid var(--border-color)}
-        .dropdown.show{display:block}
-        .dropdown a{display:block;padding:12px 20px;color:var(--text-secondary);text-decoration:none;font-size:14px}
-        .dropdown a:hover{background:var(--bg-tertiary);color:var(--text-primary)}
-        .dropdown .divider{height:1px;background:var(--border-color);margin:8px 0}
-
-        .main{max-width:900px;margin:0 auto;padding:90px 30px 40px}
-        .page-title{font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:2px;margin-bottom:25px}
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'DM Sans', sans-serif; background-color: #0D0D0D; color: #FFFFFF; min-height: 100vh; }
+        .navbar { display: flex; justify-content: space-between; align-items: center; padding: 1rem 2rem; background-color: #1A1A1A; border-bottom: 1px solid #2A2A2A; position: sticky; top: 0; z-index: 100; }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; background: linear-gradient(135deg, #F5A623, #D4880F); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; text-decoration: none; }
+        .nav-links { display: flex; align-items: center; gap: 1.5rem; }
+        .nav-links a { color: #B3B3B3; text-decoration: none; font-weight: 500; transition: color 0.3s; }
+        .nav-links a:hover { color: #F5A623; }
+        .profile-dropdown { position: relative; }
+        .profile-btn { width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #F5A623, #D4880F); border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; font-weight: 600; color: #0D0D0D; }
+        .dropdown-menu { position: absolute; top: 50px; right: 0; background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 8px; min-width: 200px; display: none; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5); }
+        .dropdown-menu.show { display: block; }
+        .dropdown-menu a { display: block; padding: 0.8rem 1rem; color: #B3B3B3; text-decoration: none; transition: background 0.3s; }
+        .dropdown-menu a:hover { background: #242424; color: #F5A623; }
         
-        .edit-container{display:grid;grid-template-columns:1fr 300px;gap:30px}
-        .edit-form{background:var(--bg-secondary);border-radius:12px;padding:25px}
-        .preview-section{background:var(--bg-secondary);border-radius:12px;padding:20px}
+        .main-content { max-width: 1000px; margin: 0 auto; padding: 2rem; }
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; }
+        .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.5rem; }
+        .back-link { color: #B3B3B3; text-decoration: none; display: flex; align-items: center; gap: 0.5rem; }
+        .back-link:hover { color: #F5A623; }
         
-        .form-group{margin-bottom:20px}
-        .form-group label{display:block;margin-bottom:8px;font-size:14px;color:var(--text-secondary)}
-        .form-group input,.form-group textarea,.form-group select{width:100%;padding:12px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:8px;color:var(--text-primary);font-size:14px;font-family:inherit}
-        .form-group input:focus,.form-group textarea:focus,.form-group select:focus{outline:none;border-color:var(--accent-gold)}
-        .form-group textarea{min-height:120px;resize:vertical}
-        .form-group small{display:block;margin-top:6px;color:var(--text-muted);font-size:12px}
+        .edit-container { display: grid; grid-template-columns: 1fr 350px; gap: 2rem; }
+        .edit-form { background: #1A1A1A; border-radius: 16px; padding: 2rem; border: 1px solid #2A2A2A; }
+        .video-preview { background: #1A1A1A; border-radius: 16px; padding: 1.5rem; border: 1px solid #2A2A2A; height: fit-content; position: sticky; top: 100px; }
         
-        .thumbnail-section{margin-bottom:20px}
-        .thumbnail-section label{display:block;margin-bottom:10px;font-size:14px;color:var(--text-secondary)}
-        .thumbnail-preview{width:100%;aspect-ratio:16/9;background:var(--bg-tertiary);border-radius:8px;overflow:hidden;margin-bottom:10px;display:flex;align-items:center;justify-content:center}
-        .thumbnail-preview img{width:100%;height:100%;object-fit:cover}
-        .thumbnail-preview svg{width:48px;height:48px;color:var(--text-muted)}
-        .thumbnail-upload{display:flex;gap:10px}
-        .thumbnail-upload input{display:none}
-        .thumbnail-btn{padding:8px 16px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:6px;color:var(--text-primary);cursor:pointer;font-size:13px}
-        .thumbnail-btn:hover{background:var(--border-color)}
+        .preview-player { aspect-ratio: 16/9; background: #000; border-radius: 8px; overflow: hidden; margin-bottom: 1rem; }
+        .preview-player iframe { width: 100%; height: 100%; border: none; }
+        .preview-title { font-weight: 600; margin-bottom: 0.5rem; }
+        .preview-meta { color: #666666; font-size: 0.85rem; }
+        .preview-link { display: block; margin-top: 1rem; color: #F5A623; text-decoration: none; font-size: 0.9rem; }
+        .preview-link:hover { text-decoration: underline; }
         
-        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:15px}
+        .form-group { margin-bottom: 1.5rem; }
+        .form-label { display: block; margin-bottom: 0.5rem; color: #B3B3B3; font-weight: 500; }
+        .form-label .required { color: #F44336; }
+        .form-input, .form-textarea, .form-select { width: 100%; padding: 0.875rem 1rem; background: #242424; border: 1px solid #2A2A2A; border-radius: 8px; color: #FFFFFF; font-family: 'DM Sans', sans-serif; font-size: 1rem; transition: border-color 0.3s; }
+        .form-input:focus, .form-textarea:focus, .form-select:focus { outline: none; border-color: #F5A623; }
+        .form-textarea { min-height: 120px; resize: vertical; }
+        .form-hint { color: #666666; font-size: 0.85rem; margin-top: 0.25rem; }
+        .char-count { text-align: right; color: #666666; font-size: 0.85rem; }
         
-        .tags-input{display:flex;flex-wrap:wrap;gap:8px;padding:10px;background:var(--bg-tertiary);border:1px solid var(--border-color);border-radius:8px;min-height:45px}
-        .tags-input:focus-within{border-color:var(--accent-gold)}
-        .tag{display:flex;align-items:center;gap:5px;background:var(--accent-gold);color:#000;padding:4px 10px;border-radius:15px;font-size:12px;font-weight:600}
-        .tag button{background:none;border:none;color:#000;cursor:pointer;font-size:14px;line-height:1}
-        .tags-input input{flex:1;min-width:100px;background:none;border:none;color:var(--text-primary);font-size:14px;outline:none}
+        .thumbnail-section { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        .thumbnail-preview { aspect-ratio: 16/9; background: #242424; border-radius: 8px; overflow: hidden; border: 1px solid #2A2A2A; }
+        .thumbnail-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .thumbnail-options { display: flex; flex-direction: column; gap: 0.75rem; }
+        .thumbnail-btn { padding: 0.75rem; background: #242424; border: 1px solid #2A2A2A; border-radius: 8px; color: #FFFFFF; font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.3s; text-align: left; font-size: 0.9rem; }
+        .thumbnail-btn:hover { border-color: #F5A623; }
+        .thumbnail-btn.active { border-color: #F5A623; background: rgba(245, 166, 35, 0.1); }
+        .thumb-progress { margin-top: 0.5rem; display: none; }
+        .thumb-progress.show { display: block; }
+        .progress-bar { height: 4px; background: #242424; border-radius: 2px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(135deg, #F5A623, #D4880F); width: 0%; transition: width 0.3s; }
         
-        .btn-row{display:flex;gap:12px;margin-top:25px}
-        .btn{padding:12px 24px;border-radius:8px;border:none;cursor:pointer;font-weight:600;font-size:14px}
-        .btn-primary{background:linear-gradient(135deg,var(--accent-gold),#D4880F);color:#000}
-        .btn-secondary{background:var(--bg-tertiary);color:var(--text-primary)}
-        .btn-danger{background:transparent;border:1px solid #DC3545;color:#DC3545}
-        .btn-danger:hover{background:#DC3545;color:#fff}
-        .btn:disabled{opacity:0.6;cursor:not-allowed}
+        .tags-container { display: flex; flex-wrap: wrap; gap: 0.5rem; padding: 0.5rem; background: #242424; border: 1px solid #2A2A2A; border-radius: 8px; min-height: 50px; }
+        .tag { display: flex; align-items: center; gap: 0.25rem; background: #1A1A1A; border: 1px solid #2A2A2A; border-radius: 20px; padding: 0.3rem 0.6rem; font-size: 0.85rem; }
+        .tag-remove { background: none; border: none; color: #666666; cursor: pointer; font-size: 1rem; line-height: 1; }
+        .tag-remove:hover { color: #F44336; }
+        .tag-input { flex: 1; min-width: 80px; background: none; border: none; color: #FFFFFF; font-family: 'DM Sans', sans-serif; padding: 0.3rem; font-size: 0.9rem; }
+        .tag-input:focus { outline: none; }
         
-        .preview-title{font-size:14px;font-weight:600;margin-bottom:15px;color:var(--text-muted)}
-        .preview-thumb{width:100%;aspect-ratio:16/9;background:var(--bg-tertiary);border-radius:8px;overflow:hidden;margin-bottom:12px}
-        .preview-thumb img{width:100%;height:100%;object-fit:cover}
-        .preview-video-title{font-size:15px;font-weight:600;margin-bottom:6px}
-        .preview-meta{color:var(--text-muted);font-size:12px;margin-bottom:4px}
-        .preview-link{margin-top:15px}
-        .preview-link a{color:var(--accent-gold);font-size:13px;text-decoration:none}
-        .preview-link a:hover{text-decoration:underline}
+        .visibility-options { display: flex; gap: 1rem; }
+        .visibility-option { flex: 1; padding: 1rem; background: #242424; border: 1px solid #2A2A2A; border-radius: 8px; cursor: pointer; transition: all 0.3s; text-align: center; }
+        .visibility-option:hover { border-color: #F5A623; }
+        .visibility-option.selected { border-color: #F5A623; background: rgba(245, 166, 35, 0.1); }
+        .visibility-option input { display: none; }
+        .visibility-icon { font-size: 1.5rem; margin-bottom: 0.25rem; }
+        .visibility-title { font-weight: 500; font-size: 0.9rem; }
         
-        .success-msg{background:rgba(40,167,69,0.1);border:1px solid #28A745;color:#28A745;padding:12px;border-radius:8px;margin-bottom:20px;display:none}
-        .error-msg{background:rgba(220,53,69,0.1);border:1px solid #DC3545;color:#DC3545;padding:12px;border-radius:8px;margin-bottom:20px;display:none}
+        .form-actions { display: flex; gap: 1rem; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #2A2A2A; }
+        .btn { padding: 0.875rem 1.5rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; }
+        .btn-secondary { background: #242424; color: #FFFFFF; }
+        .btn-primary { background: linear-gradient(135deg, #F5A623, #D4880F); color: #0D0D0D; flex: 1; }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(245, 166, 35, 0.4); }
+        .btn-danger { background: transparent; color: #F44336; border: 1px solid #F44336; }
+        .btn-danger:hover { background: #F44336; color: #FFFFFF; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         
-        .loading{text-align:center;padding:60px}
-        .loading-spinner{width:40px;height:40px;border:3px solid var(--border-color);border-top-color:var(--accent-gold);border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 15px}
-        @keyframes spin{to{transform:rotate(360deg)}}
-
-        .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:2000}
-        .modal-overlay.show{display:flex}
-        .modal{background:var(--bg-secondary);border-radius:12px;padding:25px;max-width:400px;width:90%}
-        .modal h3{margin-bottom:10px}
-        .modal p{color:var(--text-muted);margin-bottom:20px;font-size:14px}
-        .modal-actions{display:flex;gap:10px;justify-content:flex-end}
-
-        @media(max-width:768px){.edit-container{grid-template-columns:1fr}.preview-section{order:-1}.main{padding:80px 15px 20px}.form-row{grid-template-columns:1fr}}
+        .loading { text-align: center; padding: 4rem; color: #B3B3B3; }
+        .spinner { width: 40px; height: 40px; border: 3px solid #2A2A2A; border-top-color: #F5A623; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 1rem; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.8); display: none; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-overlay.show { display: flex; }
+        .modal { background: #1A1A1A; border-radius: 12px; padding: 2rem; max-width: 400px; width: 90%; border: 1px solid #2A2A2A; }
+        .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; margin-bottom: 1rem; color: #F44336; }
+        .modal-text { color: #B3B3B3; margin-bottom: 1.5rem; }
+        .modal-actions { display: flex; gap: 1rem; }
+        .modal-btn { flex: 1; padding: 0.75rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 600; cursor: pointer; border: none; }
+        .modal-cancel { background: #242424; color: #FFFFFF; }
+        .modal-confirm { background: #F44336; color: #FFFFFF; }
+        
+        .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: #1A1A1A; border: 1px solid #2A2A2A; padding: 1rem 1.5rem; border-radius: 8px; transition: transform 0.3s; z-index: 1001; }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+        .toast.success { border-color: #4CAF50; }
+        .toast.error { border-color: #F44336; }
+        
+        @media (max-width: 900px) {
+            .edit-container { grid-template-columns: 1fr; }
+            .video-preview { position: static; order: -1; }
+            .thumbnail-section { grid-template-columns: 1fr; }
+            .visibility-options { flex-direction: column; }
+        }
+        @media (max-width: 768px) {
+            .navbar { padding: 1rem; }
+            .main-content { padding: 1rem; }
+            .form-actions { flex-direction: column; }
+        }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-left">
-            <a href="index.html" class="logo">UNCAGED</a>
-            <a href="my-videos.html" class="back-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-                Back to My Videos
-            </a>
-        </div>
-        <button class="profile-btn" id="profileBtn">V
-            <div class="dropdown" id="profileDropdown">
-                <a href="dashboard.html">Dashboard</a>
-                <a href="my-videos.html">My Videos</a>
-                <a href="earnings.html">Earnings</a>
-                <div class="divider"></div>
-                <a href="settings.html">Settings</a>
-                <div class="divider"></div>
-                <a href="#" id="logoutBtn">Log Out</a>
+    <nav class="navbar">
+        <a href="index.html" class="logo">UNCAGED</a>
+        <div class="nav-links">
+            <a href="browse.html">Browse</a>
+            <a href="dashboard.html">Dashboard</a>
+            <div class="profile-dropdown">
+                <button class="profile-btn" id="profileBtn">?</button>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="dashboard.html">Dashboard</a>
+                    <a href="my-videos.html">My Videos</a>
+                    <a href="earnings.html">Earnings</a>
+                    <a href="settings.html">Settings</a>
+                    <a href="#" id="logoutBtn">Log Out</a>
+                </div>
             </div>
-        </button>
-    </header>
+        </div>
+    </nav>
 
-    <main class="main">
-        <h1 class="page-title">Edit Video</h1>
-        
-        <div id="loadingState" class="loading">
-            <div class="loading-spinner"></div>
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">Edit Video</h1>
+            <a href="my-videos.html" class="back-link">← Back to My Videos</a>
+        </div>
+
+        <div class="loading" id="loadingState">
+            <div class="spinner"></div>
             <p>Loading video...</p>
         </div>
 
-        <div id="editContent" style="display:none">
-            <div class="success-msg" id="successMsg">Changes saved successfully!</div>
-            <div class="error-msg" id="errorMsg"></div>
-            
-            <div class="edit-container">
-                <div class="edit-form">
-                    <form id="editForm">
-                        <div class="form-group">
-                            <label>Title *</label>
-                            <input type="text" id="title" required maxlength="100">
-                            <small><span id="titleCount">0</span>/100 characters</small>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Description</label>
-                            <textarea id="description" maxlength="5000" placeholder="Tell viewers about your video..."></textarea>
-                            <small><span id="descCount">0</span>/5000 characters</small>
-                        </div>
-                        
-                        <div class="thumbnail-section">
-                            <label>Thumbnail</label>
-                            <div class="thumbnail-preview" id="thumbPreview">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                            </div>
-                            <div class="thumbnail-upload">
-                                <label class="thumbnail-btn" for="thumbInput">Upload Thumbnail</label>
-                                <input type="file" id="thumbInput" accept="image/*">
-                                <button type="button" class="thumbnail-btn" id="resetThumb">Use Auto-Generated</button>
-                            </div>
-                            <small style="margin-top:8px;display:block">Recommended: 1280x720 (16:9 ratio)</small>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Category</label>
-                                <select id="category">
-                                    <option value="">Select category</option>
-                                    <option>Gaming</option>
-                                    <option>Music</option>
-                                    <option>Entertainment</option>
-                                    <option>Sports</option>
-                                    <option>Education</option>
-                                    <option>Lifestyle</option>
-                                    <option>Tech</option>
-                                    <option>Travel</option>
-                                    <option>News</option>
-                                    <option>Comedy</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Visibility</label>
-                                <select id="visibility">
-                                    <option value="public">Public</option>
-                                    <option value="private">Private</option>
-                                </select>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Tags</label>
-                            <div class="tags-input" id="tagsContainer">
-                                <input type="text" id="tagInput" placeholder="Add tag and press Enter">
-                            </div>
-                            <small>Press Enter to add tags. Click × to remove.</small>
-                        </div>
-                        
-                        <div class="btn-row">
-                            <button type="submit" class="btn btn-primary" id="saveBtn">Save Changes</button>
-                            <button type="button" class="btn btn-secondary" onclick="location.href='my-videos.html'">Cancel</button>
-                            <button type="button" class="btn btn-danger" id="deleteBtn" style="margin-left:auto">Delete Video</button>
-                        </div>
-                    </form>
+        <div class="edit-container" id="editContainer" style="display: none;">
+            <div class="edit-form">
+                <div class="form-group">
+                    <label class="form-label">Title <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="videoTitle" maxlength="100">
+                    <div class="char-count"><span id="titleCount">0</span>/100</div>
                 </div>
-                
-                <div class="preview-section">
-                    <div class="preview-title">PREVIEW</div>
-                    <div class="preview-thumb" id="previewThumb"></div>
-                    <div class="preview-video-title" id="previewTitle">Video Title</div>
-                    <div class="preview-meta" id="previewViews">0 views</div>
-                    <div class="preview-meta" id="previewDate">Uploaded today</div>
-                    <div class="preview-link">
-                        <a href="#" id="watchLink" target="_blank">View on UNCAGED →</a>
+
+                <div class="form-group">
+                    <label class="form-label">Description</label>
+                    <textarea class="form-textarea" id="videoDescription" maxlength="5000"></textarea>
+                    <div class="char-count"><span id="descCount">0</span>/5000</div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Thumbnail</label>
+                    <div class="thumbnail-section">
+                        <div class="thumbnail-preview" id="thumbnailPreview">
+                            <img src="" alt="Thumbnail" id="thumbImg">
+                        </div>
+                        <div class="thumbnail-options">
+                            <button class="thumbnail-btn" id="autoThumbBtn">
+                                Use auto-generated thumbnail
+                            </button>
+                            <button class="thumbnail-btn" id="customThumbBtn">
+                                Upload custom thumbnail
+                                <input type="file" id="thumbnailInput" accept="image/jpeg,image/png,image/webp" style="display:none;">
+                                <div class="thumb-progress" id="thumbProgress">
+                                    <div class="progress-bar"><div class="progress-fill" id="thumbProgressFill"></div></div>
+                                </div>
+                            </button>
+                            <p class="form-hint">JPG, PNG or WebP, max 2MB</p>
+                        </div>
                     </div>
                 </div>
+
+                <div class="form-group">
+                    <label class="form-label">Category</label>
+                    <select class="form-select" id="videoCategory">
+                        <option value="">Select a category</option>
+                        <option value="entertainment">Entertainment</option>
+                        <option value="music">Music</option>
+                        <option value="gaming">Gaming</option>
+                        <option value="sports">Sports</option>
+                        <option value="education">Education</option>
+                        <option value="howto">How-to & Style</option>
+                        <option value="science">Science & Technology</option>
+                        <option value="travel">Travel & Events</option>
+                        <option value="news">News & Politics</option>
+                        <option value="comedy">Comedy</option>
+                        <option value="film">Film & Animation</option>
+                        <option value="autos">Autos & Vehicles</option>
+                        <option value="pets">Pets & Animals</option>
+                        <option value="people">People & Blogs</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Tags</label>
+                    <div class="tags-container" id="tagsContainer">
+                        <input type="text" class="tag-input" id="tagInput" placeholder="Add tags (press Enter)">
+                    </div>
+                    <p class="form-hint">Up to 15 tags</p>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Visibility</label>
+                    <div class="visibility-options">
+                        <label class="visibility-option" data-value="public">
+                            <input type="radio" name="visibility" value="public">
+                            <div class="visibility-icon">🌐</div>
+                            <div class="visibility-title">Public</div>
+                        </label>
+                        <label class="visibility-option" data-value="unlisted">
+                            <input type="radio" name="visibility" value="unlisted">
+                            <div class="visibility-icon">🔗</div>
+                            <div class="visibility-title">Unlisted</div>
+                        </label>
+                        <label class="visibility-option" data-value="private">
+                            <input type="radio" name="visibility" value="private">
+                            <div class="visibility-icon">🔒</div>
+                            <div class="visibility-title">Private</div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="btn btn-danger" id="deleteBtn">Delete Video</button>
+                    <button class="btn btn-primary" id="saveBtn">Save Changes</button>
+                </div>
+            </div>
+
+            <div class="video-preview">
+                <div class="preview-player">
+                    <iframe id="videoPlayer" allowfullscreen></iframe>
+                </div>
+                <div class="preview-title" id="previewTitle"></div>
+                <div class="preview-meta">
+                    <span id="previewViews">0 views</span> • <span id="previewDate"></span>
+                </div>
+                <a href="#" class="preview-link" id="previewLink" target="_blank">View on UNCAGED →</a>
             </div>
         </div>
     </main>
 
-    <!-- Delete Confirmation Modal -->
     <div class="modal-overlay" id="deleteModal">
         <div class="modal">
-            <h3>Delete Video?</h3>
-            <p>This action cannot be undone. Your video and all its data (views, comments, likes) will be permanently deleted.</p>
+            <h2 class="modal-title">Delete Video?</h2>
+            <p class="modal-text">This will permanently delete your video. This action cannot be undone.</p>
             <div class="modal-actions">
-                <button class="btn btn-secondary" onclick="closeDeleteModal()">Cancel</button>
-                <button class="btn btn-danger" id="confirmDelete">Delete Forever</button>
+                <button class="modal-btn modal-cancel" id="cancelDelete">Cancel</button>
+                <button class="modal-btn modal-confirm" id="confirmDelete">Delete</button>
             </div>
         </div>
     </div>
 
+    <div class="toast" id="toast"><span id="toastMessage"></span></div>
+
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, doc, getDoc, updateDoc, deleteDoc, collection, query, where, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, updateDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
 
-        const app = initializeApp({
-            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
-            authDomain: "uncaged-85b49.firebaseapp.com",
-            projectId: "uncaged-85b49",
-            storageBucket: "uncaged-85b49.firebasestorage.app",
-            messagingSenderId: "957750920887",
-            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
-        });
+        const firebaseConfig = { apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ", authDomain: "uncaged-85b49.firebaseapp.com", projectId: "uncaged-85b49", storageBucket: "uncaged-85b49.firebasestorage.app", messagingSenderId: "957750920887", appId: "1:957750920887:web:9af4d847dad76c876d2f32" };
+        const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         const db = getFirestore(app);
-        const videoId = new URLSearchParams(location.search).get('v');
+        const storage = getStorage(app);
+
+        const BUNNY_CDN = 'vz-fa698983-d99.b-cdn.net';
+
         let currentUser = null;
-        let videoData = null;
+        let currentVideo = null;
+        let videoId = null;
         let tags = [];
-        let customThumbnail = null;
+        let newThumbnailUrl = null;
 
-        function formatNumber(n) {
-            if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-            if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
-            return n.toString();
-        }
+        const $ = id => document.getElementById(id);
+        const urlParams = new URLSearchParams(window.location.search);
+        videoId = urlParams.get('v');
+        if (!videoId) window.location.href = 'my-videos.html';
 
-        function formatDate(ts) {
-            if (!ts) return 'Unknown';
-            const d = ts.toDate ? ts.toDate() : new Date(ts);
-            return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        }
-
+        // Auth
         onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                location.href = 'login.html';
-                return;
+            if (user) {
+                currentUser = user;
+                $('profileBtn').textContent = user.displayName ? user.displayName.charAt(0).toUpperCase() : user.email.charAt(0).toUpperCase();
+                await loadVideo();
+            } else {
+                window.location.href = 'login.html';
             }
-            currentUser = user;
-            document.getElementById('profileBtn').childNodes[0].textContent = (user.displayName || user.email)[0].toUpperCase();
-            
-            if (!videoId) {
-                showError('No video ID provided');
-                return;
-            }
-            
-            loadVideo();
         });
 
         // Dropdown
-        document.getElementById('profileBtn').onclick = (e) => {
-            e.stopPropagation();
-            document.getElementById('profileDropdown').classList.toggle('show');
-        };
-        document.onclick = () => document.getElementById('profileDropdown').classList.remove('show');
-        document.querySelectorAll('.dropdown').forEach(d => d.onclick = e => e.stopPropagation());
-        document.getElementById('logoutBtn').onclick = async (e) => {
-            e.preventDefault();
-            await signOut(auth);
-            location.href = 'index.html';
-        };
+        $('profileBtn').addEventListener('click', () => $('dropdownMenu').classList.toggle('show'));
+        document.addEventListener('click', (e) => { if (!e.target.closest('.profile-dropdown')) $('dropdownMenu').classList.remove('show'); });
+        $('logoutBtn').addEventListener('click', async (e) => { e.preventDefault(); await signOut(auth); window.location.href = 'index.html'; });
 
         async function loadVideo() {
             try {
-                const vDoc = await getDoc(doc(db, 'videos', videoId));
-                
-                if (!vDoc.exists()) {
-                    showError('Video not found');
+                const videoDoc = await getDoc(doc(db, 'videos', videoId));
+                if (!videoDoc.exists()) {
+                    showToast('Video not found', 'error');
+                    setTimeout(() => window.location.href = 'my-videos.html', 2000);
                     return;
                 }
-                
-                videoData = { id: vDoc.id, ...vDoc.data() };
-                
-                // Check ownership
-                if (videoData.creatorId !== currentUser.uid) {
-                    showError('You do not have permission to edit this video');
-                    return;
-                }
-                
-                populateForm();
-                document.getElementById('loadingState').style.display = 'none';
-                document.getElementById('editContent').style.display = 'block';
-            } catch (e) {
-                showError(e.message);
-            }
-        }
 
-        function showError(msg) {
-            document.getElementById('loadingState').innerHTML = `
-                <h2 style="margin-bottom:10px">Error</h2>
-                <p style="color:var(--text-muted);margin-bottom:20px">${msg}</p>
-                <a href="my-videos.html" style="color:var(--accent-gold)">← Back to My Videos</a>
-            `;
+                currentVideo = { id: videoDoc.id, ...videoDoc.data() };
+
+                if (currentVideo.creatorId !== currentUser.uid) {
+                    showToast('You can only edit your own videos', 'error');
+                    setTimeout(() => window.location.href = 'my-videos.html', 2000);
+                    return;
+                }
+
+                populateForm();
+                $('loadingState').style.display = 'none';
+                $('editContainer').style.display = 'grid';
+
+            } catch (error) {
+                console.error('Error loading video:', error);
+                showToast('Error loading video', 'error');
+            }
         }
 
         function populateForm() {
-            document.getElementById('title').value = videoData.title || '';
-            document.getElementById('description').value = videoData.description || '';
-            document.getElementById('category').value = videoData.category || '';
-            document.getElementById('visibility').value = videoData.visibility || 'public';
-            
-            // Tags
-            tags = videoData.tags || [];
+            $('videoTitle').value = currentVideo.title || '';
+            $('titleCount').textContent = $('videoTitle').value.length;
+
+            $('videoDescription').value = currentVideo.description || '';
+            $('descCount').textContent = $('videoDescription').value.length;
+
+            $('videoCategory').value = currentVideo.category || '';
+
+            tags = currentVideo.tags || [];
             renderTags();
-            
-            // Thumbnail
-            const thumbUrl = videoData.thumbnail || `https://vz-fa698983-d99.b-cdn.net/${videoData.bunnyVideoId || videoData.id}/thumbnail.jpg`;
-            document.getElementById('thumbPreview').innerHTML = `<img src="${thumbUrl}" onerror="this.parentElement.innerHTML='<svg viewBox=\\'0 0 24 24\\' fill=\\'none\\' stroke=\\'currentColor\\' stroke-width=\\'2\\'><rect x=\\'3\\' y=\\'3\\' width=\\'18\\' height=\\'18\\' rx=\\'2\\' ry=\\'2\\'/><circle cx=\\'8.5\\' cy=\\'8.5\\' r=\\'1.5\\'/><polyline points=\\'21 15 16 10 5 21\\'/></svg>'">`;
-            document.getElementById('previewThumb').innerHTML = `<img src="${thumbUrl}" onerror="this.style.display='none'">`;
-            
-            // Preview
-            updatePreview();
-            document.getElementById('watchLink').href = `watch.html?v=${videoData.id}`;
-            
-            // Character counts
-            updateCharCount('title', 'titleCount', 100);
-            updateCharCount('description', 'descCount', 5000);
+
+            const visibility = currentVideo.visibility || 'public';
+            document.querySelector(`.visibility-option[data-value="${visibility}"]`).classList.add('selected');
+            document.querySelector(`input[value="${visibility}"]`).checked = true;
+
+            const thumbnail = currentVideo.thumbnail || `https://${BUNNY_CDN}/${currentVideo.bunnyVideoId}/thumbnail.jpg`;
+            $('thumbImg').src = thumbnail;
+
+            $('videoPlayer').src = `https://iframe.mediadelivery.net/embed/588548/${currentVideo.bunnyVideoId}?autoplay=false`;
+            $('previewTitle').textContent = currentVideo.title || 'Untitled';
+            $('previewViews').textContent = `${(currentVideo.views || 0).toLocaleString()} views`;
+            $('previewDate').textContent = currentVideo.createdAt?.toDate().toLocaleDateString() || '';
+            $('previewLink').href = `watch.html?v=${videoId}`;
         }
 
-        function updatePreview() {
-            document.getElementById('previewTitle').textContent = document.getElementById('title').value || 'Untitled';
-            document.getElementById('previewViews').textContent = formatNumber(videoData.views || 0) + ' views';
-            document.getElementById('previewDate').textContent = 'Uploaded ' + formatDate(videoData.createdAt);
-        }
-
-        function updateCharCount(inputId, countId, max) {
-            const len = document.getElementById(inputId).value.length;
-            document.getElementById(countId).textContent = len;
-        }
-
-        // Character count listeners
-        document.getElementById('title').oninput = () => {
-            updateCharCount('title', 'titleCount', 100);
-            updatePreview();
-        };
-        document.getElementById('description').oninput = () => updateCharCount('description', 'descCount', 5000);
+        // Character counts
+        $('videoTitle').addEventListener('input', () => {
+            $('titleCount').textContent = $('videoTitle').value.length;
+            $('previewTitle').textContent = $('videoTitle').value || 'Untitled';
+        });
+        $('videoDescription').addEventListener('input', () => $('descCount').textContent = $('videoDescription').value.length);
 
         // Tags
         function renderTags() {
-            const container = document.getElementById('tagsContainer');
-            const input = document.getElementById('tagInput');
-            container.innerHTML = '';
-            tags.forEach((tag, i) => {
-                const el = document.createElement('span');
-                el.className = 'tag';
-                el.innerHTML = `${tag} <button type="button" onclick="removeTag(${i})">×</button>`;
-                container.appendChild(el);
+            const container = $('tagsContainer');
+            container.innerHTML = tags.map((tag, i) => `
+                <div class="tag"><span>${tag}</span><button class="tag-remove" data-index="${i}">&times;</button></div>
+            `).join('') + '<input type="text" class="tag-input" id="tagInput" placeholder="Add tags">';
+
+            $('tagInput').addEventListener('keydown', handleTagInput);
+            container.querySelectorAll('.tag-remove').forEach(btn => {
+                btn.addEventListener('click', () => { tags.splice(parseInt(btn.dataset.index), 1); renderTags(); });
             });
-            container.appendChild(input);
         }
 
-        window.removeTag = (index) => {
-            tags.splice(index, 1);
-            renderTags();
-        };
-
-        document.getElementById('tagInput').onkeydown = (e) => {
-            if (e.key === 'Enter') {
+        function handleTagInput(e) {
+            if (e.key === 'Enter' || e.key === ',') {
                 e.preventDefault();
-                const val = e.target.value.trim().toLowerCase();
-                if (val && !tags.includes(val) && tags.length < 10) {
-                    tags.push(val);
-                    renderTags();
-                }
-                e.target.value = '';
+                const tag = $('tagInput').value.trim().replace(',', '');
+                if (tag && tags.length < 15 && !tags.includes(tag)) { tags.push(tag); renderTags(); }
+                $('tagInput').value = '';
             }
-        };
+        }
 
-        // Thumbnail upload
-        document.getElementById('thumbInput').onchange = (e) => {
+        // Visibility
+        document.querySelectorAll('.visibility-option').forEach(option => {
+            option.addEventListener('click', () => {
+                document.querySelectorAll('.visibility-option').forEach(o => o.classList.remove('selected'));
+                option.classList.add('selected');
+                option.querySelector('input').checked = true;
+            });
+        });
+
+        // Thumbnail - Auto
+        $('autoThumbBtn').addEventListener('click', () => {
+            const autoThumb = `https://${BUNNY_CDN}/${currentVideo.bunnyVideoId}/thumbnail.jpg`;
+            $('thumbImg').src = autoThumb;
+            newThumbnailUrl = autoThumb;
+            $('autoThumbBtn').classList.add('active');
+            $('customThumbBtn').classList.remove('active');
+            showToast('Using auto-generated thumbnail', 'success');
+        });
+
+        // Thumbnail - Custom Upload
+        $('customThumbBtn').addEventListener('click', () => $('thumbnailInput').click());
+
+        $('thumbnailInput').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if (!file) return;
-            
-            if (!file.type.startsWith('image/')) {
-                alert('Please select an image file');
-                return;
+
+            if (file.size > 2 * 1024 * 1024) { showToast('Thumbnail must be under 2MB', 'error'); return; }
+            if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) { showToast('Use JPG, PNG, or WebP', 'error'); return; }
+
+            $('thumbProgress').classList.add('show');
+            $('customThumbBtn').classList.add('active');
+            $('autoThumbBtn').classList.remove('active');
+
+            try {
+                const fileName = `thumbnails/${currentUser.uid}/${Date.now()}_${file.name}`;
+                const storageRef = ref(storage, fileName);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                        $('thumbProgressFill').style.width = `${progress}%`;
+                    },
+                    (error) => {
+                        console.error('Thumbnail upload error:', error);
+                        showToast('Failed to upload thumbnail', 'error');
+                        $('thumbProgress').classList.remove('show');
+                    },
+                    async () => {
+                        newThumbnailUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                        $('thumbImg').src = newThumbnailUrl;
+                        $('thumbProgress').classList.remove('show');
+                        showToast('Thumbnail uploaded!', 'success');
+                    }
+                );
+            } catch (error) {
+                console.error('Thumbnail error:', error);
+                showToast('Failed to upload thumbnail', 'error');
+                $('thumbProgress').classList.remove('show');
             }
-            
-            const reader = new FileReader();
-            reader.onload = (ev) => {
-                customThumbnail = ev.target.result;
-                document.getElementById('thumbPreview').innerHTML = `<img src="${customThumbnail}">`;
-                document.getElementById('previewThumb').innerHTML = `<img src="${customThumbnail}">`;
-            };
-            reader.readAsDataURL(file);
-        };
+        });
 
-        document.getElementById('resetThumb').onclick = () => {
-            customThumbnail = null;
-            const thumbUrl = `https://vz-fa698983-d99.b-cdn.net/${videoData.bunnyVideoId || videoData.id}/thumbnail.jpg`;
-            document.getElementById('thumbPreview').innerHTML = `<img src="${thumbUrl}">`;
-            document.getElementById('previewThumb').innerHTML = `<img src="${thumbUrl}">`;
-            document.getElementById('thumbInput').value = '';
-        };
+        // Save
+        $('saveBtn').addEventListener('click', async () => {
+            const title = $('videoTitle').value.trim();
+            if (!title) { showToast('Title is required', 'error'); return; }
 
-        // Save form
-        document.getElementById('editForm').onsubmit = async (e) => {
-            e.preventDefault();
-            
-            const btn = document.getElementById('saveBtn');
-            btn.disabled = true;
-            btn.textContent = 'Saving...';
-            
+            $('saveBtn').disabled = true;
+            $('saveBtn').textContent = 'Saving...';
+
             try {
                 const updates = {
-                    title: document.getElementById('title').value.trim(),
-                    description: document.getElementById('description').value.trim(),
-                    category: document.getElementById('category').value,
-                    visibility: document.getElementById('visibility').value,
-                    tags: tags
+                    title: title,
+                    description: $('videoDescription').value.trim(),
+                    category: $('videoCategory').value,
+                    tags: tags,
+                    visibility: document.querySelector('input[name="visibility"]:checked').value,
+                    updatedAt: serverTimestamp()
                 };
-                
-                if (customThumbnail) {
-                    updates.thumbnail = customThumbnail;
+
+                if (newThumbnailUrl) {
+                    updates.thumbnail = newThumbnailUrl;
                 }
-                
+
                 await updateDoc(doc(db, 'videos', videoId), updates);
-                
-                document.getElementById('successMsg').style.display = 'block';
-                setTimeout(() => document.getElementById('successMsg').style.display = 'none', 3000);
-            } catch (err) {
-                document.getElementById('errorMsg').textContent = 'Error: ' + err.message;
-                document.getElementById('errorMsg').style.display = 'block';
+                showToast('Changes saved!', 'success');
+
+            } catch (error) {
+                console.error('Save error:', error);
+                showToast('Failed to save changes', 'error');
             }
-            
-            btn.disabled = false;
-            btn.textContent = 'Save Changes';
-        };
 
-        // Delete video
-        document.getElementById('deleteBtn').onclick = () => {
-            document.getElementById('deleteModal').classList.add('show');
-        };
+            $('saveBtn').disabled = false;
+            $('saveBtn').textContent = 'Save Changes';
+        });
 
-        window.closeDeleteModal = () => {
-            document.getElementById('deleteModal').classList.remove('show');
-        };
+        // Delete
+        $('deleteBtn').addEventListener('click', () => $('deleteModal').classList.add('show'));
+        $('cancelDelete').addEventListener('click', () => $('deleteModal').classList.remove('show'));
+        $('deleteModal').addEventListener('click', (e) => { if (e.target === $('deleteModal')) $('deleteModal').classList.remove('show'); });
 
-        document.getElementById('confirmDelete').onclick = async () => {
-            const btn = document.getElementById('confirmDelete');
-            btn.disabled = true;
-            btn.textContent = 'Deleting...';
-            
+        $('confirmDelete').addEventListener('click', async () => {
+            $('confirmDelete').disabled = true;
+            $('confirmDelete').textContent = 'Deleting...';
+
             try {
-                // Delete comments
-                const commentsSnap = await getDocs(query(collection(db, 'comments'), where('videoId', '==', videoId)));
-                const batch = writeBatch(db);
-                commentsSnap.forEach(d => batch.delete(d.ref));
-                await batch.commit();
-                
-                // Delete video
                 await deleteDoc(doc(db, 'videos', videoId));
-                
-                location.href = 'my-videos.html';
-            } catch (err) {
-                alert('Error deleting video: ' + err.message);
-                btn.disabled = false;
-                btn.textContent = 'Delete Forever';
+                showToast('Video deleted', 'success');
+                setTimeout(() => window.location.href = 'my-videos.html', 1500);
+            } catch (error) {
+                console.error('Delete error:', error);
+                showToast('Failed to delete video', 'error');
+                $('confirmDelete').disabled = false;
+                $('confirmDelete').textContent = 'Delete';
             }
-        };
+        });
+
+        function showToast(message, type = 'success') {
+            $('toastMessage').textContent = message;
+            $('toast').className = `toast ${type} show`;
+            setTimeout(() => $('toast').classList.remove('show'), 3000);
+        }
     </script>
 </body>
 </html>
