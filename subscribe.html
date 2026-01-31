@@ -695,6 +695,27 @@
             selectedTip = parseFloat(e.target.value) || 0;
         });
 
+        // Get creator's Stripe ID
+        let creatorStripeId = null;
+        let creatorName = null;
+
+        async function loadCreatorStripe() {
+            if (creatorId) {
+                const creatorDoc = await getDoc(doc(db, 'users', creatorId));
+                if (creatorDoc.exists()) {
+                    const data = creatorDoc.data();
+                    creatorStripeId = data.stripeConnectId;
+                    creatorName = data.displayName;
+                    
+                    if (!creatorStripeId) {
+                        document.getElementById('subscribeBtn').disabled = true;
+                        document.getElementById('subscribeBtn').textContent = 'Creator not set up for payments';
+                    }
+                }
+            }
+        }
+        loadCreatorStripe();
+
         // Subscribe button
         document.getElementById('subscribeBtn').addEventListener('click', async () => {
             const user = auth.currentUser;
@@ -702,17 +723,92 @@
                 window.location.href = 'login.html';
                 return;
             }
-            
-            alert(`Subscribing to ${selectedPlan} plan at $${selectedPrice}/month\n\nStripe Checkout integration coming soon!`);
+
+            if (!creatorStripeId) {
+                alert('This creator has not connected their payment account yet.');
+                return;
+            }
+
+            const btn = document.getElementById('subscribeBtn');
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+
+            try {
+                const response = await fetch('/api/create-checkout', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        creatorId: creatorId,
+                        creatorStripeId: creatorStripeId,
+                        planName: selectedPlan.charAt(0).toUpperCase() + selectedPlan.slice(1),
+                        planPrice: selectedPrice,
+                        userId: user.uid,
+                        userEmail: user.email
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.url) {
+                    window.location.href = data.url; // Redirect to Stripe Checkout
+                } else {
+                    throw new Error(data.error || 'Failed to start checkout');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+                btn.disabled = false;
+                btn.textContent = 'Subscribe Now';
+            }
         });
 
         // Send tip button
-        document.getElementById('sendTipBtn').addEventListener('click', () => {
+        document.getElementById('sendTipBtn').addEventListener('click', async () => {
+            const user = auth.currentUser;
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
             if (selectedTip <= 0) {
                 alert('Please select or enter a tip amount');
                 return;
             }
-            alert(`Sending $${selectedTip} tip!\n\nStripe payment integration coming soon!`);
+
+            if (!creatorStripeId) {
+                alert('This creator has not connected their payment account yet.');
+                return;
+            }
+
+            const btn = document.getElementById('sendTipBtn');
+            btn.disabled = true;
+            btn.textContent = 'Processing...';
+
+            try {
+                const response = await fetch('/api/create-tip', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        creatorId: creatorId,
+                        creatorStripeId: creatorStripeId,
+                        amount: selectedTip,
+                        userId: user.uid,
+                        userEmail: user.email,
+                        creatorName: creatorName
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.url) {
+                    window.location.href = data.url; // Redirect to Stripe Checkout
+                } else {
+                    throw new Error(data.error || 'Failed to start payment');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+                btn.disabled = false;
+                btn.textContent = 'Send Tip';
+            }
         });
     </script>
 </body>

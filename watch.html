@@ -4,18 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UNCAGED | Watch</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg-primary: #0a0a0b;
+            --bg-secondary: #111113;
+            --bg-card: #161618;
+            --bg-card-hover: #1c1c1f;
+            --accent: #f5a623;
+            --accent-glow: rgba(245, 166, 35, 0.15);
+            --text-primary: #ffffff;
+            --text-secondary: #8a8a8d;
+            --text-muted: #5a5a5d;
+            --border: #2a2a2d;
+            --success: #22c55e;
+            --danger: #ef4444;
         }
 
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
-            font-family: 'DM Sans', sans-serif;
-            background: #0D0D0D;
-            color: #FFFFFF;
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
         }
 
@@ -25,460 +36,274 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 60px;
-            background: rgba(13, 13, 13, 0.95);
-            backdrop-filter: blur(10px);
+            height: 70px;
+            background: rgba(10, 10, 11, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 30px;
-            z-index: 1000;
-            border-bottom: 1px solid #1A1A1A;
+            padding: 0 40px;
+            z-index: 100;
         }
 
         .header-left {
             display: flex;
             align-items: center;
-            gap: 20px;
-        }
-
-        .back-btn {
-            background: #1A1A1A;
-            border: none;
-            color: #FFFFFF;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-            transition: background 0.2s ease;
-            text-decoration: none;
-        }
-
-        .back-btn:hover {
-            background: #2A2A2A;
+            gap: 40px;
         }
 
         .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 28px;
-            letter-spacing: 3px;
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            font-family: 'Space Mono', monospace;
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--accent);
             text-decoration: none;
         }
 
-        .header-right {
+        .nav-links {
+            display: flex;
+            gap: 32px;
+        }
+        .nav-link {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+        .nav-link:hover { color: var(--text-primary); }
+
+        .header-actions {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 16px;
         }
 
-        .header-btn {
-            background: #1A1A1A;
-            border: none;
-            color: #FFFFFF;
+        .profile-btn {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            text-decoration: none;
-        }
-
-        .header-btn:hover {
-            background: #2A2A2A;
-        }
-
-        .profile-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
+            background: linear-gradient(135deg, var(--accent), #d4880f);
+            border: none;
+            color: var(--bg-primary);
+            font-weight: 700;
             font-size: 14px;
             cursor: pointer;
-            text-decoration: none;
-            color: #FFFFFF;
         }
 
-        /* Main Content */
-        .main-content {
-            padding-top: 60px;
-            display: flex;
-            min-height: calc(100vh - 60px);
+        /* Main layout */
+        .main {
+            padding-top: 70px;
+            display: grid;
+            grid-template-columns: 1fr 380px;
+            gap: 24px;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 90px 40px 40px;
         }
 
-        /* Video Section */
-        .video-section {
-            flex: 1;
-            max-width: 1000px;
-            padding: 20px;
-        }
-
-        /* Video Player Container */
-        .video-player-container {
-            position: relative;
-            width: 100%;
+        /* Video section */
+        .video-container {
             background: #000;
+            aspect-ratio: 16/9;
             border-radius: 12px;
             overflow: hidden;
-            aspect-ratio: 16/9;
+            margin-bottom: 20px;
         }
 
-        .video-player-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
+        .video-container iframe,
+        .video-container video {
             width: 100%;
             height: 100%;
-            border: none;
         }
 
-        .video-loading {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background: #1A1A1A;
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid #333;
-            border-radius: 50%;
-            border-top-color: #F5A623;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Video Info */
         .video-info {
-            padding: 20px 0;
+            margin-bottom: 24px;
         }
 
         .video-title {
-            font-size: 22px;
+            font-size: 24px;
             font-weight: 700;
-            margin-bottom: 12px;
+            margin-bottom: 16px;
             line-height: 1.3;
         }
 
         .video-meta {
             display: flex;
             align-items: center;
-            gap: 15px;
-            color: #888;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-
-        .video-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        /* Action Buttons */
-        .action-buttons {
-            display: flex;
-            gap: 10px;
+            justify-content: space-between;
             flex-wrap: wrap;
-            padding-bottom: 20px;
-            border-bottom: 1px solid #1A1A1A;
+            gap: 16px;
+        }
+
+        .video-stats {
+            display: flex;
+            gap: 24px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .video-actions {
+            display: flex;
+            gap: 12px;
         }
 
         .action-btn {
-            background: #1A1A1A;
-            border: none;
-            color: #FFFFFF;
-            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
             border-radius: 20px;
+            padding: 10px 20px;
+            color: var(--text-primary);
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
+            font-family: inherit;
         }
-
         .action-btn:hover {
-            background: #2A2A2A;
+            background: var(--bg-card-hover);
+            border-color: var(--text-muted);
         }
-
         .action-btn.active {
-            background: rgba(245, 166, 35, 0.2);
-            color: #F5A623;
+            background: var(--accent-glow);
+            border-color: var(--accent);
+            color: var(--accent);
         }
+        .action-btn svg { width: 18px; height: 18px; }
 
-        .action-btn.primary {
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            color: #0D0D0D;
-        }
-
-        .action-btn.primary:hover {
-            transform: scale(1.02);
-        }
-
-        .action-btn.report {
-            background: #1A1A1A;
-            color: #888;
-        }
-
-        .action-btn.report:hover {
-            background: rgba(229, 9, 20, 0.2);
-            color: #E50914;
-        }
-
-        /* Creator Section */
-        .creator-section {
+        /* Creator card */
+        .creator-card {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 20px 0;
-            border-bottom: 1px solid #1A1A1A;
-        }
-
-        .creator-info {
-            display: flex;
-            align-items: center;
-            gap: 15px;
+            gap: 16px;
+            padding: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            margin-bottom: 24px;
         }
 
         .creator-avatar {
-            width: 50px;
-            height: 50px;
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
+            background: linear-gradient(135deg, var(--accent), #d4880f);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 24px;
             font-weight: 700;
-            cursor: pointer;
-            text-decoration: none;
-            color: #FFFFFF;
-        }
-
-        .creator-details h3 {
-            font-size: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .creator-details h3 a {
-            color: #FFFFFF;
-            text-decoration: none;
-        }
-
-        .creator-details h3 a:hover {
-            color: #F5A623;
-        }
-
-        .verified-badge {
-            background: #F5A623;
-            color: #0D0D0D;
-            font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 10px;
-            font-weight: 700;
-        }
-
-        .creator-details p {
-            font-size: 13px;
-            color: #888;
-            margin-top: 2px;
-        }
-
-        .subscribe-btn {
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            border: none;
-            color: #0D0D0D;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-decoration: none;
-        }
-
-        .subscribe-btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0 5px 20px rgba(245, 166, 35, 0.3);
-        }
-
-        /* Description */
-        .video-description {
-            padding: 20px 0;
-            border-bottom: 1px solid #1A1A1A;
-        }
-
-        .description-text {
-            font-size: 14px;
-            color: #B3B3B3;
-            line-height: 1.6;
-            white-space: pre-wrap;
-        }
-
-        .description-tags {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 15px;
-        }
-
-        .tag {
-            background: #1A1A1A;
-            color: #F5A623;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            cursor: pointer;
-        }
-
-        .tag:hover {
-            background: #2A2A2A;
-        }
-
-        /* Sidebar */
-        .sidebar {
-            width: 380px;
-            padding: 20px;
-            border-left: 1px solid #1A1A1A;
-            overflow-y: auto;
-            max-height: calc(100vh - 60px);
-        }
-
-        .sidebar-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 20px;
-        }
-
-        /* Related Videos */
-        .related-video {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            padding: 8px;
-            border-radius: 8px;
-            transition: background 0.2s ease;
-            text-decoration: none;
-            color: #FFFFFF;
-        }
-
-        .related-video:hover {
-            background: #1A1A1A;
-        }
-
-        .related-thumbnail {
-            width: 160px;
-            height: 90px;
-            background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%);
-            border-radius: 8px;
+            color: var(--bg-primary);
             flex-shrink: 0;
-            position: relative;
-            overflow: hidden;
+            cursor: pointer;
         }
 
-        .related-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .related-duration {
-            position: absolute;
-            bottom: 5px;
-            right: 5px;
-            background: rgba(0,0,0,0.85);
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        .related-info {
+        .creator-info {
             flex: 1;
         }
 
-        .related-info h4 {
+        .creator-name {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 4px;
+            cursor: pointer;
+        }
+        .creator-name:hover { color: var(--accent); }
+
+        .creator-subs {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .subscribe-btn {
+            background: var(--accent);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 24px;
+            color: var(--bg-primary);
             font-size: 14px;
             font-weight: 600;
-            line-height: 1.3;
-            margin-bottom: 6px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+        .subscribe-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px var(--accent-glow);
         }
 
-        .related-info p {
-            font-size: 12px;
-            color: #888;
+        /* Description */
+        .description-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 24px;
         }
 
-        /* Comments Section */
+        .description-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.7;
+            white-space: pre-wrap;
+        }
+
+        /* Comments section */
         .comments-section {
-            padding: 20px 0;
+            margin-top: 32px;
         }
 
         .comments-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 16px;
+            margin-bottom: 24px;
         }
 
         .comments-count {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
         }
 
-        .add-comment {
+        .sort-btn {
             display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            cursor: pointer;
+            font-family: inherit;
+        }
+        .sort-btn:hover { color: var(--text-primary); }
+
+        /* Comment form */
+        .comment-form {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 32px;
         }
 
-        .comment-avatar {
-            width: 40px;
-            height: 40px;
+        .comment-form-avatar {
+            width: 44px;
+            height: 44px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 14px;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 16px;
             flex-shrink: 0;
         }
 
-        .comment-input-container {
+        .comment-input-wrapper {
             flex: 1;
         }
 
@@ -486,473 +311,336 @@
             width: 100%;
             background: transparent;
             border: none;
-            border-bottom: 1px solid #333;
-            color: #FFFFFF;
+            border-bottom: 1px solid var(--border);
+            padding: 12px 0;
+            color: var(--text-primary);
             font-size: 14px;
-            padding: 10px 0;
+            font-family: inherit;
             outline: none;
+            transition: border-color 0.2s;
         }
-
         .comment-input:focus {
-            border-bottom-color: #F5A623;
+            border-color: var(--text-primary);
+        }
+        .comment-input::placeholder {
+            color: var(--text-muted);
         }
 
         .comment-actions {
             display: flex;
             justify-content: flex-end;
-            gap: 10px;
-            margin-top: 10px;
+            gap: 12px;
+            margin-top: 12px;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+        .comment-input:focus ~ .comment-actions,
+        .comment-actions.show {
+            opacity: 1;
+            height: auto;
         }
 
-        .comment-btn {
-            padding: 8px 16px;
+        .cancel-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 10px 16px;
+            font-family: inherit;
+        }
+        .cancel-btn:hover { color: var(--text-primary); }
+
+        .submit-comment-btn {
+            background: var(--accent);
+            border: none;
             border-radius: 20px;
-            font-size: 13px;
+            padding: 10px 20px;
+            color: var(--bg-primary);
+            font-size: 14px;
             font-weight: 600;
             cursor: pointer;
-            border: none;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        .submit-comment-btn:disabled {
+            background: var(--bg-card);
+            color: var(--text-muted);
+            cursor: not-allowed;
         }
 
-        .comment-btn.cancel {
-            background: transparent;
-            color: #888;
-        }
-
-        .comment-btn.submit {
-            background: rgba(245, 166, 35, 0.3);
-            color: #F5A623;
-        }
-
-        /* Report Modal */
-        .modal-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .modal-overlay.show {
-            display: flex;
-        }
-
-        .modal {
-            background: #1A1A1A;
-            border-radius: 16px;
-            padding: 30px;
-            width: 90%;
-            max-width: 500px;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-        }
-
-        .modal-title {
-            font-size: 22px;
-            font-weight: 700;
-        }
-
-        .modal-close {
-            background: #2A2A2A;
-            border: none;
-            color: #FFFFFF;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 18px;
-        }
-
-        .report-options {
+        /* Comments list */
+        .comments-list {
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            margin-bottom: 25px;
+            gap: 24px;
         }
 
-        .report-option {
-            background: #0D0D0D;
-            border: 2px solid #2A2A2A;
-            border-radius: 12px;
-            padding: 15px 20px;
-            cursor: pointer;
+        .comment {
+            display: flex;
+            gap: 16px;
+        }
+
+        .comment-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
-            gap: 15px;
-            transition: all 0.2s ease;
-        }
-
-        .report-option:hover {
-            border-color: #F5A623;
-        }
-
-        .report-option.selected {
-            border-color: #F5A623;
-            background: rgba(245, 166, 35, 0.1);
-        }
-
-        .report-option.urgent {
-            border-color: rgba(229, 9, 20, 0.3);
-        }
-
-        .report-option.urgent:hover,
-        .report-option.urgent.selected {
-            border-color: #E50914;
-            background: rgba(229, 9, 20, 0.1);
-        }
-
-        .report-icon {
-            font-size: 24px;
-        }
-
-        .report-label {
-            flex: 1;
-        }
-
-        .report-label strong {
-            display: block;
-            margin-bottom: 3px;
-        }
-
-        .report-label span {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .report-details {
-            display: none;
-            margin-bottom: 20px;
-        }
-
-        .report-details.show {
-            display: block;
-        }
-
-        .report-details textarea {
-            width: 100%;
-            background: #0D0D0D;
-            border: 2px solid #2A2A2A;
-            border-radius: 12px;
-            padding: 15px;
-            color: #FFFFFF;
-            font-size: 14px;
-            font-family: inherit;
-            min-height: 100px;
-            resize: vertical;
-        }
-
-        .report-details label {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 14px;
-            color: #888;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 15px;
-        }
-
-        .modal-btn {
-            flex: 1;
-            padding: 14px;
-            border-radius: 12px;
-            font-size: 15px;
+            justify-content: center;
             font-weight: 700;
-            cursor: pointer;
-            border: none;
+            font-size: 16px;
+            flex-shrink: 0;
         }
 
-        .modal-btn.cancel {
-            background: #2A2A2A;
-            color: #FFFFFF;
+        .comment-content {
+            flex: 1;
         }
 
-        .modal-btn.submit {
-            background: #E50914;
-            color: #FFFFFF;
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
-        .report-success {
-            display: none;
-            text-align: center;
-            padding: 40px 20px;
-        }
-
-        .report-success.show {
-            display: block;
-        }
-
-        .report-success-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        /* Error State */
-        .error-state {
-            text-align: center;
-            padding: 60px 20px;
-        }
-
-        .error-state-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        .error-state h2 {
-            margin-bottom: 10px;
-        }
-
-        .error-state p {
-            color: #888;
-            margin-bottom: 20px;
-        }
-
-        .error-state a {
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            color: #0D0D0D;
-            padding: 12px 25px;
-            border-radius: 25px;
-            text-decoration: none;
+        .comment-author {
             font-weight: 600;
+            font-size: 14px;
         }
 
-        /* Mobile */
+        .comment-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .comment-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-secondary);
+        }
+
+        .comment-footer {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 12px;
+        }
+
+        .comment-action {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 13px;
+            cursor: pointer;
+            padding: 4px;
+            font-family: inherit;
+            transition: color 0.2s;
+        }
+        .comment-action:hover { color: var(--text-primary); }
+        .comment-action svg { width: 16px; height: 16px; }
+
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .sidebar-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .related-video {
+            display: flex;
+            gap: 12px;
+            padding: 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .related-video:hover {
+            background: var(--bg-card);
+        }
+
+        .related-thumbnail {
+            width: 168px;
+            height: 94px;
+            border-radius: 8px;
+            background: var(--bg-card);
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .related-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .related-info {
+            flex: 1;
+        }
+
+        .related-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .related-creator {
+            font-size: 12px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+        }
+
+        .related-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        /* Empty comments */
+        .no-comments {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-secondary);
+        }
+
+        /* Login prompt */
+        .login-prompt {
+            text-align: center;
+            padding: 20px;
+            background: var(--bg-card);
+            border-radius: 8px;
+            margin-bottom: 24px;
+        }
+        .login-prompt a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        /* Responsive */
         @media (max-width: 1024px) {
-            .sidebar {
-                display: none;
+            .main {
+                grid-template-columns: 1fr;
+                padding: 90px 20px 40px;
             }
-
-            .video-section {
-                max-width: 100%;
-            }
+            .sidebar { display: none; }
         }
 
-        @media (max-width: 768px) {
-            .header {
-                padding: 0 15px;
-            }
-
-            .video-section {
-                padding: 15px;
-            }
-
-            .video-title {
-                font-size: 18px;
-            }
-
-            .action-buttons {
-                gap: 8px;
-            }
-
-            .action-btn {
-                padding: 8px 14px;
-                font-size: 13px;
-            }
-
-            .creator-section {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-            }
-
-            .subscribe-btn {
-                width: 100%;
-                text-align: center;
-            }
+        @media (max-width: 600px) {
+            .header { padding: 0 20px; }
+            .video-meta { flex-direction: column; align-items: flex-start; }
+            .comment-form { flex-direction: column; }
+            .comment-form-avatar { display: none; }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
     <header class="header">
         <div class="header-left">
-            <a href="browse.html" class="back-btn">←</a>
             <a href="index.html" class="logo">UNCAGED</a>
+            <nav class="nav-links">
+                <a href="browse.html" class="nav-link">Browse</a>
+                <a href="dashboard.html" class="nav-link">Dashboard</a>
+            </nav>
         </div>
-        <div class="header-right">
-            <a href="browse.html" class="header-btn">🔍</a>
-            <a href="#" class="header-btn">🔔</a>
-            <a href="dashboard.html" class="profile-avatar" id="profileAvatar">?</a>
+        <div class="header-actions">
+            <button class="profile-btn" id="profileBtn" onclick="window.location.href='login.html'">?</button>
         </div>
     </header>
 
-    <!-- Main Content -->
-    <div class="main-content">
-        <!-- Video Section -->
-        <div class="video-section">
+    <main class="main">
+        <div class="content">
             <!-- Video Player -->
-            <div class="video-player-container" id="videoContainer">
-                <div class="video-loading">
-                    <div class="spinner"></div>
-                </div>
+            <div class="video-container" id="videoContainer">
+                <div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--text-muted);">Loading video...</div>
             </div>
 
             <!-- Video Info -->
             <div class="video-info">
                 <h1 class="video-title" id="videoTitle">Loading...</h1>
                 <div class="video-meta">
-                    <span id="videoViews">👁 0 views</span>
-                    <span id="videoLikes">❤️ 0 likes</span>
-                    <span id="videoDate">📅 Loading...</span>
-                </div>
-            </div>
-
-            <!-- Action Buttons -->
-            <div class="action-buttons">
-                <button class="action-btn" id="likeBtn">👍 <span id="likeCount">0</span></button>
-                <button class="action-btn" id="dislikeBtn">👎 <span id="dislikeCount">0</span></button>
-                <button class="action-btn" onclick="shareVideo()">↗️ Share</button>
-                <button class="action-btn">📥 Save</button>
-                <button class="action-btn primary" onclick="tipCreator()">💰 Tip</button>
-                <button class="action-btn report" onclick="openReportModal()">⚠️ Report</button>
-            </div>
-
-            <!-- Creator Section -->
-            <div class="creator-section">
-                <div class="creator-info">
-                    <a href="#" class="creator-avatar" id="creatorAvatar">?</a>
-                    <div class="creator-details">
-                        <h3>
-                            <a href="#" id="creatorLink">Loading...</a>
-                            <span class="verified-badge" id="verifiedBadge" style="display: none;">✓</span>
-                        </h3>
-                        <p id="creatorSubscribers">0 subscribers</p>
+                    <div class="video-stats">
+                        <span id="viewCount">0 views</span>
+                        <span id="uploadDate">-</span>
+                    </div>
+                    <div class="video-actions">
+                        <button class="action-btn" id="likeBtn">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
+                            <span id="likeCount">0</span>
+                        </button>
+                        <button class="action-btn" id="dislikeBtn">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018a2 2 0 01.485.06l3.76.94m-7 10v5a2 2 0 002 2h.096c.5 0 .905-.405.905-.904 0-.715.211-1.413.608-2.008L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2.5"/></svg>
+                        </button>
+                        <button class="action-btn">
+                            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/></svg>
+                            Share
+                        </button>
                     </div>
                 </div>
-                <a href="#" class="subscribe-btn" id="subscribeBtn">Subscribe $9.99/mo</a>
+            </div>
+
+            <!-- Creator Card -->
+            <div class="creator-card">
+                <div class="creator-avatar" id="creatorAvatar" onclick="goToCreator()">?</div>
+                <div class="creator-info">
+                    <div class="creator-name" id="creatorName" onclick="goToCreator()">Loading...</div>
+                    <div class="creator-subs" id="creatorSubs">0 subscribers</div>
+                </div>
+                <button class="subscribe-btn" id="subscribeBtn">Subscribe</button>
             </div>
 
             <!-- Description -->
-            <div class="video-description">
+            <div class="description-card">
                 <p class="description-text" id="videoDescription">Loading description...</p>
-                <div class="description-tags" id="videoTags"></div>
             </div>
 
-            <!-- Comments -->
+            <!-- Comments Section -->
             <div class="comments-section">
                 <div class="comments-header">
-                    <span class="comments-count" id="commentsCount">0 Comments</span>
+                    <span class="comments-count"><span id="commentCount">0</span> Comments</span>
+                    <button class="sort-btn">
+                        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"/></svg>
+                        Sort by
+                    </button>
                 </div>
-                <div class="add-comment">
-                    <div class="comment-avatar" id="userAvatar">?</div>
-                    <div class="comment-input-container">
-                        <input type="text" class="comment-input" placeholder="Add a comment..." id="commentInput">
-                        <div class="comment-actions">
-                            <button class="comment-btn cancel">Cancel</button>
-                            <button class="comment-btn submit" onclick="submitComment()">Comment</button>
-                        </div>
-                    </div>
+
+                <!-- Comment Form (shown if logged in) -->
+                <div id="commentFormContainer"></div>
+
+                <!-- Comments List -->
+                <div class="comments-list" id="commentsList">
+                    <div class="no-comments">No comments yet. Be the first to comment!</div>
                 </div>
             </div>
         </div>
 
         <!-- Sidebar -->
         <aside class="sidebar">
-            <h3 class="sidebar-title">Up Next</h3>
+            <h3 class="sidebar-title">Related Videos</h3>
             <div id="relatedVideos">
-                <p style="color: #888;">Loading...</p>
+                <p style="color: var(--text-muted); font-size: 14px;">No related videos</p>
             </div>
         </aside>
-    </div>
+    </main>
 
-    <!-- Report Modal -->
-    <div class="modal-overlay" id="reportModal">
-        <div class="modal">
-            <div id="reportForm">
-                <div class="modal-header">
-                    <h2 class="modal-title">Report Video</h2>
-                    <button class="modal-close" onclick="closeReportModal()">✕</button>
-                </div>
-
-                <div class="report-options">
-                    <div class="report-option urgent" onclick="selectReportOption(this, 'csam')">
-                        <span class="report-icon">🚨</span>
-                        <div class="report-label">
-                            <strong>Child exploitation / CSAM</strong>
-                            <span>Sexual content involving minors - immediate review</span>
-                        </div>
-                    </div>
-                    <div class="report-option urgent" onclick="selectReportOption(this, 'nonconsent')">
-                        <span class="report-icon">⛔</span>
-                        <div class="report-label">
-                            <strong>Non-consensual content</strong>
-                            <span>Intimate content shared without consent</span>
-                        </div>
-                    </div>
-                    <div class="report-option" onclick="selectReportOption(this, 'illegal')">
-                        <span class="report-icon">🚫</span>
-                        <div class="report-label">
-                            <strong>Illegal activity</strong>
-                            <span>Violence, threats, or criminal behavior</span>
-                        </div>
-                    </div>
-                    <div class="report-option" onclick="selectReportOption(this, 'copyright')">
-                        <span class="report-icon">©️</span>
-                        <div class="report-label">
-                            <strong>Copyright infringement</strong>
-                            <span>Content that infringes your copyright</span>
-                        </div>
-                    </div>
-                    <div class="report-option" onclick="selectReportOption(this, 'spam')">
-                        <span class="report-icon">🗑️</span>
-                        <div class="report-label">
-                            <strong>Spam or misleading</strong>
-                            <span>Scams, fake content, or spam</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="report-details" id="reportDetails">
-                    <label>Additional details (optional)</label>
-                    <textarea id="reportText" placeholder="Please provide any additional information..."></textarea>
-                </div>
-
-                <div class="modal-actions">
-                    <button class="modal-btn cancel" onclick="closeReportModal()">Cancel</button>
-                    <button class="modal-btn submit" id="submitReportBtn" onclick="submitReport()" disabled>Submit Report</button>
-                </div>
-            </div>
-
-            <div class="report-success" id="reportSuccess">
-                <div class="report-success-icon">✅</div>
-                <h3>Report Submitted</h3>
-                <p style="color: #888; margin-bottom: 20px;">Thank you for helping keep Uncaged safe.</p>
-                <button class="modal-btn cancel" onclick="closeReportModal()" style="width: 100%;">Close</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            doc,
-            getDoc,
-            getDocs,
-            query,
-            where,
-            orderBy,
-            limit,
-            updateDoc,
-            increment,
-            addDoc,
-            serverTimestamp 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, collection, query, where, orderBy, getDocs, addDoc, serverTimestamp, deleteDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
@@ -967,269 +655,312 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        const BUNNY_LIBRARY_ID = '588548';
-
-        let currentUser = null;
-        let currentVideo = null;
-
         // Get video ID from URL
         const urlParams = new URLSearchParams(window.location.search);
         const videoId = urlParams.get('v');
 
-        // Check auth state
-        onAuthStateChanged(auth, (user) => {
-            if (user) {
-                currentUser = user;
-                const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
-                document.getElementById('profileAvatar').textContent = initial;
-                document.getElementById('userAvatar').textContent = initial;
-            } else {
-                document.getElementById('profileAvatar').textContent = '?';
-                document.getElementById('userAvatar').textContent = '?';
-            }
-        });
+        let currentUser = null;
+        let videoData = null;
+        let creatorId = null;
 
-        // Load video
-        async function loadVideo() {
-            if (!videoId) {
-                showError('No video specified');
-                return;
-            }
-
-            try {
-                // Try to find video in Firebase by bunnyVideoId
-                const videosRef = collection(db, 'videos');
-                const q = query(videosRef, where('bunnyVideoId', '==', videoId));
-                const snapshot = await getDocs(q);
-
-                if (!snapshot.empty) {
-                    const videoDoc = snapshot.docs[0];
-                    currentVideo = { id: videoDoc.id, ...videoDoc.data() };
-                    displayVideo(currentVideo);
-                    
-                    // Increment view count
-                    await updateDoc(doc(db, 'videos', videoDoc.id), {
-                        views: increment(1)
-                    });
-                } else {
-                    // Video not in Firebase, but might exist in Bunny - try to play it
-                    displayVideoFromBunny(videoId);
-                }
-
-                // Load related videos
-                loadRelatedVideos();
-
-            } catch (error) {
-                console.error('Error loading video:', error);
-                // Still try to play from Bunny
-                displayVideoFromBunny(videoId);
-            }
-        }
-
-        // Display video from Firebase data
-        function displayVideo(video) {
-            // Set player
-            const container = document.getElementById('videoContainer');
-            container.innerHTML = `
-                <iframe 
-                    src="https://iframe.mediadelivery.net/embed/${BUNNY_LIBRARY_ID}/${video.bunnyVideoId}?autoplay=false&loop=false&muted=false&preload=true&responsive=true"
-                    loading="lazy"
-                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                    allowfullscreen="true"
-                ></iframe>
-            `;
-
-            // Set video info
-            document.getElementById('videoTitle').textContent = video.title || 'Untitled Video';
-            document.getElementById('videoViews').textContent = `👁 ${formatNumber(video.views || 0)} views`;
-            document.getElementById('videoLikes').textContent = `❤️ ${formatNumber(video.likes || 0)} likes`;
-            document.getElementById('videoDate').textContent = `📅 ${formatDate(video.createdAt)}`;
-            document.getElementById('likeCount').textContent = video.likes || 0;
-            document.getElementById('dislikeCount').textContent = video.dislikes || 0;
-            document.getElementById('videoDescription').textContent = video.description || 'No description';
-
-            // Set tags
-            const tagsContainer = document.getElementById('videoTags');
-            if (video.tags && video.tags.length > 0) {
-                tagsContainer.innerHTML = video.tags.map(tag => `<span class="tag">#${tag}</span>`).join('');
-            } else {
-                tagsContainer.innerHTML = '';
-            }
-
-            // Set creator info
-            const creatorInitial = (video.creatorName || 'U')[0].toUpperCase();
-            document.getElementById('creatorAvatar').textContent = creatorInitial;
-            document.getElementById('creatorLink').textContent = video.creatorName || 'Unknown Creator';
-            document.getElementById('creatorLink').href = `creator.html?id=${video.creatorId}`;
-            document.getElementById('creatorAvatar').href = `creator.html?id=${video.creatorId}`;
-            document.getElementById('subscribeBtn').href = `subscribe.html?creator=${video.creatorId}`;
-
-            // Update page title
-            document.title = `${video.title} | UNCAGED`;
-        }
-
-        // Display video directly from Bunny (fallback)
-        function displayVideoFromBunny(bunnyId) {
-            const container = document.getElementById('videoContainer');
-            container.innerHTML = `
-                <iframe 
-                    src="https://iframe.mediadelivery.net/embed/${BUNNY_LIBRARY_ID}/${bunnyId}?autoplay=false&loop=false&muted=false&preload=true&responsive=true"
-                    loading="lazy"
-                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                    allowfullscreen="true"
-                ></iframe>
-            `;
-
-            document.getElementById('videoTitle').textContent = 'Video';
-            document.getElementById('videoDescription').textContent = 'No description available';
-        }
-
-        // Load related videos
-        async function loadRelatedVideos() {
-            try {
-                const videosRef = collection(db, 'videos');
-                const q = query(videosRef, orderBy('createdAt', 'desc'), limit(6));
-                const snapshot = await getDocs(q);
-
-                const container = document.getElementById('relatedVideos');
-                
-                if (snapshot.empty) {
-                    container.innerHTML = '<p style="color: #888;">No related videos yet</p>';
-                    return;
-                }
-
-                let html = '';
-                snapshot.forEach(doc => {
-                    const video = doc.data();
-                    if (video.bunnyVideoId !== videoId) {
-                        html += `
-                            <a href="watch.html?v=${video.bunnyVideoId}" class="related-video">
-                                <div class="related-thumbnail">
-                                    <div style="width:100%;height:100%;background:linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%);display:flex;align-items:center;justify-content:center;">🎬</div>
-                                    <span class="related-duration">${video.duration || '10:00'}</span>
-                                </div>
-                                <div class="related-info">
-                                    <h4>${video.title || 'Untitled'}</h4>
-                                    <p>${video.creatorName || 'Unknown'}</p>
-                                    <p>${formatNumber(video.views || 0)} views • ${formatDate(video.createdAt)}</p>
-                                </div>
-                            </a>
-                        `;
-                    }
-                });
-
-                container.innerHTML = html || '<p style="color: #888;">No related videos yet</p>';
-
-            } catch (error) {
-                console.error('Error loading related videos:', error);
-            }
-        }
-
-        // Show error
-        function showError(message) {
-            document.querySelector('.video-section').innerHTML = `
-                <div class="error-state">
-                    <div class="error-state-icon">😕</div>
-                    <h2>Video Not Found</h2>
-                    <p>${message}</p>
-                    <a href="browse.html">Browse Videos</a>
-                </div>
-            `;
-        }
-
-        // Helper functions
+        // Format numbers
         function formatNumber(num) {
             if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
             if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
             return num.toString();
         }
 
+        // Format date
         function formatDate(timestamp) {
-            if (!timestamp) return 'Just now';
+            if (!timestamp) return '';
             const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
             const now = new Date();
             const diff = now - date;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
             
-            if (days === 0) return 'Today';
-            if (days === 1) return 'Yesterday';
-            if (days < 7) return `${days} days ago`;
-            if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
-            return date.toLocaleDateString();
+            if (minutes < 1) return 'Just now';
+            if (minutes < 60) return minutes + ' minutes ago';
+            if (hours < 24) return hours + ' hours ago';
+            if (days < 7) return days + ' days ago';
+            if (days < 30) return Math.floor(days / 7) + ' weeks ago';
+            if (days < 365) return Math.floor(days / 30) + ' months ago';
+            return Math.floor(days / 365) + ' years ago';
         }
 
-        // Make functions available globally
-        window.db = db;
-        window.currentUser = currentUser;
-        window.currentVideo = currentVideo;
-
-        // Load video on page load
-        loadVideo();
-    </script>
-
-    <script>
-        // Report modal functions
-        let selectedReportType = null;
-
-        function openReportModal() {
-            document.getElementById('reportModal').classList.add('show');
-        }
-
-        function closeReportModal() {
-            document.getElementById('reportModal').classList.remove('show');
-            // Reset
-            document.getElementById('reportForm').style.display = 'block';
-            document.getElementById('reportSuccess').classList.remove('show');
-            document.querySelectorAll('.report-option').forEach(opt => opt.classList.remove('selected'));
-            document.getElementById('reportDetails').classList.remove('show');
-            document.getElementById('submitReportBtn').disabled = true;
-            selectedReportType = null;
-        }
-
-        function selectReportOption(element, type) {
-            document.querySelectorAll('.report-option').forEach(opt => opt.classList.remove('selected'));
-            element.classList.add('selected');
-            selectedReportType = type;
-            document.getElementById('reportDetails').classList.add('show');
-            document.getElementById('submitReportBtn').disabled = false;
-        }
-
-        function submitReport() {
-            console.log('Report submitted:', selectedReportType);
-            document.getElementById('reportForm').style.display = 'none';
-            document.getElementById('reportSuccess').classList.add('show');
-        }
-
-        // Share video
-        function shareVideo() {
-            const url = window.location.href;
-            if (navigator.share) {
-                navigator.share({
-                    title: document.getElementById('videoTitle').textContent,
-                    url: url
-                });
-            } else {
-                navigator.clipboard.writeText(url);
-                alert('Link copied to clipboard!');
+        // Go to creator profile
+        window.goToCreator = function() {
+            if (creatorId) {
+                window.location.href = `creator.html?id=${creatorId}`;
             }
         }
 
-        // Tip creator
-        function tipCreator() {
-            const subscribeUrl = document.getElementById('subscribeBtn').href;
-            window.location.href = subscribeUrl;
-        }
-
-        // Submit comment
-        function submitComment() {
-            const comment = document.getElementById('commentInput').value.trim();
-            if (!comment) {
-                alert('Please enter a comment');
+        // Load video
+        async function loadVideo() {
+            if (!videoId) {
+                document.getElementById('videoTitle').textContent = 'Video not found';
                 return;
             }
-            alert('Comments coming soon!');
-            document.getElementById('commentInput').value = '';
+
+            const videoDoc = await getDoc(doc(db, 'videos', videoId));
+            if (!videoDoc.exists()) {
+                document.getElementById('videoTitle').textContent = 'Video not found';
+                return;
+            }
+
+            videoData = videoDoc.data();
+            creatorId = videoData.creatorId;
+
+            // Update video info
+            document.getElementById('videoTitle').textContent = videoData.title || 'Untitled';
+            document.getElementById('viewCount').textContent = formatNumber(videoData.views || 0) + ' views';
+            document.getElementById('uploadDate').textContent = formatDate(videoData.createdAt);
+            document.getElementById('videoDescription').textContent = videoData.description || 'No description';
+            document.getElementById('likeCount').textContent = formatNumber(videoData.likes || 0);
+
+            // Load video player
+            if (videoData.videoUrl) {
+                document.getElementById('videoContainer').innerHTML = `
+                    <iframe src="${videoData.videoUrl}" 
+                            frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                            allowfullscreen>
+                    </iframe>`;
+            }
+
+            // Increment view count
+            await updateDoc(doc(db, 'videos', videoId), {
+                views: increment(1)
+            });
+
+            // Load creator info
+            loadCreator();
+            
+            // Load comments
+            loadComments();
         }
+
+        // Load creator
+        async function loadCreator() {
+            if (!creatorId) return;
+
+            const creatorDoc = await getDoc(doc(db, 'users', creatorId));
+            if (creatorDoc.exists()) {
+                const creator = creatorDoc.data();
+                document.getElementById('creatorName').textContent = creator.displayName || 'Creator';
+                document.getElementById('creatorAvatar').textContent = (creator.displayName || 'C')[0].toUpperCase();
+                document.getElementById('creatorSubs').textContent = formatNumber(creator.subscribers || 0) + ' subscribers';
+                
+                // Subscribe button
+                document.getElementById('subscribeBtn').onclick = () => {
+                    window.location.href = `subscribe.html?creator=${creatorId}`;
+                };
+            }
+        }
+
+        // Load comments
+        async function loadComments() {
+            const commentsQuery = query(
+                collection(db, 'comments'),
+                where('videoId', '==', videoId),
+                orderBy('createdAt', 'desc')
+            );
+
+            try {
+                const snapshot = await getDocs(commentsQuery);
+                const comments = [];
+                
+                snapshot.forEach(doc => {
+                    comments.push({ id: doc.id, ...doc.data() });
+                });
+
+                document.getElementById('commentCount').textContent = comments.length;
+
+                if (comments.length === 0) {
+                    document.getElementById('commentsList').innerHTML = `
+                        <div class="no-comments">No comments yet. Be the first to comment!</div>
+                    `;
+                    return;
+                }
+
+                document.getElementById('commentsList').innerHTML = comments.map(comment => `
+                    <div class="comment" data-id="${comment.id}">
+                        <div class="comment-avatar">${(comment.authorName || 'U')[0].toUpperCase()}</div>
+                        <div class="comment-content">
+                            <div class="comment-header">
+                                <span class="comment-author">${comment.authorName || 'User'}</span>
+                                <span class="comment-time">${formatDate(comment.createdAt)}</span>
+                            </div>
+                            <p class="comment-text">${escapeHtml(comment.text)}</p>
+                            <div class="comment-footer">
+                                <button class="comment-action like-comment" data-id="${comment.id}">
+                                    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5"/></svg>
+                                    ${comment.likes || 0}
+                                </button>
+                                <button class="comment-action">Reply</button>
+                                ${currentUser && currentUser.uid === comment.authorId ? `<button class="comment-action delete-comment" data-id="${comment.id}">Delete</button>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+
+                // Add delete handlers
+                document.querySelectorAll('.delete-comment').forEach(btn => {
+                    btn.addEventListener('click', async () => {
+                        if (confirm('Delete this comment?')) {
+                            await deleteDoc(doc(db, 'comments', btn.dataset.id));
+                            loadComments();
+                        }
+                    });
+                });
+
+            } catch (error) {
+                console.error('Error loading comments:', error);
+                document.getElementById('commentsList').innerHTML = `
+                    <div class="no-comments">No comments yet. Be the first to comment!</div>
+                `;
+            }
+        }
+
+        // Escape HTML
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Post comment
+        async function postComment(text) {
+            if (!currentUser || !text.trim()) return;
+
+            await addDoc(collection(db, 'comments'), {
+                videoId: videoId,
+                authorId: currentUser.uid,
+                authorName: currentUser.displayName || currentUser.email.split('@')[0],
+                text: text.trim(),
+                likes: 0,
+                createdAt: serverTimestamp()
+            });
+
+            loadComments();
+        }
+
+        // Like video
+        async function likeVideo() {
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const likeRef = doc(db, 'likes', `${currentUser.uid}_${videoId}`);
+            const likeDoc = await getDoc(likeRef);
+
+            if (likeDoc.exists()) {
+                // Unlike
+                await deleteDoc(likeRef);
+                await updateDoc(doc(db, 'videos', videoId), { likes: increment(-1) });
+                document.getElementById('likeBtn').classList.remove('active');
+            } else {
+                // Like
+                await setDoc(likeRef, { 
+                    usedId: currentUser.uid, 
+                    videoId: videoId,
+                    createdAt: serverTimestamp()
+                });
+                await updateDoc(doc(db, 'videos', videoId), { likes: increment(1) });
+                document.getElementById('likeBtn').classList.add('active');
+            }
+
+            // Refresh count
+            const videoDoc = await getDoc(doc(db, 'videos', videoId));
+            document.getElementById('likeCount').textContent = formatNumber(videoDoc.data().likes || 0);
+        }
+
+        // Check if user liked
+        async function checkIfLiked() {
+            if (!currentUser) return;
+            
+            const likeRef = doc(db, 'likes', `${currentUser.uid}_${videoId}`);
+            const likeDoc = await getDoc(likeRef);
+            
+            if (likeDoc.exists()) {
+                document.getElementById('likeBtn').classList.add('active');
+            }
+        }
+
+        // Auth state
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            
+            if (user) {
+                const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
+                document.getElementById('profileBtn').textContent = initial;
+                document.getElementById('profileBtn').onclick = () => window.location.href = 'dashboard.html';
+
+                // Show comment form
+                document.getElementById('commentFormContainer').innerHTML = `
+                    <div class="comment-form">
+                        <div class="comment-form-avatar">${initial}</div>
+                        <div class="comment-input-wrapper">
+                            <input type="text" class="comment-input" placeholder="Add a comment..." id="commentInput">
+                            <div class="comment-actions" id="commentActions">
+                                <button class="cancel-btn" id="cancelComment">Cancel</button>
+                                <button class="submit-comment-btn" id="submitComment" disabled>Comment</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Comment input handlers
+                const input = document.getElementById('commentInput');
+                const actions = document.getElementById('commentActions');
+                const submitBtn = document.getElementById('submitComment');
+                const cancelBtn = document.getElementById('cancelComment');
+
+                input.addEventListener('focus', () => actions.classList.add('show'));
+                input.addEventListener('input', () => {
+                    submitBtn.disabled = !input.value.trim();
+                });
+
+                cancelBtn.addEventListener('click', () => {
+                    input.value = '';
+                    actions.classList.remove('show');
+                    submitBtn.disabled = true;
+                });
+
+                submitBtn.addEventListener('click', async () => {
+                    await postComment(input.value);
+                    input.value = '';
+                    actions.classList.remove('show');
+                    submitBtn.disabled = true;
+                });
+
+                input.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && input.value.trim()) {
+                        postComment(input.value);
+                        input.value = '';
+                        actions.classList.remove('show');
+                        submitBtn.disabled = true;
+                    }
+                });
+
+                checkIfLiked();
+
+            } else {
+                document.getElementById('commentFormContainer').innerHTML = `
+                    <div class="login-prompt">
+                        <a href="login.html">Sign in</a> to comment
+                    </div>
+                `;
+            }
+        });
+
+        // Like button handler
+        document.getElementById('likeBtn').addEventListener('click', likeVideo);
+
+        // Load video
+        loadVideo();
     </script>
 </body>
 </html>
