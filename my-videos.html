@@ -6,596 +6,214 @@
     <title>UNCAGED | My Videos</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0D0D0D;
+            --bg-secondary: #1A1A1A;
+            --bg-tertiary: #242424;
+            --accent-gold: #F5A623;
+            --accent-gold-dark: #D4880F;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --text-muted: #666666;
+            --border-color: #2A2A2A;
+            --success: #28A745;
+            --danger: #DC3545;
         }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: #0D0D0D;
-            color: #FFFFFF;
-            min-height: 100vh;
-        }
-
-        /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: rgba(13, 13, 13, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            z-index: 1000;
-            border-bottom: 1px solid #1A1A1A;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 28px;
-            letter-spacing: 3px;
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-link {
-            color: #888;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: #FFFFFF;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .upload-btn {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            color: #000;
-            padding: 8px 16px;
-            border-radius: 20px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .upload-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3);
-        }
-
-        .profile-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            border: none;
-            color: #000;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 14px;
-        }
-
-        /* Main Layout */
-        .dashboard-container {
-            display: flex;
-            padding-top: 60px;
-            min-height: 100vh;
-        }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
 
         /* Sidebar */
-        .sidebar {
-            width: 250px;
-            background: #0A0A0A;
-            padding: 30px 20px;
-            border-right: 1px solid #1A1A1A;
-            position: fixed;
-            top: 60px;
-            bottom: 0;
-            left: 0;
-            overflow-y: auto;
-        }
-
-        .sidebar-section {
-            margin-bottom: 30px;
-        }
-
-        .sidebar-title {
-            color: #666;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 15px;
-        }
-
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 15px;
-            color: #888;
-            text-decoration: none;
-            border-radius: 8px;
-            margin-bottom: 5px;
-            transition: all 0.2s;
-        }
-
-        .sidebar-link:hover {
-            background: #1A1A1A;
-            color: #FFFFFF;
-        }
-
-        .sidebar-link.active {
-            background: rgba(245, 166, 35, 0.1);
-            color: #F5A623;
-        }
-
-        .sidebar-link span {
-            font-size: 18px;
-        }
+        .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 250px; background: var(--bg-secondary); padding: 20px 0; border-right: 1px solid var(--border-color); z-index: 100; }
+        .sidebar-logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; padding: 0 20px; margin-bottom: 30px; text-decoration: none; display: block; }
+        .sidebar-nav { display: flex; flex-direction: column; }
+        .sidebar-link { display: flex; align-items: center; gap: 12px; padding: 12px 20px; color: var(--text-secondary); text-decoration: none; font-size: 14px; transition: all 0.3s; }
+        .sidebar-link:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .sidebar-link.active { background: rgba(245, 166, 35, 0.1); color: var(--accent-gold); border-left: 3px solid var(--accent-gold); }
+        .sidebar-link svg { width: 20px; height: 20px; }
+        .sidebar-divider { height: 1px; background: var(--border-color); margin: 15px 20px; }
 
         /* Main Content */
-        .main-content {
-            flex: 1;
-            margin-left: 250px;
-            padding: 30px;
-        }
+        .main-content { margin-left: 250px; padding: 30px; }
 
-        .page-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
+        /* Page Header */
+        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .page-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 2px; }
+        .upload-btn { display: flex; align-items: center; gap: 8px; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); color: #000; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 14px; }
+        .upload-btn:hover { opacity: 0.9; }
 
-        .page-title {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 36px;
-            letter-spacing: 2px;
-        }
-
-        .page-actions {
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn-primary {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            color: #000;
-            padding: 12px 24px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            border: none;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(245, 166, 35, 0.3);
-        }
+        /* Stats Row */
+        .stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
+        .stat-card { background: var(--bg-secondary); border-radius: 12px; padding: 20px; }
+        .stat-value { font-size: 28px; font-weight: 700; margin-bottom: 5px; }
+        .stat-label { color: var(--text-muted); font-size: 13px; }
 
         /* Filter Bar */
-        .filter-bar {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 25px;
-            flex-wrap: wrap;
-        }
+        .filter-bar { display: flex; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; align-items: center; }
+        .filter-btn { padding: 8px 16px; background: var(--bg-secondary); border: none; border-radius: 20px; color: var(--text-secondary); cursor: pointer; font-size: 13px; transition: all 0.3s; }
+        .filter-btn:hover { background: var(--bg-tertiary); }
+        .filter-btn.active { background: var(--accent-gold); color: #000; }
+        .search-box { margin-left: auto; }
+        .search-box input { background: var(--bg-secondary); border: 1px solid var(--border-color); border-radius: 20px; padding: 8px 16px; color: var(--text-primary); font-size: 13px; width: 250px; }
+        .search-box input:focus { outline: none; border-color: var(--accent-gold); }
 
-        .filter-btn {
-            padding: 8px 16px;
-            background: #1A1A1A;
-            border: 1px solid #2A2A2A;
-            border-radius: 20px;
-            color: #888;
-            font-size: 14px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
+        /* Videos Grid */
+        .videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+        .video-card { background: var(--bg-secondary); border-radius: 12px; overflow: hidden; transition: transform 0.3s; }
+        .video-card:hover { transform: translateY(-5px); }
+        .video-thumb { position: relative; width: 100%; padding-top: 56.25%; background: var(--bg-tertiary); }
+        .video-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .video-duration { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+        .video-status { position: absolute; top: 8px; left: 8px; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+        .video-status.public { background: var(--success); color: #fff; }
+        .video-status.private { background: var(--danger); color: #fff; }
+        .video-status.unlisted { background: #FFC107; color: #000; }
+        .video-info { padding: 15px; }
+        .video-title { font-size: 14px; font-weight: 600; margin-bottom: 8px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .video-title a { color: var(--text-primary); text-decoration: none; }
+        .video-title a:hover { color: var(--accent-gold); }
+        .video-stats { display: flex; gap: 15px; color: var(--text-muted); font-size: 12px; margin-bottom: 12px; }
+        .video-actions { display: flex; gap: 8px; }
+        .action-btn { padding: 6px 12px; background: var(--bg-tertiary); border: none; border-radius: 6px; color: var(--text-secondary); cursor: pointer; font-size: 12px; transition: all 0.3s; }
+        .action-btn:hover { background: var(--border-color); color: var(--text-primary); }
+        .action-btn.delete:hover { background: var(--danger); color: #fff; }
 
-        .filter-btn:hover,
-        .filter-btn.active {
-            background: #F5A623;
-            border-color: #F5A623;
-            color: #000;
-        }
+        /* Loading & Empty States */
+        .loading { text-align: center; padding: 60px 20px; }
+        .loading-spinner { width: 40px; height: 40px; border: 3px solid var(--border-color); border-top-color: var(--accent-gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .empty-state { text-align: center; padding: 60px 20px; }
+        .empty-state h3 { font-size: 20px; margin-bottom: 10px; }
+        .empty-state p { color: var(--text-muted); margin-bottom: 20px; }
+        .empty-state a { color: var(--accent-gold); text-decoration: none; }
 
-        .search-box {
-            flex: 1;
-            max-width: 300px;
-            position: relative;
-        }
+        /* Error State */
+        .error-state { text-align: center; padding: 60px 20px; }
+        .error-state h3 { color: var(--danger); font-size: 20px; margin-bottom: 10px; }
+        .error-state p { color: var(--text-muted); margin-bottom: 20px; }
+        .retry-btn { background: var(--accent-gold); color: #000; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; font-weight: 600; }
 
-        .search-box input {
-            width: 100%;
-            padding: 10px 15px 10px 40px;
-            background: #1A1A1A;
-            border: 1px solid #2A2A2A;
-            border-radius: 8px;
-            color: #FFFFFF;
-            font-size: 14px;
-        }
-
-        .search-box input::placeholder {
-            color: #666;
-        }
-
-        .search-box::before {
-            content: "🔍";
-            position: absolute;
-            left: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 14px;
-        }
-
-        /* Video Grid */
-        .videos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .video-card {
-            background: #1A1A1A;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid #2A2A2A;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .video-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .video-thumbnail {
-            position: relative;
-            aspect-ratio: 16/9;
-            background: #2A2A2A;
-        }
-
-        .video-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .video-duration {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0, 0, 0, 0.8);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 500;
-        }
-
-        .video-status {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .video-status.public {
-            background: rgba(40, 167, 69, 0.9);
-        }
-
-        .video-status.private {
-            background: rgba(108, 117, 125, 0.9);
-        }
-
-        .video-status.unlisted {
-            background: rgba(255, 193, 7, 0.9);
-            color: #000;
-        }
-
-        .video-info {
-            padding: 20px;
-        }
-
-        .video-title {
-            font-weight: 600;
-            font-size: 16px;
-            margin-bottom: 10px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .video-meta {
-            display: flex;
-            gap: 15px;
-            color: #888;
-            font-size: 13px;
-            margin-bottom: 15px;
-        }
-
-        .video-meta span {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .video-actions {
-            display: flex;
-            gap: 10px;
-        }
-
-        .video-action-btn {
-            flex: 1;
-            padding: 10px;
-            border: 1px solid #2A2A2A;
-            background: transparent;
-            color: #888;
-            border-radius: 6px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-            text-decoration: none;
-            text-align: center;
-        }
-
-        .video-action-btn:hover {
-            background: #2A2A2A;
-            color: #FFFFFF;
-        }
-
-        .video-action-btn.delete:hover {
-            background: rgba(220, 53, 69, 0.2);
-            border-color: #DC3545;
-            color: #DC3545;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 80px 20px;
-            color: #888;
-        }
-
-        .empty-state-icon {
-            font-size: 64px;
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            color: #FFFFFF;
-            margin-bottom: 10px;
-            font-size: 24px;
-        }
-
-        .empty-state p {
-            margin-bottom: 25px;
-        }
-
-        /* Loading State */
-        .loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 60px;
-            color: #888;
-        }
-
-        .loading-spinner {
-            width: 30px;
-            height: 30px;
-            border: 3px solid #2A2A2A;
-            border-top-color: #F5A623;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 15px;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Stats Bar */
-        .stats-bar {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 25px;
-            padding: 20px;
-            background: #1A1A1A;
-            border-radius: 12px;
-            border: 1px solid #2A2A2A;
-        }
-
-        .stat-item {
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 24px;
-            font-weight: 700;
-            color: #F5A623;
-        }
-
-        .stat-label {
-            font-size: 13px;
-            color: #888;
-            margin-top: 5px;
-        }
+        /* Index Notice */
+        .index-notice { background: rgba(245, 166, 35, 0.1); border: 1px solid var(--accent-gold); border-radius: 8px; padding: 15px; margin-bottom: 20px; }
+        .index-notice p { color: var(--text-secondary); font-size: 14px; }
+        .index-notice a { color: var(--accent-gold); }
 
         /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar { width: 70px; }
+            .sidebar-logo { font-size: 20px; padding: 0 10px; text-align: center; }
+            .sidebar-link span { display: none; }
+            .sidebar-link { justify-content: center; padding: 15px; }
+            .main-content { margin-left: 70px; }
+            .stats-row { grid-template-columns: 1fr; }
+        }
         @media (max-width: 768px) {
-            .sidebar {
-                display: none;
-            }
-            .main-content {
-                margin-left: 0;
-            }
-            .videos-grid {
-                grid-template-columns: 1fr;
-            }
-            .page-header {
-                flex-direction: column;
-                gap: 15px;
-                align-items: flex-start;
-            }
+            .sidebar { display: none; }
+            .main-content { margin-left: 0; padding: 20px; }
+            .page-header { flex-direction: column; gap: 15px; align-items: flex-start; }
+            .filter-bar { flex-direction: column; }
+            .search-box { margin-left: 0; width: 100%; }
+            .search-box input { width: 100%; }
         }
     </style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-left">
-            <a href="index.html" class="logo">UNCAGED</a>
-            <nav class="nav-links">
-                <a href="browse.html" class="nav-link">Browse</a>
-                <a href="dashboard.html" class="nav-link">Dashboard</a>
-            </nav>
-        </div>
-        <div class="header-right">
-            <a href="upload.html" class="upload-btn">
-                <span>+</span>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="sidebar-logo">UNCAGED</a>
+        <nav class="sidebar-nav">
+            <a href="dashboard.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                <span>Dashboard</span>
+            </a>
+            <a href="my-videos.html" class="sidebar-link active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+                <span>My Videos</span>
+            </a>
+            <a href="analytics.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                <span>Analytics</span>
+            </a>
+            <a href="earnings.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                <span>Earnings</span>
+            </a>
+            <div class="sidebar-divider"></div>
+            <a href="upload.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
                 <span>Upload</span>
             </a>
-            <button class="profile-btn" id="profileBtn">V</button>
+            <a href="stripe-connect.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                <span>Get Paid</span>
+            </a>
+            <a href="settings.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                <span>Settings</span>
+            </a>
+            <div class="sidebar-divider"></div>
+            <a href="browse.html" class="sidebar-link">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                <span>Browse</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1 class="page-title">My Videos</h1>
+            <a href="upload.html" class="upload-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload New Video
+            </a>
         </div>
-    </header>
 
-    <div class="dashboard-container">
-        <aside class="sidebar">
-            <div class="sidebar-section">
-                <div class="sidebar-title">Dashboard</div>
-                <a href="dashboard.html" class="sidebar-link">
-                    <span>📊</span> Overview
-                </a>
-                <a href="my-videos.html" class="sidebar-link active">
-                    <span>📹</span> My Videos
-                </a>
-                <a href="analytics.html" class="sidebar-link">
-                    <span>📈</span> Analytics
-                </a>
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-value" id="totalVideos">0</div>
+                <div class="stat-label">Total Videos</div>
             </div>
-            <div class="sidebar-section">
-                <div class="sidebar-title">Monetization</div>
-                <a href="earnings.html" class="sidebar-link">
-                    <span>💰</span> Earnings
-                </a>
-                <a href="payouts.html" class="sidebar-link">
-                    <span>💳</span> Payouts
-                </a>
-                <a href="subscriptions.html" class="sidebar-link">
-                    <span>🎁</span> Subscriptions
-                </a>
+            <div class="stat-card">
+                <div class="stat-value" id="totalViews">0</div>
+                <div class="stat-label">Total Views</div>
             </div>
-            <div class="sidebar-section">
-                <div class="sidebar-title">Settings</div>
-                <a href="profile-edit.html" class="sidebar-link">
-                    <span>👤</span> Profile
-                </a>
-                <a href="stripe-connect.html" class="sidebar-link">
-                    <span>🔗</span> Stripe Connect
-                </a>
-                <a href="settings.html" class="sidebar-link">
-                    <span>⚙️</span> Settings
-                </a>
+            <div class="stat-card">
+                <div class="stat-value" id="totalSubs">0</div>
+                <div class="stat-label">Subscribers</div>
             </div>
-        </aside>
+        </div>
 
-        <main class="main-content">
-            <div class="page-header">
-                <h1 class="page-title">My Videos</h1>
-                <div class="page-actions">
-                    <a href="upload.html" class="btn-primary">
-                        <span>+</span> Upload New Video
-                    </a>
-                </div>
-            </div>
+        <!-- Index Notice (hidden by default) -->
+        <div class="index-notice" id="indexNotice" style="display: none;">
+            <p>⚠️ Firebase index required for sorting. Videos are shown without sorting. <a href="https://console.firebase.google.com" target="_blank">Create index in Firebase Console</a></p>
+        </div>
 
-            <!-- Stats Bar -->
-            <div class="stats-bar">
-                <div class="stat-item">
-                    <div class="stat-value" id="totalVideos">0</div>
-                    <div class="stat-label">Total Videos</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="totalViews">0</div>
-                    <div class="stat-label">Total Views</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="totalLikes">0</div>
-                    <div class="stat-label">Total Likes</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="avgViews">0</div>
-                    <div class="stat-label">Avg. Views</div>
-                </div>
+        <!-- Filter Bar -->
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">All Videos</button>
+            <button class="filter-btn" data-filter="public">Public</button>
+            <button class="filter-btn" data-filter="private">Private</button>
+            <button class="filter-btn" data-filter="unlisted">Unlisted</button>
+            <div class="search-box">
+                <input type="text" placeholder="Search your videos..." id="searchInput">
             </div>
+        </div>
 
-            <!-- Filter Bar -->
-            <div class="filter-bar">
-                <button class="filter-btn active" data-filter="all">All Videos</button>
-                <button class="filter-btn" data-filter="public">Public</button>
-                <button class="filter-btn" data-filter="private">Private</button>
-                <button class="filter-btn" data-filter="unlisted">Unlisted</button>
-                <div class="search-box">
-                    <input type="text" placeholder="Search your videos..." id="searchInput">
-                </div>
+        <!-- Videos Grid -->
+        <div class="videos-grid" id="videosGrid">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                Loading your videos...
             </div>
-
-            <!-- Videos Grid -->
-            <div class="videos-grid" id="videosGrid">
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    Loading your videos...
-                </div>
-            </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { getFirestore, collection, query, where, getDocs, orderBy, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, where, getDocs, orderBy, deleteDoc, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
@@ -611,99 +229,7 @@
         const db = getFirestore(app);
 
         let allVideos = [];
-
-        onAuthStateChanged(auth, async (user) => {
-            if (!user) {
-                window.location.href = 'login.html';
-                return;
-            }
-
-            const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
-            document.getElementById('profileBtn').textContent = initial;
-
-            await loadVideos(user.uid);
-        });
-
-        async function loadVideos(userId) {
-            try {
-                const videosQuery = query(
-                    collection(db, 'videos'),
-                    where('creatorId', '==', userId),
-                    orderBy('createdAt', 'desc')
-                );
-
-                const snapshot = await getDocs(videosQuery);
-                allVideos = [];
-                let totalViews = 0;
-                let totalLikes = 0;
-
-                snapshot.forEach(doc => {
-                    const video = { id: doc.id, ...doc.data() };
-                    allVideos.push(video);
-                    totalViews += video.views || 0;
-                    totalLikes += video.likes || 0;
-                });
-
-                // Update stats
-                document.getElementById('totalVideos').textContent = allVideos.length;
-                document.getElementById('totalViews').textContent = formatNumber(totalViews);
-                document.getElementById('totalLikes').textContent = formatNumber(totalLikes);
-                document.getElementById('avgViews').textContent = allVideos.length > 0 
-                    ? formatNumber(Math.round(totalViews / allVideos.length)) 
-                    : '0';
-
-                renderVideos(allVideos);
-
-            } catch (error) {
-                console.error('Error loading videos:', error);
-                document.getElementById('videosGrid').innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">⚠️</div>
-                        <h3>Error Loading Videos</h3>
-                        <p>Please try refreshing the page.</p>
-                    </div>
-                `;
-            }
-        }
-
-        function renderVideos(videos) {
-            const grid = document.getElementById('videosGrid');
-
-            if (videos.length === 0) {
-                grid.innerHTML = `
-                    <div class="empty-state" style="grid-column: 1/-1;">
-                        <div class="empty-state-icon">📹</div>
-                        <h3>No Videos Yet</h3>
-                        <p>Upload your first video to start earning!</p>
-                        <a href="upload.html" class="btn-primary">Upload Video</a>
-                    </div>
-                `;
-                return;
-            }
-
-            grid.innerHTML = videos.map(video => `
-                <div class="video-card" data-id="${video.id}" data-visibility="${video.visibility || 'public'}">
-                    <div class="video-thumbnail">
-                        <img src="${video.thumbnail || 'https://via.placeholder.com/320x180/1A1A1A/666?text=No+Thumbnail'}" alt="${video.title}">
-                        <span class="video-duration">${video.duration || '0:00'}</span>
-                        <span class="video-status ${video.visibility || 'public'}">${video.visibility || 'Public'}</span>
-                    </div>
-                    <div class="video-info">
-                        <h3 class="video-title">${video.title}</h3>
-                        <div class="video-meta">
-                            <span>👁 ${formatNumber(video.views || 0)} views</span>
-                            <span>👍 ${formatNumber(video.likes || 0)}</span>
-                            <span>${formatDate(video.createdAt)}</span>
-                        </div>
-                        <div class="video-actions">
-                            <a href="watch.html?v=${video.bunnyVideoId || video.id}" class="video-action-btn">View</a>
-                            <button class="video-action-btn" onclick="editVideo('${video.id}')">Edit</button>
-                            <button class="video-action-btn delete" onclick="deleteVideo('${video.id}', '${video.title}')">Delete</button>
-                        </div>
-                    </div>
-                </div>
-            `).join('');
-        }
+        let currentFilter = 'all';
 
         function formatNumber(num) {
             if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
@@ -712,61 +238,191 @@
         }
 
         function formatDate(timestamp) {
-            if (!timestamp) return 'Just now';
+            if (!timestamp) return 'Unknown';
             const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
         }
 
-        // Filter functionality
-        document.querySelectorAll('.filter-btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-                this.classList.add('active');
-                
-                const filter = this.dataset.filter;
-                if (filter === 'all') {
-                    renderVideos(allVideos);
-                } else {
-                    const filtered = allVideos.filter(v => (v.visibility || 'public') === filter);
-                    renderVideos(filtered);
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load user stats
+            try {
+                const userDoc = await getDoc(doc(db, 'users', user.uid));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    document.getElementById('totalSubs').textContent = formatNumber(userData.subscribers || 0);
                 }
+            } catch (error) {
+                console.error('Error loading user data:', error);
+            }
+
+            // Load videos
+            await loadVideos(user.uid);
+        });
+
+        async function loadVideos(userId) {
+            const grid = document.getElementById('videosGrid');
+            
+            try {
+                // Try with orderBy first (requires composite index)
+                let videosQuery;
+                let useSort = true;
+                
+                try {
+                    videosQuery = query(
+                        collection(db, 'videos'),
+                        where('creatorId', '==', userId),
+                        orderBy('createdAt', 'desc')
+                    );
+                    const testSnapshot = await getDocs(videosQuery);
+                    allVideos = [];
+                    testSnapshot.forEach(doc => {
+                        allVideos.push({ id: doc.id, ...doc.data() });
+                    });
+                } catch (indexError) {
+                    // Index doesn't exist, fallback to simple query
+                    console.log('Index not available, using simple query');
+                    useSort = false;
+                    document.getElementById('indexNotice').style.display = 'block';
+                    
+                    videosQuery = query(
+                        collection(db, 'videos'),
+                        where('creatorId', '==', userId)
+                    );
+                    const snapshot = await getDocs(videosQuery);
+                    allVideos = [];
+                    snapshot.forEach(doc => {
+                        allVideos.push({ id: doc.id, ...doc.data() });
+                    });
+                    
+                    // Sort manually in JavaScript
+                    allVideos.sort((a, b) => {
+                        const dateA = a.createdAt?.toDate?.() || new Date(a.createdAt) || new Date(0);
+                        const dateB = b.createdAt?.toDate?.() || new Date(b.createdAt) || new Date(0);
+                        return dateB - dateA;
+                    });
+                }
+
+                // Update stats
+                document.getElementById('totalVideos').textContent = allVideos.length;
+                let totalViews = 0;
+                allVideos.forEach(v => totalViews += (v.views || 0));
+                document.getElementById('totalViews').textContent = formatNumber(totalViews);
+
+                // Render videos
+                renderVideos();
+
+            } catch (error) {
+                console.error('Error loading videos:', error);
+                grid.innerHTML = `
+                    <div class="error-state">
+                        <h3>Error Loading Videos</h3>
+                        <p>${error.message}</p>
+                        <button class="retry-btn" onclick="location.reload()">Retry</button>
+                    </div>
+                `;
+            }
+        }
+
+        function renderVideos() {
+            const grid = document.getElementById('videosGrid');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            // Filter videos
+            let filteredVideos = allVideos.filter(video => {
+                // Filter by visibility
+                if (currentFilter !== 'all' && video.visibility !== currentFilter) {
+                    return false;
+                }
+                // Filter by search
+                if (searchTerm && !video.title?.toLowerCase().includes(searchTerm)) {
+                    return false;
+                }
+                return true;
+            });
+
+            if (filteredVideos.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No videos found</h3>
+                        <p>${currentFilter !== 'all' ? `No ${currentFilter} videos.` : 'Upload your first video to get started!'}</p>
+                        <a href="upload.html">Upload Video →</a>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            filteredVideos.forEach(video => {
+                const thumb = video.thumbnail || `https://vz-fa698983-d99.b-cdn.net/${video.bunnyVideoId || video.id}/thumbnail.jpg`;
+                const visibility = video.visibility || 'public';
+                
+                html += `
+                    <div class="video-card" data-id="${video.id}">
+                        <div class="video-thumb">
+                            <img src="${thumb}" alt="${video.title}" onerror="this.style.display='none'">
+                            <span class="video-status ${visibility}">${visibility}</span>
+                        </div>
+                        <div class="video-info">
+                            <div class="video-title">
+                                <a href="watch.html?v=${video.id}">${video.title || 'Untitled'}</a>
+                            </div>
+                            <div class="video-stats">
+                                <span>${formatNumber(video.views || 0)} views</span>
+                                <span>•</span>
+                                <span>${formatDate(video.createdAt)}</span>
+                            </div>
+                            <div class="video-actions">
+                                <button class="action-btn" onclick="window.location.href='watch.html?v=${video.id}'">View</button>
+                                <button class="action-btn" onclick="editVideo('${video.id}')">Edit</button>
+                                <button class="action-btn delete" onclick="deleteVideo('${video.id}')">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+        }
+
+        // Filter buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                renderVideos();
             });
         });
 
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('input', function() {
-            const query = this.value.toLowerCase();
-            const filtered = allVideos.filter(v => 
-                v.title.toLowerCase().includes(query) || 
-                (v.description && v.description.toLowerCase().includes(query))
-            );
-            renderVideos(filtered);
-        });
+        // Search
+        document.getElementById('searchInput').addEventListener('input', renderVideos);
 
-        // Make functions global
-        window.editVideo = function(videoId) {
-            // For now, show alert. Later this could open an edit modal or page
-            alert('Edit functionality coming soon!\n\nVideo ID: ' + videoId);
-        };
-
-        window.deleteVideo = async function(videoId, title) {
-            if (!confirm(`Are you sure you want to delete "${title}"?\n\nThis action cannot be undone.`)) {
+        // Delete video
+        window.deleteVideo = async function(videoId) {
+            if (!confirm('Are you sure you want to delete this video? This cannot be undone.')) {
                 return;
             }
 
             try {
                 await deleteDoc(doc(db, 'videos', videoId));
                 allVideos = allVideos.filter(v => v.id !== videoId);
-                renderVideos(allVideos);
-                
-                // Update stats
                 document.getElementById('totalVideos').textContent = allVideos.length;
-                
+                renderVideos();
                 alert('Video deleted successfully!');
             } catch (error) {
                 console.error('Error deleting video:', error);
                 alert('Error deleting video. Please try again.');
             }
+        };
+
+        // Edit video (placeholder)
+        window.editVideo = function(videoId) {
+            alert('Edit functionality coming soon! For now, delete and re-upload.');
         };
     </script>
 </body>

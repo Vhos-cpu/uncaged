@@ -6,518 +6,110 @@
     <title>UNCAGED | Browse</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-primary: #0D0D0D;
+            --bg-secondary: #1A1A1A;
+            --bg-tertiary: #242424;
+            --accent-gold: #F5A623;
+            --accent-gold-dark: #D4880F;
+            --text-primary: #FFFFFF;
+            --text-secondary: #B3B3B3;
+            --text-muted: #666666;
+            --border-color: #2A2A2A;
         }
-
-        body {
-            font-family: 'DM Sans', sans-serif;
-            background: #0D0D0D;
-            color: #FFFFFF;
-            min-height: 100vh;
-        }
+        body { font-family: 'DM Sans', sans-serif; background: var(--bg-primary); color: var(--text-primary); min-height: 100vh; }
 
         /* Header */
-        .header {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: rgba(13, 13, 13, 0.95);
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 30px;
-            z-index: 1000;
-            border-bottom: 1px solid #1A1A1A;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 30px;
-        }
-
-        .logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 28px;
-            letter-spacing: 3px;
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 25px;
-        }
-
-        .nav-link {
-            color: #888;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-
-        .nav-link:hover,
-        .nav-link.active {
-            color: #FFFFFF;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: #1A1A1A;
-            border-radius: 20px;
-            padding: 8px 15px;
-            gap: 10px;
-        }
-
-        .search-bar input {
-            background: transparent;
-            border: none;
-            color: #FFFFFF;
-            font-size: 14px;
-            width: 200px;
-            outline: none;
-        }
-
-        .search-bar input::placeholder {
-            color: #666;
-        }
-
-        .header-btn {
-            background: #1A1A1A;
-            border: none;
-            color: #FFFFFF;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            text-decoration: none;
-            transition: background 0.2s ease;
-        }
-
-        .header-btn:hover {
-            background: #2A2A2A;
-        }
-
-        .upload-btn {
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            color: #0D0D0D;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-weight: 600;
-            font-size: 14px;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .upload-btn:hover {
-            transform: scale(1.02);
-        }
-
-        .profile-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            border: none;
-            color: #FFFFFF;
-            text-decoration: none;
-        }
-
-        /* Auth buttons for logged out state */
-        .auth-buttons {
-            display: flex;
-            gap: 10px;
-        }
-
-        .auth-btn {
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 600;
-            text-decoration: none;
-            cursor: pointer;
-            border: none;
-        }
-
-        .auth-btn.login {
-            background: transparent;
-            color: #FFFFFF;
-            border: 1px solid #333;
-        }
-
-        .auth-btn.signup {
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            color: #0D0D0D;
-        }
+        .header { position: fixed; top: 0; left: 0; right: 0; height: 60px; background: rgba(13,13,13,0.95); backdrop-filter: blur(10px); display: flex; align-items: center; justify-content: space-between; padding: 0 30px; z-index: 1000; border-bottom: 1px solid var(--border-color); }
+        .logo { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 3px; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-decoration: none; }
+        .search-bar { display: flex; align-items: center; background: var(--bg-secondary); border-radius: 25px; padding: 8px 16px; width: 400px; }
+        .search-bar input { background: none; border: none; color: var(--text-primary); font-size: 14px; width: 100%; outline: none; }
+        .search-bar svg { color: var(--text-muted); margin-right: 10px; }
+        .auth-buttons { display: flex; gap: 15px; align-items: center; }
+        .btn-login { color: var(--text-primary); text-decoration: none; font-size: 14px; }
+        .btn-signup { background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); color: #000; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: 600; font-size: 14px; }
+        .profile-btn { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; cursor: pointer; font-size: 14px; position: relative; }
+        .upload-btn { background: var(--bg-tertiary); color: var(--text-primary); padding: 8px 16px; border-radius: 20px; text-decoration: none; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+        .upload-btn:hover { background: var(--border-color); }
+        #authButtons, #loggedInState { display: none; }
 
         /* Profile Dropdown */
-        .profile-dropdown {
-            position: relative;
-        }
-
-        .dropdown-menu {
-            display: none;
-            position: absolute;
-            top: 45px;
-            right: 0;
-            background: #1A1A1A;
-            border-radius: 12px;
-            padding: 10px 0;
-            min-width: 200px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            border: 1px solid #2A2A2A;
-        }
-
-        .dropdown-menu.show {
-            display: block;
-        }
-
-        .dropdown-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 12px 20px;
-            color: #FFFFFF;
-            text-decoration: none;
-            font-size: 14px;
-            transition: background 0.2s ease;
-        }
-
-        .dropdown-item:hover {
-            background: #2A2A2A;
-        }
-
-        .dropdown-item.danger {
-            color: #E50914;
-        }
-
-        .dropdown-divider {
-            height: 1px;
-            background: #2A2A2A;
-            margin: 10px 0;
-        }
+        .profile-dropdown { position: absolute; top: 100%; right: 0; margin-top: 10px; background: var(--bg-secondary); border-radius: 12px; padding: 10px 0; min-width: 200px; box-shadow: 0 10px 40px rgba(0,0,0,0.5); display: none; }
+        .profile-dropdown.show { display: block; }
+        .profile-dropdown a { display: block; padding: 10px 20px; color: var(--text-secondary); text-decoration: none; font-size: 14px; }
+        .profile-dropdown a:hover { background: var(--bg-tertiary); color: var(--text-primary); }
+        .profile-dropdown .divider { height: 1px; background: var(--border-color); margin: 10px 0; }
 
         /* Main Content */
-        .main-content {
-            padding-top: 80px;
-            padding-bottom: 40px;
-            max-width: 1400px;
-            margin: 0 auto;
-            padding-left: 30px;
-            padding-right: 30px;
-        }
+        .main-content { max-width: 1600px; margin: 0 auto; padding: 80px 30px 40px; }
 
         /* Categories */
-        .categories {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-        }
+        .categories { display: flex; gap: 10px; margin-bottom: 30px; overflow-x: auto; padding-bottom: 10px; }
+        .category-btn { padding: 8px 16px; background: var(--bg-secondary); border: none; border-radius: 20px; color: var(--text-secondary); cursor: pointer; font-size: 13px; white-space: nowrap; transition: all 0.3s; }
+        .category-btn:hover { background: var(--bg-tertiary); }
+        .category-btn.active { background: var(--accent-gold); color: #000; }
 
-        .category-btn {
-            background: #1A1A1A;
-            border: none;
-            color: #FFFFFF;
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 14px;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-        }
+        /* Videos Grid */
+        .videos-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 25px; }
+        .video-card { cursor: pointer; transition: transform 0.3s; }
+        .video-card:hover { transform: translateY(-5px); }
+        .video-thumb { position: relative; width: 100%; padding-top: 56.25%; background: var(--bg-secondary); border-radius: 12px; overflow: hidden; }
+        .video-thumb img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; }
+        .video-duration { position: absolute; bottom: 8px; right: 8px; background: rgba(0,0,0,0.8); padding: 2px 6px; border-radius: 4px; font-size: 12px; }
+        .video-info { padding: 12px 0; display: flex; gap: 12px; }
+        .creator-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent-gold), var(--accent-gold-dark)); display: flex; align-items: center; justify-content: center; font-weight: 700; color: #000; font-size: 14px; flex-shrink: 0; }
+        .video-details { flex: 1; }
+        .video-title { font-size: 14px; font-weight: 600; margin-bottom: 6px; line-height: 1.3; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .video-creator { color: var(--text-muted); font-size: 13px; margin-bottom: 4px; }
+        .video-creator:hover { color: var(--text-secondary); }
+        .video-stats { color: var(--text-muted); font-size: 12px; }
 
-        .category-btn:hover,
-        .category-btn.active {
-            background: #F5A623;
-            color: #0D0D0D;
-        }
+        /* Loading & Empty States */
+        .loading { text-align: center; padding: 60px 20px; }
+        .loading-spinner { width: 40px; height: 40px; border: 3px solid var(--border-color); border-top-color: var(--accent-gold); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .empty-state { text-align: center; padding: 100px 20px; }
+        .empty-state h2 { font-size: 24px; margin-bottom: 10px; }
+        .empty-state p { color: var(--text-muted); margin-bottom: 20px; }
+        .empty-state a { color: var(--accent-gold); text-decoration: none; }
 
-        /* Section */
-        .section {
-            margin-bottom: 40px;
-        }
-
-        .section-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .section-title {
-            font-size: 22px;
-            font-weight: 700;
-        }
-
-        .see-all {
-            color: #F5A623;
-            text-decoration: none;
-            font-size: 14px;
-        }
-
-        /* Video Grid */
-        .video-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .video-card {
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-
-        .video-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .video-thumbnail {
-            position: relative;
-            aspect-ratio: 16/9;
-            background: #1A1A1A;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 12px;
-        }
-
-        .video-thumbnail img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .video-thumbnail-placeholder {
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #2d1f3d 0%, #1a1a2e 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-        }
-
-        .video-duration {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background: rgba(0,0,0,0.85);
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-
-        .video-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background: #F5A623;
-            color: #0D0D0D;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 700;
-        }
-
-        .video-info {
-            display: flex;
-            gap: 12px;
-        }
-
-        .creator-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #6B2FEB 0%, #4A1FB8 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-
-        .video-details {
-            flex: 1;
-        }
-
-        .video-title {
-            font-size: 15px;
-            font-weight: 600;
-            margin-bottom: 5px;
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-
-        .video-meta {
-            font-size: 13px;
-            color: #888;
-        }
-
-        .video-meta a {
-            color: #888;
-            text-decoration: none;
-        }
-
-        .video-meta a:hover {
-            color: #F5A623;
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #888;
-        }
-
-        .empty-state-icon {
-            font-size: 60px;
-            margin-bottom: 20px;
-        }
-
-        .empty-state h3 {
-            font-size: 20px;
-            color: #FFFFFF;
-            margin-bottom: 10px;
-        }
-
-        .empty-state p {
-            margin-bottom: 20px;
-        }
-
-        .empty-state-btn {
-            background: linear-gradient(135deg, #F5A623 0%, #D4880F 100%);
-            color: #0D0D0D;
-            padding: 12px 25px;
-            border-radius: 25px;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-block;
-        }
-
-        /* Loading */
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: #888;
-        }
-
-        .spinner {
-            display: inline-block;
-            width: 30px;
-            height: 30px;
-            border: 3px solid #333;
-            border-radius: 50%;
-            border-top-color: #F5A623;
-            animation: spin 0.8s linear infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        /* Mobile */
+        /* Responsive */
         @media (max-width: 768px) {
-            .header {
-                padding: 0 15px;
-            }
-
-            .nav-links {
-                display: none;
-            }
-
-            .search-bar {
-                display: none;
-            }
-
-            .main-content {
-                padding: 70px 15px 30px;
-            }
-
-            .video-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .upload-btn span {
-                display: none;
-            }
+            .header { padding: 0 15px; }
+            .search-bar { width: 200px; }
+            .main-content { padding: 70px 15px 20px; }
+            .videos-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <!-- Header -->
     <header class="header">
-        <div class="header-left">
-            <a href="index.html" class="logo">UNCAGED</a>
-            <nav class="nav-links">
-                <a href="browse.html" class="nav-link active">Browse</a>
-                <a href="#" class="nav-link">Trending</a>
-                <a href="#" class="nav-link">Creators</a>
-                <a href="#" class="nav-link">Categories</a>
-            </nav>
+        <a href="index.html" class="logo">UNCAGED</a>
+        <div class="search-bar">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" placeholder="Search videos..." id="searchInput">
         </div>
-        <div class="header-right">
-            <div class="search-bar">
-                <span>🔍</span>
-                <input type="text" placeholder="Search videos..." id="searchInput">
+        <div class="auth-buttons">
+            <div id="authButtons">
+                <a href="login.html" class="btn-login">Log In</a>
+                <a href="signup.html" class="btn-signup">Get Started</a>
             </div>
-            
-            <!-- Logged Out State -->
-            <div class="auth-buttons" id="authButtons">
-                <a href="login.html" class="auth-btn login">Log In</a>
-                <a href="signup.html" class="auth-btn signup">Sign Up</a>
-            </div>
-
-            <!-- Logged In State (hidden by default) -->
-            <div id="loggedInState" style="display: none;">
+            <div id="loggedInState">
                 <a href="upload.html" class="upload-btn">
-                    <span>+</span>
-                    <span>Upload</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                    Upload
                 </a>
-                <a href="#" class="header-btn">🔔</a>
-                <div class="profile-dropdown">
-                    <button class="profile-btn" id="profileBtn">V</button>
-                    <div class="dropdown-menu" id="dropdownMenu">
-                        <a href="creator.html" class="dropdown-item">👤 My Profile</a>
-                        <a href="dashboard.html" class="dropdown-item">📊 Dashboard</a>
-                        <a href="upload.html" class="dropdown-item">📤 Upload Video</a>
-                        <div class="dropdown-divider"></div>
-                        <a href="#" class="dropdown-item">⚙️ Settings</a>
-                        <a href="#" class="dropdown-item danger" id="logoutBtn">🚪 Log Out</a>
+                <div class="profile-btn" id="profileBtn">
+                    V
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <a href="dashboard.html">Dashboard</a>
+                        <a href="my-videos.html">My Videos</a>
+                        <a href="earnings.html">Earnings</a>
+                        <div class="divider"></div>
+                        <a href="settings.html">Settings</a>
+                        <a href="#" id="logoutBtn">Log Out</a>
                     </div>
                 </div>
             </div>
@@ -528,57 +120,30 @@
     <main class="main-content">
         <!-- Categories -->
         <div class="categories">
-            <button class="category-btn active">All</button>
-            <button class="category-btn">Travel</button>
-            <button class="category-btn">Nightlife</button>
-            <button class="category-btn">Dating</button>
-            <button class="category-btn">Lifestyle</button>
-            <button class="category-btn">Vlogs</button>
-            <button class="category-btn">Behind the Scenes</button>
-            <button class="category-btn">Uncut</button>
+            <button class="category-btn active" data-category="all">All</button>
+            <button class="category-btn" data-category="gaming">Gaming</button>
+            <button class="category-btn" data-category="music">Music</button>
+            <button class="category-btn" data-category="entertainment">Entertainment</button>
+            <button class="category-btn" data-category="sports">Sports</button>
+            <button class="category-btn" data-category="education">Education</button>
+            <button class="category-btn" data-category="lifestyle">Lifestyle</button>
+            <button class="category-btn" data-category="tech">Tech</button>
+            <button class="category-btn" data-category="travel">Travel</button>
         </div>
 
-        <!-- Featured Section -->
-        <section class="section">
-            <div class="section-header">
-                <h2 class="section-title">🔥 Featured Videos</h2>
-                <a href="#" class="see-all">See All →</a>
+        <!-- Videos Grid -->
+        <div class="videos-grid" id="videosGrid">
+            <div class="loading">
+                <div class="loading-spinner"></div>
+                Loading videos...
             </div>
-            <div class="video-grid" id="featuredVideos">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading videos...</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Recent Section -->
-        <section class="section">
-            <div class="section-header">
-                <h2 class="section-title">🆕 Recently Uploaded</h2>
-                <a href="#" class="see-all">See All →</a>
-            </div>
-            <div class="video-grid" id="recentVideos">
-                <div class="loading">
-                    <div class="spinner"></div>
-                    <p>Loading videos...</p>
-                </div>
-            </div>
-        </section>
+        </div>
     </main>
 
-    <!-- Firebase -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-        import { 
-            getFirestore, 
-            collection, 
-            query, 
-            orderBy, 
-            limit,
-            getDocs 
-        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+        import { getFirestore, collection, query, where, orderBy, getDocs, limit } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
@@ -593,23 +158,55 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // Check auth state
+        let allVideos = [];
+        let currentCategory = 'all';
+
+        // Format numbers
+        function formatNumber(num) {
+            if (num >= 1000000) return (num / 1000000).toFixed(1) + 'M';
+            if (num >= 1000) return (num / 1000).toFixed(1) + 'K';
+            return num.toString();
+        }
+
+        // Format date
+        function formatDate(timestamp) {
+            if (!timestamp) return '';
+            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+            const now = new Date();
+            const diff = now - date;
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            if (days === 0) return 'Today';
+            if (days === 1) return 'Yesterday';
+            if (days < 7) return `${days} days ago`;
+            if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
+            if (days < 365) return `${Math.floor(days / 30)} months ago`;
+            return `${Math.floor(days / 365)} years ago`;
+        }
+
+        // Auth state
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // User is logged in
                 document.getElementById('authButtons').style.display = 'none';
                 document.getElementById('loggedInState').style.display = 'flex';
                 document.getElementById('loggedInState').style.alignItems = 'center';
                 document.getElementById('loggedInState').style.gap = '15px';
                 
-                // Set avatar initial
                 const initial = user.displayName ? user.displayName[0].toUpperCase() : user.email[0].toUpperCase();
-                document.getElementById('profileBtn').textContent = initial;
+                document.getElementById('profileBtn').childNodes[0].textContent = initial;
             } else {
-                // User is logged out
                 document.getElementById('authButtons').style.display = 'flex';
                 document.getElementById('loggedInState').style.display = 'none';
             }
+        });
+
+        // Profile dropdown
+        document.getElementById('profileBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            document.getElementById('profileDropdown').classList.toggle('show');
+        });
+
+        document.addEventListener('click', () => {
+            document.getElementById('profileDropdown').classList.remove('show');
         });
 
         // Logout
@@ -619,124 +216,127 @@
             window.location.href = 'index.html';
         });
 
-        // Profile dropdown
-        document.getElementById('profileBtn').addEventListener('click', () => {
-            document.getElementById('dropdownMenu').classList.toggle('show');
-        });
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.profile-dropdown')) {
-                document.getElementById('dropdownMenu').classList.remove('show');
-            }
-        });
-
-        // Load videos from Firebase
+        // Load videos
         async function loadVideos() {
+            const grid = document.getElementById('videosGrid');
+            
             try {
-                const videosRef = collection(db, 'videos');
-                const q = query(videosRef, orderBy('createdAt', 'desc'), limit(12));
-                const snapshot = await getDocs(q);
+                // Simple query for public videos
+                const videosQuery = query(
+                    collection(db, 'videos'),
+                    where('visibility', '==', 'public'),
+                    limit(50)
+                );
 
-                const videos = [];
+                const snapshot = await getDocs(videosQuery);
+                allVideos = [];
+                
                 snapshot.forEach(doc => {
-                    videos.push({ id: doc.id, ...doc.data() });
+                    allVideos.push({ id: doc.id, ...doc.data() });
                 });
 
-                displayVideos(videos, 'featuredVideos');
-                displayVideos(videos, 'recentVideos');
+                // Sort by createdAt in JavaScript (avoids index requirement)
+                allVideos.sort((a, b) => {
+                    const dateA = a.createdAt?.toDate?.() || new Date(a.createdAt) || new Date(0);
+                    const dateB = b.createdAt?.toDate?.() || new Date(b.createdAt) || new Date(0);
+                    return dateB - dateA;
+                });
+
+                renderVideos();
 
             } catch (error) {
                 console.error('Error loading videos:', error);
-                showEmptyState('featuredVideos');
-                showEmptyState('recentVideos');
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h2>Error loading videos</h2>
+                        <p>${error.message}</p>
+                        <a href="#" onclick="location.reload()">Try again</a>
+                    </div>
+                `;
             }
         }
 
-        // Display videos
-        function displayVideos(videos, containerId) {
-            const container = document.getElementById(containerId);
-            
-            if (videos.length === 0) {
-                showEmptyState(containerId);
+        // Render videos
+        function renderVideos() {
+            const grid = document.getElementById('videosGrid');
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+
+            // Filter videos
+            let filteredVideos = allVideos.filter(video => {
+                // Filter by category
+                if (currentCategory !== 'all') {
+                    const tags = video.tags || [];
+                    const category = video.category || '';
+                    if (!tags.includes(currentCategory) && category.toLowerCase() !== currentCategory) {
+                        return false;
+                    }
+                }
+                // Filter by search
+                if (searchTerm) {
+                    const title = (video.title || '').toLowerCase();
+                    const desc = (video.description || '').toLowerCase();
+                    const creator = (video.creatorName || '').toLowerCase();
+                    if (!title.includes(searchTerm) && !desc.includes(searchTerm) && !creator.includes(searchTerm)) {
+                        return false;
+                    }
+                }
+                return true;
+            });
+
+            if (filteredVideos.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <h2>No videos found</h2>
+                        <p>${searchTerm ? 'Try a different search term.' : 'Be the first to upload!'}</p>
+                        <a href="upload.html">Upload a video →</a>
+                    </div>
+                `;
                 return;
             }
 
-            container.innerHTML = videos.map(video => `
-                <div class="video-card" onclick="window.location.href='watch.html?v=${video.bunnyVideoId || video.id}'">
-                    <div class="video-thumbnail">
-                        ${video.thumbnailUrl 
-                            ? `<img src="${video.thumbnailUrl}" alt="${video.title}">`
-                            : `<div class="video-thumbnail-placeholder">🎬</div>`
-                        }
-                        <span class="video-duration">${video.duration || '10:00'}</span>
-                        ${video.visibility === 'subscribers' ? '<span class="video-badge">EXCLUSIVE</span>' : ''}
-                    </div>
-                    <div class="video-info">
-                        <div class="creator-avatar">${(video.creatorName || 'U')[0].toUpperCase()}</div>
-                        <div class="video-details">
-                            <h3 class="video-title">${video.title || 'Untitled Video'}</h3>
-                            <div class="video-meta">
-                                <a href="creator.html?id=${video.creatorId}">${video.creatorName || 'Unknown Creator'}</a>
-                                <br>${video.views || 0} views • ${formatDate(video.createdAt)}
+            let html = '';
+            filteredVideos.forEach(video => {
+                // Use document ID for the watch link - this is the key fix!
+                const videoLink = `watch.html?v=${video.id}`;
+                const creatorLink = `creator.html?id=${video.creatorId}`;
+                const thumb = video.thumbnail || `https://vz-fa698983-d99.b-cdn.net/${video.bunnyVideoId || video.id}/thumbnail.jpg`;
+                const initial = (video.creatorName || 'C')[0].toUpperCase();
+
+                html += `
+                    <div class="video-card" onclick="window.location.href='${videoLink}'">
+                        <div class="video-thumb">
+                            <img src="${thumb}" alt="${video.title}" onerror="this.style.display='none'">
+                        </div>
+                        <div class="video-info">
+                            <div class="creator-avatar" onclick="event.stopPropagation(); window.location.href='${creatorLink}'">${initial}</div>
+                            <div class="video-details">
+                                <div class="video-title">${video.title || 'Untitled'}</div>
+                                <div class="video-creator" onclick="event.stopPropagation(); window.location.href='${creatorLink}'">${video.creatorName || 'Creator'}</div>
+                                <div class="video-stats">${formatNumber(video.views || 0)} views • ${formatDate(video.createdAt)}</div>
                             </div>
                         </div>
                     </div>
-                </div>
-            `).join('');
+                `;
+            });
+
+            grid.innerHTML = html;
         }
 
-        // Empty state
-        function showEmptyState(containerId) {
-            const container = document.getElementById(containerId);
-            container.innerHTML = `
-                <div class="empty-state" style="grid-column: 1 / -1;">
-                    <div class="empty-state-icon">🎬</div>
-                    <h3>No Videos Yet</h3>
-                    <p>Be the first to upload content!</p>
-                    <a href="upload.html" class="empty-state-btn">Upload Video</a>
-                </div>
-            `;
-        }
-
-        // Format date
-        function formatDate(timestamp) {
-            if (!timestamp) return 'Just now';
-            const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
-            const now = new Date();
-            const diff = now - date;
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            
-            if (days === 0) return 'Today';
-            if (days === 1) return 'Yesterday';
-            if (days < 7) return `${days} days ago`;
-            if (days < 30) return `${Math.floor(days / 7)} weeks ago`;
-            return `${Math.floor(days / 30)} months ago`;
-        }
-
-        // Load videos on page load
-        loadVideos();
-
-        // Search functionality
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const query = e.target.value.trim();
-                if (query) {
-                    // For now, just alert - we can add search page later
-                    alert(`Search for: ${query}\n\nSearch functionality coming soon!`);
-                }
-            }
-        });
-
-        // Category filter
+        // Category buttons
         document.querySelectorAll('.category-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                // For now, just show the category - we can filter later
-                console.log('Category:', btn.textContent);
+                currentCategory = btn.dataset.category;
+                renderVideos();
             });
         });
+
+        // Search
+        document.getElementById('searchInput').addEventListener('input', renderVideos);
+
+        // Load videos on page load
+        loadVideos();
     </script>
 </body>
 </html>
