@@ -267,7 +267,7 @@
             }catch(e){console.error(e);}
         };
 
-        $('tipBtn').onclick=()=>showToast('Tipping coming soon!');
+        $('tipBtn').onclick=()=>window.location.href=`tip.html?creator=${creatorId}`;
 
         function showToast(msg){$('toastMessage').textContent=msg;$('toast').className='toast success show';setTimeout(()=>$('toast').classList.remove('show'),3000);}
         function getTimeAgo(date){if(!date)return'';const s=Math.floor((new Date()-date)/1000);const i={year:31536000,month:2592000,week:604800,day:86400,hour:3600,minute:60};for(const[u,v]of Object.entries(i)){const n=Math.floor(s/v);if(n>=1)return`${n} ${u}${n!==1?'s':''} ago`;}return'Just now';}

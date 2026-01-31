@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Tip - UNCAGED</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'DM Sans',sans-serif;background:#0D0D0D;color:#FFF;min-height:100vh}
+        .navbar{display:flex;justify-content:space-between;align-items:center;padding:1rem 2rem;background:#1A1A1A;border-bottom:1px solid #2A2A2A}
+        .logo{font-family:'Bebas Neue',sans-serif;font-size:2rem;background:linear-gradient(135deg,#F5A623,#D4880F);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none}
+        .nav-links a{color:#B3B3B3;text-decoration:none;margin-left:1.5rem}
+        .nav-links a:hover{color:#F5A623}
+
+        .main-content{max-width:500px;margin:0 auto;padding:2rem}
+        .page-title{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;text-align:center;margin-bottom:2rem}
+
+        .tip-card{background:#1A1A1A;border-radius:16px;padding:2rem;border:1px solid #2A2A2A}
+        
+        .creator-info{display:flex;align-items:center;gap:1rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid #2A2A2A}
+        .creator-avatar{width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#D4880F);display:flex;align-items:center;justify-content:center;font-size:1.5rem;font-weight:600;color:#0D0D0D}
+        .creator-details h2{font-size:1.25rem;margin-bottom:0.25rem}
+        .creator-details p{color:#666;font-size:0.9rem}
+
+        .tip-amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+        .tip-amount{padding:1rem;background:#242424;border:2px solid #2A2A2A;border-radius:12px;text-align:center;cursor:pointer;transition:all 0.2s}
+        .tip-amount:hover{border-color:#F5A623}
+        .tip-amount.selected{border-color:#F5A623;background:rgba(245,166,35,0.1)}
+        .tip-amount .amount{font-size:1.5rem;font-weight:600;color:#F5A623}
+        .tip-amount .label{color:#666;font-size:0.8rem;margin-top:0.25rem}
+
+        .custom-amount{margin-bottom:1.5rem}
+        .custom-amount label{display:block;color:#B3B3B3;margin-bottom:0.5rem;font-size:0.9rem}
+        .amount-input-wrapper{position:relative}
+        .amount-input-wrapper span{position:absolute;left:1rem;top:50%;transform:translateY(-50%);color:#666;font-size:1.25rem}
+        .amount-input{width:100%;padding:1rem 1rem 1rem 2.5rem;background:#242424;border:1px solid #2A2A2A;border-radius:8px;color:#FFF;font-size:1.25rem;font-family:'DM Sans',sans-serif}
+        .amount-input:focus{outline:none;border-color:#F5A623}
+
+        .message-input{width:100%;padding:1rem;background:#242424;border:1px solid #2A2A2A;border-radius:8px;color:#FFF;font-family:'DM Sans',sans-serif;resize:none;min-height:80px;margin-bottom:1.5rem}
+        .message-input:focus{outline:none;border-color:#F5A623}
+
+        .tip-summary{background:#242424;border-radius:8px;padding:1rem;margin-bottom:1.5rem}
+        .summary-row{display:flex;justify-content:space-between;margin-bottom:0.5rem;color:#B3B3B3}
+        .summary-row:last-child{margin-bottom:0;padding-top:0.5rem;border-top:1px solid #333;color:#FFF;font-weight:600}
+        .summary-row .highlight{color:#F5A623}
+
+        .tip-btn{width:100%;padding:1rem;background:linear-gradient(135deg,#F5A623,#D4880F);border:none;border-radius:8px;color:#0D0D0D;font-family:'DM Sans',sans-serif;font-size:1.1rem;font-weight:600;cursor:pointer;transition:all 0.2s}
+        .tip-btn:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(245,166,35,0.4)}
+        .tip-btn:disabled{opacity:0.5;cursor:not-allowed;transform:none}
+
+        .secure-note{text-align:center;color:#666;font-size:0.85rem;margin-top:1rem}
+        .secure-note span{color:#4CAF50}
+
+        .back-link{display:block;text-align:center;color:#B3B3B3;margin-top:1.5rem;text-decoration:none}
+        .back-link:hover{color:#F5A623}
+
+        .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(100px);background:#1A1A1A;border:1px solid #2A2A2A;padding:1rem 1.5rem;border-radius:8px;transition:transform .3s;z-index:1001}
+        .toast.show{transform:translateX(-50%) translateY(0)}
+        .toast.success{border-color:#4CAF50}
+        .toast.error{border-color:#F44336}
+
+        .loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);display:none;align-items:center;justify-content:center;z-index:1000}
+        .loading-overlay.show{display:flex}
+        .loading-content{text-align:center}
+        .spinner{width:50px;height:50px;border:3px solid #2A2A2A;border-top-color:#F5A623;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem}
+        @keyframes spin{to{transform:rotate(360deg)}}
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="logo">UNCAGED</a>
+        <div class="nav-links">
+            <a href="browse.html">Browse</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <h1 class="page-title">💰 Send a Tip</h1>
+
+        <div class="tip-card">
+            <div class="creator-info">
+                <div class="creator-avatar" id="creatorAvatar">?</div>
+                <div class="creator-details">
+                    <h2 id="creatorName">Loading...</h2>
+                    <p>Creator on UNCAGED</p>
+                </div>
+            </div>
+
+            <div class="tip-amounts">
+                <div class="tip-amount" data-amount="2">
+                    <div class="amount">$2</div>
+                    <div class="label">Coffee</div>
+                </div>
+                <div class="tip-amount selected" data-amount="5">
+                    <div class="amount">$5</div>
+                    <div class="label">Lunch</div>
+                </div>
+                <div class="tip-amount" data-amount="10">
+                    <div class="amount">$10</div>
+                    <div class="label">Support</div>
+                </div>
+                <div class="tip-amount" data-amount="20">
+                    <div class="amount">$20</div>
+                    <div class="label">Big Fan</div>
+                </div>
+                <div class="tip-amount" data-amount="50">
+                    <div class="amount">$50</div>
+                    <div class="label">Super</div>
+                </div>
+                <div class="tip-amount" data-amount="100">
+                    <div class="amount">$100</div>
+                    <div class="label">Legend</div>
+                </div>
+            </div>
+
+            <div class="custom-amount">
+                <label>Or enter custom amount</label>
+                <div class="amount-input-wrapper">
+                    <span>$</span>
+                    <input type="number" class="amount-input" id="customAmount" min="1" max="500" placeholder="0.00">
+                </div>
+            </div>
+
+            <textarea class="message-input" id="tipMessage" placeholder="Add a message (optional)"></textarea>
+
+            <div class="tip-summary">
+                <div class="summary-row"><span>Tip amount</span><span class="highlight" id="tipAmount">$5.00</span></div>
+                <div class="summary-row"><span>Platform fee (5%)</span><span id="platformFee">$0.25</span></div>
+                <div class="summary-row"><span>Creator receives</span><span class="highlight" id="creatorReceives">$4.75</span></div>
+                <div class="summary-row"><span>Total</span><span id="totalAmount">$5.00</span></div>
+            </div>
+
+            <button class="tip-btn" id="tipBtn">Send $5.00 Tip</button>
+
+            <p class="secure-note"><span>🔒</span> Secure payment powered by Stripe</p>
+
+            <a href="#" class="back-link" id="backLink">← Back to video</a>
+        </div>
+    </main>
+
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-content">
+            <div class="spinner"></div>
+            <p>Processing your tip...</p>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"><span id="toastMessage"></span></div>
+
+    <script type="module">
+        import{initializeApp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import{getAuth,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+        import{getFirestore,doc,getDoc,addDoc,collection,updateDoc,increment,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig={apiKey:"AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",authDomain:"uncaged-85b49.firebaseapp.com",projectId:"uncaged-85b49",storageBucket:"uncaged-85b49.firebasestorage.app",messagingSenderId:"957750920887",appId:"1:957750920887:web:9af4d847dad76c876d2f32"};
+        const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
+        
+        const $=id=>document.getElementById(id);
+        const urlParams=new URLSearchParams(window.location.search);
+        const creatorId=urlParams.get('creator');
+        const videoId=urlParams.get('video');
+        
+        let currentUser=null,creatorData=null,selectedAmount=5;
+
+        if(!creatorId){window.location.href='browse.html';}
+        if(videoId)$('backLink').href=`watch.html?v=${videoId}`;
+        else $('backLink').href='browse.html';
+
+        onAuthStateChanged(auth,async user=>{
+            if(!user){window.location.href='login.html';return;}
+            currentUser=user;
+            await loadCreator();
+        });
+
+        async function loadCreator(){
+            try{
+                const userDoc=await getDoc(doc(db,'users',creatorId));
+                if(userDoc.exists()){
+                    creatorData=userDoc.data();
+                    $('creatorName').textContent=creatorData.displayName||creatorData.name||'Creator';
+                    $('creatorAvatar').textContent=(creatorData.displayName||creatorData.name||'?')[0].toUpperCase();
+                    document.title=`Tip ${creatorData.displayName||'Creator'} - UNCAGED`;
+                }
+            }catch(e){console.error(e);}
+        }
+
+        // Preset amounts
+        document.querySelectorAll('.tip-amount').forEach(el=>{
+            el.onclick=()=>{
+                document.querySelectorAll('.tip-amount').forEach(e=>e.classList.remove('selected'));
+                el.classList.add('selected');
+                selectedAmount=parseFloat(el.dataset.amount);
+                $('customAmount').value='';
+                updateSummary();
+            };
+        });
+
+        // Custom amount
+        $('customAmount').oninput=()=>{
+            const val=parseFloat($('customAmount').value);
+            if(val>0){
+                document.querySelectorAll('.tip-amount').forEach(e=>e.classList.remove('selected'));
+                selectedAmount=Math.min(500,Math.max(1,val));
+            }
+            updateSummary();
+        };
+
+        function updateSummary(){
+            const fee=selectedAmount*0.05;
+            const creatorGets=selectedAmount-fee;
+            
+            $('tipAmount').textContent=`$${selectedAmount.toFixed(2)}`;
+            $('platformFee').textContent=`$${fee.toFixed(2)}`;
+            $('creatorReceives').textContent=`$${creatorGets.toFixed(2)}`;
+            $('totalAmount').textContent=`$${selectedAmount.toFixed(2)}`;
+            $('tipBtn').textContent=`Send $${selectedAmount.toFixed(2)} Tip`;
+        }
+
+        $('tipBtn').onclick=async()=>{
+            if(!currentUser||!creatorData){showToast('Please sign in','error');return;}
+            if(creatorId===currentUser.uid){showToast("Can't tip yourself",'error');return;}
+            if(selectedAmount<1){showToast('Minimum tip is $1','error');return;}
+
+            $('loadingOverlay').classList.add('show');
+            $('tipBtn').disabled=true;
+
+            try{
+                const fee=selectedAmount*0.05;
+                const creatorGets=selectedAmount-fee;
+
+                // Record the tip
+                await addDoc(collection(db,'tips'),{
+                    fromUserId:currentUser.uid,
+                    fromUserName:currentUser.displayName||currentUser.email.split('@')[0],
+                    toUserId:creatorId,
+                    toUserName:creatorData.displayName||creatorData.name,
+                    amount:selectedAmount,
+                    platformFee:fee,
+                    creatorAmount:creatorGets,
+                    message:$('tipMessage').value.trim(),
+                    videoId:videoId||null,
+                    status:'completed',
+                    createdAt:serverTimestamp()
+                });
+
+                // Update creator's earnings
+                await updateDoc(doc(db,'users',creatorId),{
+                    totalEarnings:increment(creatorGets),
+                    totalTips:increment(1)
+                });
+
+                // Send notification
+                await addDoc(collection(db,'notifications'),{
+                    userId:creatorId,
+                    type:'tip',
+                    text:`${currentUser.displayName||'Someone'} sent you a $${selectedAmount.toFixed(2)} tip!`,
+                    videoId:videoId||null,
+                    read:false,
+                    createdAt:serverTimestamp()
+                });
+
+                $('loadingOverlay').classList.remove('show');
+                showToast('Tip sent successfully! 🎉','success');
+
+                setTimeout(()=>{
+                    if(videoId)window.location.href=`watch.html?v=${videoId}`;
+                    else window.location.href=`creator.html?id=${creatorId}`;
+                },2000);
+
+            }catch(error){
+                console.error('Tip error:',error);
+                $('loadingOverlay').classList.remove('show');
+                $('tipBtn').disabled=false;
+                showToast('Failed to send tip. Please try again.','error');
+            }
+        };
+
+        function showToast(msg,type='success'){
+            $('toastMessage').textContent=msg;
+            $('toast').className=`toast ${type} show`;
+            setTimeout(()=>$('toast').classList.remove('show'),3000);
+        }
+
+        updateSummary();
+    </script>
+</body>
+</html>

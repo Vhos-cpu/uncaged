@@ -194,6 +194,7 @@
                     <button class="action-btn" id="likeBtn"><span>👍</span><span id="likeCount">0</span></button>
                     <button class="action-btn" id="watchLaterBtn"><span>🕐</span><span>Watch Later</span></button>
                     <button class="action-btn" id="shareBtn"><span>🔗</span><span>Share</span></button>
+                    <button class="action-btn tip-action-btn" id="tipCreatorBtn"><span>💰</span><span>Tip</span></button>
                     <button class="action-btn report-btn" id="reportBtn"><span>🚩</span><span>Report</span></button>
                 </div>
                 <div class="creator-section">
@@ -405,6 +406,11 @@
         };
 
         $('shareBtn').onclick=()=>{navigator.clipboard.writeText(window.location.href).then(()=>showToast('Link copied!','success'));};
+        $('tipCreatorBtn').onclick=()=>{
+            if(!currentUser){showToast('Please sign in','error');return;}
+            if(currentVideo.creatorId===currentUser.uid){showToast("Can't tip yourself",'error');return;}
+            window.location.href=`tip.html?creator=${currentVideo.creatorId}&video=${videoId}`;
+        };
         $('showMoreBtn').onclick=()=>{$('descriptionText').classList.toggle('collapsed');$('showMoreBtn').textContent=$('descriptionText').classList.contains('collapsed')?'Show more':'Show less';};
 
         $('commentInput').onfocus=()=>$('commentActions').classList.add('show');
