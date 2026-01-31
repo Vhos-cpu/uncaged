@@ -30,7 +30,6 @@
         .step.active .step-number { background: #F5A623; color: #0D0D0D; border-color: #F5A623; }
         .step.completed .step-number { background: #4CAF50; color: #FFFFFF; border-color: #4CAF50; }
         
-        /* Step 1: Video Upload */
         .upload-zone { border: 2px dashed #2A2A2A; border-radius: 12px; padding: 4rem 2rem; text-align: center; cursor: pointer; transition: all 0.3s; }
         .upload-zone:hover { border-color: #F5A623; background: rgba(245, 166, 35, 0.05); }
         .upload-zone.dragover { border-color: #F5A623; background: rgba(245, 166, 35, 0.1); }
@@ -39,7 +38,6 @@
         .upload-hint { color: #666666; font-size: 0.9rem; }
         .file-input { display: none; }
         
-        /* Progress */
         .upload-progress { display: none; margin-top: 2rem; }
         .upload-progress.show { display: block; }
         .progress-info { display: flex; justify-content: space-between; margin-bottom: 0.5rem; color: #B3B3B3; }
@@ -47,7 +45,6 @@
         .progress-fill { height: 100%; background: linear-gradient(135deg, #F5A623, #D4880F); border-radius: 4px; transition: width 0.3s; width: 0%; }
         .progress-status { margin-top: 0.5rem; color: #666666; font-size: 0.9rem; }
         
-        /* Step 2: Video Details */
         .details-form { display: none; }
         .details-form.show { display: block; }
         .form-group { margin-bottom: 1.5rem; }
@@ -59,10 +56,10 @@
         .form-hint { color: #666666; font-size: 0.85rem; margin-top: 0.25rem; }
         .char-count { text-align: right; color: #666666; font-size: 0.85rem; }
         
-        /* Thumbnail Upload */
         .thumbnail-section { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
         .thumbnail-preview { aspect-ratio: 16/9; background: #242424; border-radius: 8px; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #2A2A2A; }
         .thumbnail-preview img { width: 100%; height: 100%; object-fit: cover; }
+        .thumbnail-preview video { width: 100%; height: 100%; object-fit: cover; }
         .thumbnail-placeholder { text-align: center; color: #666666; }
         .thumbnail-placeholder span { font-size: 3rem; display: block; margin-bottom: 0.5rem; }
         .thumbnail-options { display: flex; flex-direction: column; gap: 1rem; }
@@ -74,7 +71,6 @@
         .thumbnail-upload-progress { margin-top: 0.5rem; display: none; }
         .thumbnail-upload-progress.show { display: block; }
         
-        /* Tags */
         .tags-container { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
         .tag { display: flex; align-items: center; gap: 0.25rem; background: #242424; border: 1px solid #2A2A2A; border-radius: 20px; padding: 0.4rem 0.8rem; font-size: 0.9rem; }
         .tag-remove { background: none; border: none; color: #666666; cursor: pointer; font-size: 1.1rem; line-height: 1; }
@@ -82,7 +78,6 @@
         .tag-input { flex: 1; min-width: 100px; background: none; border: none; color: #FFFFFF; font-family: 'DM Sans', sans-serif; padding: 0.4rem; }
         .tag-input:focus { outline: none; }
         
-        /* Visibility */
         .visibility-options { display: flex; gap: 1rem; }
         .visibility-option { flex: 1; padding: 1rem; background: #242424; border: 1px solid #2A2A2A; border-radius: 8px; cursor: pointer; transition: all 0.3s; }
         .visibility-option:hover { border-color: #F5A623; }
@@ -91,7 +86,6 @@
         .visibility-title { font-weight: 600; margin-bottom: 0.25rem; display: flex; align-items: center; gap: 0.5rem; }
         .visibility-desc { color: #666666; font-size: 0.85rem; }
         
-        /* Form Actions */
         .form-actions { display: flex; gap: 1rem; margin-top: 2rem; }
         .btn { padding: 0.875rem 2rem; border-radius: 8px; font-family: 'DM Sans', sans-serif; font-weight: 600; cursor: pointer; transition: all 0.3s; border: none; }
         .btn-secondary { background: #242424; color: #FFFFFF; }
@@ -99,7 +93,6 @@
         .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(245, 166, 35, 0.4); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         
-        /* Toast */
         .toast { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%) translateY(100px); background: #1A1A1A; border: 1px solid #2A2A2A; padding: 1rem 1.5rem; border-radius: 8px; transition: transform 0.3s; z-index: 1001; }
         .toast.show { transform: translateX(-50%) translateY(0); }
         .toast.success { border-color: #4CAF50; }
@@ -154,8 +147,8 @@
                 <div class="upload-zone" id="uploadZone">
                     <div class="upload-icon">📹</div>
                     <p class="upload-text">Drag and drop your video here, or click to browse</p>
-                    <p class="upload-hint">MP4, MOV, AVI, MKV up to 10GB</p>
-                    <input type="file" class="file-input" id="videoInput" accept="video/*">
+                    <p class="upload-hint">MP4, MOV, WebM up to 5GB</p>
+                    <input type="file" class="file-input" id="videoInput" accept="video/mp4,video/webm,video/quicktime">
                 </div>
 
                 <div class="upload-progress" id="uploadProgress">
@@ -195,8 +188,8 @@
                         </div>
                         <div class="thumbnail-options">
                             <button class="thumbnail-btn active" id="autoThumbBtn">
-                                <div class="thumbnail-btn-title">Auto-generate</div>
-                                <div class="thumbnail-btn-desc">Use Bunny.net auto-generated thumbnail</div>
+                                <div class="thumbnail-btn-title">Use video frame</div>
+                                <div class="thumbnail-btn-desc">Auto-capture from your video</div>
                             </button>
                             <button class="thumbnail-btn" id="customThumbBtn">
                                 <div class="thumbnail-btn-title">Upload custom</div>
@@ -283,14 +276,12 @@
         const db = getFirestore(app);
         const storage = getStorage(app);
 
-        // Bunny.net config
-        const BUNNY_LIBRARY_ID = '588548';
-        const BUNNY_API_KEY = '2c87ab86-6ef1-4dbf-8fcf4c40cf06-b823-4f9b';
-        const BUNNY_CDN = 'vz-fa698983-d99.b-cdn.net';
-
         let currentUser = null;
-        let bunnyVideoId = null;
+        let uploadedVideoUrl = null;
+        let videoId = null;
         let customThumbnailUrl = null;
+        let autoThumbnailUrl = null;
+        let videoFile = null;
         let tags = [];
         const $ = id => document.getElementById(id);
 
@@ -326,59 +317,62 @@
         videoInput.addEventListener('change', (e) => { if (e.target.files[0]) handleVideoUpload(e.target.files[0]); });
 
         async function handleVideoUpload(file) {
-            if (file.size > 10 * 1024 * 1024 * 1024) { showToast('File too large. Max 10GB.', 'error'); return; }
+            if (file.size > 5 * 1024 * 1024 * 1024) { showToast('File too large. Max 5GB.', 'error'); return; }
 
+            videoFile = file;
             $('fileName').textContent = file.name;
             $('uploadProgress').classList.add('show');
             uploadZone.style.display = 'none';
 
             try {
-                // Create video in Bunny
-                $('progressStatus').textContent = 'Creating video...';
-                const createRes = await fetch(`https://video.bunnycdn.com/library/${BUNNY_LIBRARY_ID}/videos`, {
-                    method: 'POST',
-                    headers: { 'AccessKey': BUNNY_API_KEY, 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ title: file.name.replace(/\.[^/.]+$/, '') })
-                });
-
-                if (!createRes.ok) throw new Error('Failed to create video');
-                const videoData = await createRes.json();
-                bunnyVideoId = videoData.guid;
-
-                // Upload video
                 $('progressStatus').textContent = 'Uploading video...';
-                const uploadRes = await uploadWithProgress(
-                    `https://video.bunnycdn.com/library/${BUNNY_LIBRARY_ID}/videos/${bunnyVideoId}`,
-                    file,
-                    (progress) => {
+                
+                videoId = `vid_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                
+                const videoFileName = `videos/${currentUser.uid}/${videoId}/${file.name}`;
+                const storageRef = ref(storage, videoFileName);
+                const uploadTask = uploadBytesResumable(storageRef, file);
+
+                uploadTask.on('state_changed',
+                    (snapshot) => {
+                        const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
                         $('progressFill').style.width = `${progress}%`;
                         $('uploadPercent').textContent = `${Math.round(progress)}%`;
+                        
+                        const uploaded = (snapshot.bytesTransferred / (1024 * 1024)).toFixed(1);
+                        const total = (snapshot.totalBytes / (1024 * 1024)).toFixed(1);
+                        $('progressStatus').textContent = `Uploading... ${uploaded}MB / ${total}MB`;
+                    },
+                    (error) => {
+                        console.error('Upload error:', error);
+                        showToast('Upload failed: ' + error.message, 'error');
+                        $('uploadProgress').classList.remove('show');
+                        uploadZone.style.display = 'block';
+                    },
+                    async () => {
+                        uploadedVideoUrl = await getDownloadURL(uploadTask.snapshot.ref);
+                        
+                        $('progressStatus').textContent = 'Generating thumbnail...';
+                        
+                        // Generate auto thumbnail from video
+                        await generateVideoThumbnail(file);
+                        
+                        $('progressStatus').textContent = 'Upload complete!';
+                        $('progressFill').style.width = '100%';
+                        $('uploadPercent').textContent = '100%';
+
+                        $('videoTitle').value = file.name.replace(/\.[^/.]+$/, '');
+                        $('titleCount').textContent = $('videoTitle').value.length;
+
+                        setTimeout(() => {
+                            $('step1').style.display = 'none';
+                            $('step2').classList.add('show');
+                            $('step1Indicator').classList.remove('active');
+                            $('step1Indicator').classList.add('completed');
+                            $('step2Indicator').classList.add('active');
+                        }, 1000);
                     }
                 );
-
-                if (!uploadRes.ok) throw new Error('Upload failed');
-
-                $('progressStatus').textContent = 'Processing complete!';
-                $('progressFill').style.width = '100%';
-                $('uploadPercent').textContent = '100%';
-
-                // Pre-fill title
-                $('videoTitle').value = file.name.replace(/\.[^/.]+$/, '');
-                $('titleCount').textContent = $('videoTitle').value.length;
-
-                // Set auto thumbnail preview
-                setTimeout(() => {
-                    $('thumbnailPreview').innerHTML = `<img src="https://${BUNNY_CDN}/${bunnyVideoId}/thumbnail.jpg" alt="Thumbnail" onerror="this.parentElement.innerHTML='<div class=\\'thumbnail-placeholder\\'><span>🖼️</span><p>Thumbnail generating...</p></div>'">`;
-                }, 2000);
-
-                // Move to step 2
-                setTimeout(() => {
-                    $('step1').style.display = 'none';
-                    $('step2').classList.add('show');
-                    $('step1Indicator').classList.remove('active');
-                    $('step1Indicator').classList.add('completed');
-                    $('step2Indicator').classList.add('active');
-                }, 1000);
 
             } catch (error) {
                 console.error('Upload error:', error);
@@ -388,17 +382,48 @@
             }
         }
 
-        async function uploadWithProgress(url, file, onProgress) {
-            return new Promise((resolve, reject) => {
-                const xhr = new XMLHttpRequest();
-                xhr.upload.addEventListener('progress', (e) => {
-                    if (e.lengthComputable) onProgress((e.loaded / e.total) * 100);
-                });
-                xhr.addEventListener('load', () => resolve({ ok: xhr.status >= 200 && xhr.status < 300 }));
-                xhr.addEventListener('error', () => reject(new Error('Upload failed')));
-                xhr.open('PUT', url);
-                xhr.setRequestHeader('AccessKey', BUNNY_API_KEY);
-                xhr.send(file);
+        // Generate thumbnail from video
+        async function generateVideoThumbnail(file) {
+            return new Promise((resolve) => {
+                const video = document.createElement('video');
+                video.preload = 'metadata';
+                video.muted = true;
+                video.playsInline = true;
+
+                video.onloadeddata = () => {
+                    video.currentTime = Math.min(1, video.duration / 4); // Capture at 25% or 1 second
+                };
+
+                video.onseeked = () => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = 1280;
+                    canvas.height = 720;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+                    
+                    canvas.toBlob(async (blob) => {
+                        if (blob) {
+                            try {
+                                const thumbFileName = `thumbnails/${currentUser.uid}/${videoId}_auto.jpg`;
+                                const thumbRef = ref(storage, thumbFileName);
+                                await uploadBytesResumable(thumbRef, blob);
+                                autoThumbnailUrl = await getDownloadURL(thumbRef);
+                                $('thumbnailPreview').innerHTML = `<img src="${autoThumbnailUrl}" alt="Video Thumbnail">`;
+                            } catch (e) {
+                                console.error('Auto thumbnail upload failed:', e);
+                            }
+                        }
+                        URL.revokeObjectURL(video.src);
+                        resolve();
+                    }, 'image/jpeg', 0.8);
+                };
+
+                video.onerror = () => {
+                    console.error('Could not load video for thumbnail');
+                    resolve();
+                };
+
+                video.src = URL.createObjectURL(file);
             });
         }
 
@@ -407,8 +432,8 @@
             $('autoThumbBtn').classList.add('active');
             $('customThumbBtn').classList.remove('active');
             customThumbnailUrl = null;
-            if (bunnyVideoId) {
-                $('thumbnailPreview').innerHTML = `<img src="https://${BUNNY_CDN}/${bunnyVideoId}/thumbnail.jpg" alt="Thumbnail">`;
+            if (autoThumbnailUrl) {
+                $('thumbnailPreview').innerHTML = `<img src="${autoThumbnailUrl}" alt="Video Thumbnail">`;
             }
         });
 
@@ -425,18 +450,12 @@
                 return;
             }
 
-            if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
-                showToast('Please use JPG, PNG, or WebP', 'error');
-                return;
-            }
-
             $('autoThumbBtn').classList.remove('active');
             $('customThumbBtn').classList.add('active');
             $('thumbProgress').classList.add('show');
 
             try {
-                // Upload to Firebase Storage
-                const fileName = `thumbnails/${currentUser.uid}/${Date.now()}_${file.name}`;
+                const fileName = `thumbnails/${currentUser.uid}/${videoId}_custom_${file.name}`;
                 const storageRef = ref(storage, fileName);
                 
                 const uploadTask = uploadBytesResumable(storageRef, file);
@@ -470,27 +489,7 @@
         $('videoDescription').addEventListener('input', () => $('descCount').textContent = $('videoDescription').value.length);
 
         // Tags
-        $('tagInput').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' || e.key === ',') {
-                e.preventDefault();
-                const tag = $('tagInput').value.trim().replace(',', '');
-                if (tag && tags.length < 15 && !tags.includes(tag)) {
-                    tags.push(tag);
-                    renderTags();
-                }
-                $('tagInput').value = '';
-            }
-        });
-
-        function renderTags() {
-            const container = $('tagsContainer');
-            container.innerHTML = tags.map((tag, i) => `
-                <div class="tag">
-                    <span>${tag}</span>
-                    <button class="tag-remove" data-index="${i}">&times;</button>
-                </div>
-            `).join('') + '<input type="text" class="tag-input" id="tagInput" placeholder="Add tags (press Enter)">';
-            
+        function setupTagInput() {
             $('tagInput').addEventListener('keydown', (e) => {
                 if (e.key === 'Enter' || e.key === ',') {
                     e.preventDefault();
@@ -502,6 +501,19 @@
                     $('tagInput').value = '';
                 }
             });
+        }
+        setupTagInput();
+
+        function renderTags() {
+            const container = $('tagsContainer');
+            container.innerHTML = tags.map((tag, i) => `
+                <div class="tag">
+                    <span>${tag}</span>
+                    <button class="tag-remove" data-index="${i}">&times;</button>
+                </div>
+            `).join('') + '<input type="text" class="tag-input" id="tagInput" placeholder="Add tags (press Enter)">';
+            
+            setupTagInput();
 
             container.querySelectorAll('.tag-remove').forEach(btn => {
                 btn.addEventListener('click', () => {
@@ -536,14 +548,14 @@
         $('publishBtn').addEventListener('click', async () => {
             const title = $('videoTitle').value.trim();
             if (!title) { showToast('Please enter a title', 'error'); return; }
-            if (!bunnyVideoId) { showToast('No video uploaded', 'error'); return; }
+            if (!uploadedVideoUrl) { showToast('No video uploaded', 'error'); return; }
 
             $('publishBtn').disabled = true;
             $('publishBtn').textContent = 'Publishing...';
 
             try {
                 const visibility = document.querySelector('input[name="visibility"]:checked').value;
-                const thumbnail = customThumbnailUrl || `https://${BUNNY_CDN}/${bunnyVideoId}/thumbnail.jpg`;
+                const thumbnail = customThumbnailUrl || autoThumbnailUrl || '';
 
                 await addDoc(collection(db, 'videos'), {
                     title: title,
@@ -552,7 +564,8 @@
                     tags: tags,
                     visibility: visibility,
                     thumbnail: thumbnail,
-                    bunnyVideoId: bunnyVideoId,
+                    videoUrl: uploadedVideoUrl,
+                    bunnyVideoId: videoId,
                     creatorId: currentUser.uid,
                     creatorName: currentUser.displayName || currentUser.email.split('@')[0],
                     views: 0,
