@@ -5,8 +5,7 @@ const crypto = require('crypto');
 const TEAM_ID = 'K6Y8V3KPQY';
 const KEY_ID = 'B5VY92CW85';
 const CLIENT_ID = 'one.uncaged.auth';
-const REDIRECT_URI = 'https://uncaged.one/auth/apple/callback';
-
+const REDIRECT_URI = 'https://uncaged.one/api/auth/apple/callback';
 export default async function handler(req, res) {
     if (req.method === 'GET') {
         const state = crypto.randomBytes(16).toString('hex');
