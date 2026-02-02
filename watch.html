@@ -76,8 +76,10 @@
         .paywall-creator-name{font-weight:600;font-size:16px}
         .paywall-creator-subs{color:#888;font-size:13px}
         .paywall-price-box{background:linear-gradient(135deg,rgba(245,166,35,0.15),rgba(212,136,15,0.1));border:1px solid rgba(245,166,35,0.3);border-radius:12px;padding:20px 35px;margin-bottom:20px}
-        .paywall-price{font-family:'Bebas Neue',sans-serif;font-size:42px;color:#F5A623}
-        .paywall-price span{font-size:16px;color:#888;font-family:'DM Sans',sans-serif}
+        .paywall-price{font-family:'DM Sans',sans-serif;font-size:18px;color:#F5A623;display:flex;align-items:baseline;justify-content:center;gap:2px}
+        .paywall-price .dollar{font-size:24px;font-weight:600}
+        .paywall-price .amount{font-family:'Bebas Neue',sans-serif;font-size:48px;line-height:1}
+        .paywall-price .period{font-size:16px;color:#888;margin-left:4px}
         .paywall-benefits{display:flex;gap:15px;margin-bottom:25px;flex-wrap:wrap;justify-content:center}
         .paywall-benefit{display:flex;align-items:center;gap:6px;color:#888;font-size:13px}
         .paywall-benefit svg{width:14px;height:14px;fill:#1DB954}
@@ -201,7 +203,7 @@
                         </div>
                     </div>
                     <div class="paywall-price-box">
-                        <div class="paywall-price">$<span id="paywallPrice">9.99</span><span>/month</span></div>
+                        <div class="paywall-price"><span class="dollar">$</span><span class="amount" id="paywallPrice">9.99</span><span class="period">/month</span></div>
                     </div>
                     <div class="paywall-benefits">
                         <div class="paywall-benefit"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>All videos</div>
