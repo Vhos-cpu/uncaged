@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Completing Sign In... | UNCAGED</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0D0D0D;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .container { text-align: center; padding: 40px; }
+        .spinner {
+            width: 50px; height: 50px;
+            border: 3px solid #333;
+            border-top-color: #F5A623;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        h1 { color: #F5A623; margin-bottom: 10px; font-size: 24px; }
+        p { color: #888; font-size: 16px; }
+        .error { color: #EF4444; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="spinner" id="spinner"></div>
+        <h1 id="title">Completing Sign In...</h1>
+        <p id="message">Please wait while we finish setting up your account.</p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",
+            authDomain: "uncaged-85b49.firebaseapp.com",
+            projectId: "uncaged-85b49",
+            storageBucket: "uncaged-85b49.firebasestorage.app",
+            messagingSenderId: "957750920887",
+            appId: "1:957750920887:web:9af4d847dad76c876d2f32"
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const provider = urlParams.get('provider');
+        const email = urlParams.get('email');
+        const uid = urlParams.get('uid');
+        const name = urlParams.get('name');
+        const error = urlParams.get('error');
+
+        const titleEl = document.getElementById('title');
+        const messageEl = document.getElementById('message');
+        const spinnerEl = document.getElementById('spinner');
+
+        function showError(msg) {
+            spinnerEl.style.display = 'none';
+            titleEl.textContent = 'Sign In Failed';
+            titleEl.classList.add('error');
+            messageEl.textContent = msg;
+            setTimeout(() => { window.location.href = '/login.html'; }, 3000);
+        }
+
+        async function completeAuth() {
+            if (error) { showError('Authentication failed. Please try again.'); return; }
+            if (!email || !uid) { showError('Missing authentication data.'); return; }
+
+            try {
+                // Check if user exists
+                const usersRef = db.collection('users');
+                const existingUser = await usersRef.where('appleId', '==', uid).limit(1).get();
+                
+                let isNewUser = existingUser.empty;
+                
+                if (isNewUser) {
+                    // Check by email
+                    const emailUser = await usersRef.where('email', '==', email).limit(1).get();
+                    if (!emailUser.empty) {
+                        // Link Apple ID to existing account
+                        await emailUser.docs[0].ref.update({ appleId: uid });
+                        isNewUser = false;
+                    }
+                }
+
+                // Sign in or create with email link (passwordless)
+                // For now, redirect to dashboard - full auth will be handled by your existing system
+                titleEl.textContent = isNewUser ? 'Account Created!' : 'Welcome Back!';
+                messageEl.textContent = 'Redirecting you now...';
+
+                // Store Apple auth data temporarily
+                sessionStorage.setItem('appleAuth', JSON.stringify({ email, uid, name, provider }));
+
+                setTimeout(() => {
+                    window.location.href = isNewUser ? '/signup.html?apple=1' : '/dashboard.html';
+                }, 1500);
+
+            } catch (err) {
+                console.error('Auth error:', err);
+                showError('Failed to complete sign in. Please try again.');
+            }
+        }
+
+        completeAuth();
+    </script>
+</body>
+</html>
