@@ -29,9 +29,11 @@
         .video-wrapper video{width:100%;height:100%;cursor:pointer}
         .video-wrapper.fullscreen{position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:9999;border-radius:0;aspect-ratio:auto}
         .video-wrapper.fullscreen video{height:100%}
+        .video-wrapper.blurred video{filter:blur(20px);transform:scale(1.1)}
         
         .video-controls{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.9));padding:1rem;opacity:0;transition:opacity 0.3s}
         .video-wrapper:hover .video-controls,.video-wrapper.paused .video-controls,.video-wrapper.show-controls .video-controls{opacity:1}
+        .video-wrapper.blurred .video-controls{display:none}
         
         .progress-container{width:100%;height:5px;background:rgba(255,255,255,0.2);border-radius:3px;cursor:pointer;margin-bottom:0.75rem}
         .progress-bar{height:100%;background:linear-gradient(135deg,#F5A623,#D4880F);border-radius:3px;position:relative;width:0%;transition:width 0.1s}
@@ -60,6 +62,31 @@
         .big-play-btn{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:80px;height:80px;background:rgba(245,166,35,0.9);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.2s,opacity 0.2s;font-size:2rem;border:none;color:#0D0D0D}
         .big-play-btn:hover{transform:translate(-50%,-50%) scale(1.1)}
         .video-wrapper.playing .big-play-btn{opacity:0;pointer-events:none}
+        .video-wrapper.blurred .big-play-btn{display:none}
+        
+        /* PAYWALL STYLES */
+        .paywall-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:linear-gradient(to bottom,rgba(13,13,13,0.3) 0%,rgba(13,13,13,0.8) 50%,rgba(13,13,13,0.98) 100%);display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:50;padding:20px;text-align:center}
+        .paywall-overlay.hidden{display:none}
+        .paywall-lock-icon{width:70px;height:70px;background:rgba(245,166,35,0.15);border-radius:50%;display:flex;align-items:center;justify-content:center;margin-bottom:20px}
+        .paywall-lock-icon svg{width:35px;height:35px;fill:#F5A623}
+        .paywall-title{font-family:'Bebas Neue',sans-serif;font-size:28px;color:#FFF;margin-bottom:8px}
+        .paywall-subtitle{color:#888;font-size:14px;margin-bottom:20px}
+        .paywall-creator-info{display:flex;align-items:center;gap:12px;background:#1A1A1A;padding:12px 20px;border-radius:10px;margin-bottom:20px}
+        .paywall-creator-avatar{width:45px;height:45px;border-radius:50%;background:linear-gradient(135deg,#F5A623,#D4880F);display:flex;align-items:center;justify-content:center;font-weight:600;color:#0D0D0D}
+        .paywall-creator-name{font-weight:600;font-size:16px}
+        .paywall-creator-subs{color:#888;font-size:13px}
+        .paywall-price-box{background:linear-gradient(135deg,rgba(245,166,35,0.15),rgba(212,136,15,0.1));border:1px solid rgba(245,166,35,0.3);border-radius:12px;padding:20px 35px;margin-bottom:20px}
+        .paywall-price{font-family:'Bebas Neue',sans-serif;font-size:42px;color:#F5A623}
+        .paywall-price span{font-size:16px;color:#888;font-family:'DM Sans',sans-serif}
+        .paywall-benefits{display:flex;gap:15px;margin-bottom:25px;flex-wrap:wrap;justify-content:center}
+        .paywall-benefit{display:flex;align-items:center;gap:6px;color:#888;font-size:13px}
+        .paywall-benefit svg{width:14px;height:14px;fill:#1DB954}
+        .paywall-subscribe-btn{background:linear-gradient(135deg,#F5A623,#D4880F);color:#0D0D0D;border:none;padding:14px 40px;border-radius:10px;font-size:16px;font-weight:700;cursor:pointer;transition:all 0.3s;display:flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif}
+        .paywall-subscribe-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(245,166,35,0.4)}
+        .paywall-subscribe-btn:disabled{opacity:0.7;cursor:not-allowed}
+        .paywall-login-link{margin-top:15px;color:#888;font-size:13px}
+        .paywall-login-link a{color:#F5A623;text-decoration:none}
+        .paywall-login-link a:hover{text-decoration:underline}
         
         .video-info{margin-top:1rem}
         .video-title{font-size:1.4rem;font-weight:600;margin-bottom:0.5rem}
@@ -125,7 +152,7 @@
         @keyframes spin{to{transform:rotate(360deg)}}
         
         @media(max-width:1024px){.main-content{grid-template-columns:1fr}.sidebar{order:2}.search-box{display:none}}
-        @media(max-width:768px){.navbar{padding:1rem}.main-content{padding:1rem}.report-btn{margin-left:0}.video-controls{padding:0.75rem}.time-display{min-width:auto}}
+        @media(max-width:768px){.navbar{padding:1rem}.main-content{padding:1rem}.report-btn{margin-left:0}.video-controls{padding:0.75rem}.time-display{min-width:auto}.paywall-benefits{flex-direction:column;gap:8px}.paywall-title{font-size:24px}.paywall-price{font-size:36px}}
     </style>
 </head>
 <body>
@@ -158,6 +185,36 @@
             <div class="video-wrapper paused" id="videoWrapper" style="display:none">
                 <video id="videoPlayer" playsinline></video>
                 <button class="big-play-btn" id="bigPlayBtn">▶</button>
+                
+                <!-- PAYWALL OVERLAY -->
+                <div class="paywall-overlay hidden" id="paywallOverlay">
+                    <div class="paywall-lock-icon">
+                        <svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                    </div>
+                    <h2 class="paywall-title">Subscribe to Watch</h2>
+                    <p class="paywall-subtitle">Get unlimited access to all content from this creator</p>
+                    <div class="paywall-creator-info">
+                        <div class="paywall-creator-avatar" id="paywallCreatorAvatar">?</div>
+                        <div>
+                            <div class="paywall-creator-name" id="paywallCreatorName">Creator</div>
+                            <div class="paywall-creator-subs" id="paywallCreatorSubs">0 subscribers</div>
+                        </div>
+                    </div>
+                    <div class="paywall-price-box">
+                        <div class="paywall-price">$<span id="paywallPrice">9.99</span><span>/month</span></div>
+                    </div>
+                    <div class="paywall-benefits">
+                        <div class="paywall-benefit"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>All videos</div>
+                        <div class="paywall-benefit"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>New uploads</div>
+                        <div class="paywall-benefit"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>Cancel anytime</div>
+                    </div>
+                    <button class="paywall-subscribe-btn" id="paywallSubscribeBtn">
+                        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>
+                        Subscribe Now
+                    </button>
+                    <p class="paywall-login-link" id="paywallLoginPrompt">Already subscribed? <a href="login.html">Log in</a></p>
+                </div>
+                
                 <div class="video-controls">
                     <div class="progress-container" id="progressContainer">
                         <div class="progress-bar" id="progressBar"></div>
@@ -232,7 +289,7 @@
         const firebaseConfig={apiKey:"AIzaSyDNPN3jptNzbR8vWy5hnVCuLoIBK2AW_HQ",authDomain:"uncaged-85b49.firebaseapp.com",projectId:"uncaged-85b49",storageBucket:"uncaged-85b49.firebasestorage.app",messagingSenderId:"957750920887",appId:"1:957750920887:web:9af4d847dad76c876d2f32"};
         const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getFirestore(app);
         
-        let currentUser=null,currentVideo=null,videoId=null,isLiked=false,isSubscribed=false,isWatchLater=false;
+        let currentUser=null,currentVideo=null,videoId=null,isLiked=false,isSubscribed=false,isWatchLater=false,hasAccess=false;
         const $=id=>document.getElementById(id);
         const urlParams=new URLSearchParams(window.location.search);
         videoId=urlParams.get('v');
@@ -242,8 +299,10 @@
         const video=$('videoPlayer'),videoWrapper=$('videoWrapper'),playPauseBtn=$('playPauseBtn'),bigPlayBtn=$('bigPlayBtn');
         const muteBtn=$('muteBtn'),volumeSlider=$('volumeSlider'),progressContainer=$('progressContainer'),progressBar=$('progressBar');
         const currentTimeEl=$('currentTime'),durationEl=$('duration'),speedBtn=$('speedBtn'),speedMenu=$('speedMenu'),fullscreenBtn=$('fullscreenBtn');
+        const paywallOverlay=$('paywallOverlay');
 
         function togglePlay(){
+            if(!hasAccess){showPaywall();return;}
             if(video.paused){
                 video.play();
                 videoWrapper.classList.add('playing');
@@ -257,13 +316,99 @@
             }
         }
 
+        function showPaywall(){
+            paywallOverlay.classList.remove('hidden');
+            videoWrapper.classList.add('blurred');
+            video.pause();
+        }
+
+        function hidePaywall(){
+            paywallOverlay.classList.add('hidden');
+            videoWrapper.classList.remove('blurred');
+            hasAccess=true;
+        }
+
+        async function checkViewerAccess(){
+            if(!currentUser||!currentVideo)return false;
+            
+            // Creator always has access to their own content
+            if(currentUser.uid===currentVideo.creatorId){
+                return true;
+            }
+            
+            try{
+                // Check local subscription first (free follows)
+                const subDoc=await getDoc(doc(db,'subscriptions',`${currentUser.uid}_${currentVideo.creatorId}`));
+                if(subDoc.exists()&&subDoc.data().status==='active'){
+                    return true;
+                }
+                
+                // Check paid subscriptions via API
+                const response=await fetch(`/api/check-access?viewerId=${currentUser.uid}&creatorId=${currentVideo.creatorId}`);
+                const data=await response.json();
+                return data.hasAccess;
+            }catch(e){
+                console.error('Access check error:',e);
+                return false;
+            }
+        }
+
+        function updatePaywallUI(){
+            if(!currentVideo)return;
+            const initial=currentVideo.creatorName?currentVideo.creatorName[0].toUpperCase():'?';
+            $('paywallCreatorAvatar').textContent=initial;
+            $('paywallCreatorName').textContent=currentVideo.creatorName||'Creator';
+            $('paywallCreatorSubs').textContent=`${(currentVideo.creatorSubscribers||0).toLocaleString()} subscribers`;
+            // Default price, can be customized per creator
+            $('paywallPrice').textContent='9.99';
+        }
+
+        $('paywallSubscribeBtn').onclick=async()=>{
+            if(!currentUser){
+                const returnUrl=encodeURIComponent(window.location.href);
+                window.location.href=`/login.html?redirect=${returnUrl}`;
+                return;
+            }
+            
+            const btn=$('paywallSubscribeBtn');
+            btn.disabled=true;
+            btn.innerHTML='<span class="spinner" style="width:18px;height:18px;border-width:2px;margin-right:8px"></span>Processing...';
+            
+            try{
+                const response=await fetch('/api/create-subscription',{
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({
+                        creatorId:currentVideo.creatorId,
+                        creatorName:currentVideo.creatorName,
+                        viewerId:currentUser.uid,
+                        viewerEmail:currentUser.email,
+                        priceAmount:999
+                    })
+                });
+                
+                const data=await response.json();
+                
+                if(data.url){
+                    window.location.href=data.url;
+                }else{
+                    throw new Error(data.error||'Failed to create checkout');
+                }
+            }catch(e){
+                console.error('Subscription error:',e);
+                showToast('Something went wrong','error');
+                btn.disabled=false;
+                btn.innerHTML='<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>Subscribe Now';
+            }
+        };
+
         function formatTime(s){if(isNaN(s))return'0:00';const m=Math.floor(s/60),sec=Math.floor(s%60);return`${m}:${sec.toString().padStart(2,'0')}`;}
         function updateProgress(){const p=(video.currentTime/video.duration)*100;progressBar.style.width=`${p}%`;currentTimeEl.textContent=formatTime(video.currentTime);}
-        function seek(e){const rect=progressContainer.getBoundingClientRect(),p=(e.clientX-rect.left)/rect.width;video.currentTime=p*video.duration;}
+        function seek(e){if(!hasAccess){showPaywall();return;}const rect=progressContainer.getBoundingClientRect(),p=(e.clientX-rect.left)/rect.width;video.currentTime=p*video.duration;}
         function updateVolume(){video.volume=volumeSlider.value;muteBtn.textContent=video.volume==0?'🔇':video.volume<0.5?'🔉':'🔊';}
         function toggleMute(){video.muted=!video.muted;muteBtn.textContent=video.muted?'🔇':'🔊';volumeSlider.value=video.muted?0:video.volume;}
         function changeSpeed(s){video.playbackRate=s;speedBtn.textContent=`${s}x`;document.querySelectorAll('.speed-option').forEach(o=>o.classList.toggle('active',parseFloat(o.dataset.speed)===s));speedMenu.classList.remove('show');}
-        function toggleFullscreen(){if(document.fullscreenElement){document.exitFullscreen();videoWrapper.classList.remove('fullscreen');}else{videoWrapper.requestFullscreen();videoWrapper.classList.add('fullscreen');}}
+        function toggleFullscreen(){if(!hasAccess){showPaywall();return;}if(document.fullscreenElement){document.exitFullscreen();videoWrapper.classList.remove('fullscreen');}else{videoWrapper.requestFullscreen();videoWrapper.classList.add('fullscreen');}}
 
         video.onclick=togglePlay;
         bigPlayBtn.onclick=togglePlay;
@@ -281,6 +426,7 @@
 
         document.onkeydown=e=>{
             if(e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA')return;
+            if(!hasAccess&&(e.key===' '||e.key==='f'||e.key==='F')){showPaywall();return;}
             switch(e.key){
                 case' ':e.preventDefault();togglePlay();break;
                 case'ArrowLeft':video.currentTime-=10;break;
@@ -295,7 +441,15 @@
         document.onclick=e=>{if(!e.target.closest('.speed-selector'))speedMenu.classList.remove('show');};
 
         onAuthStateChanged(auth,async user=>{
-            if(user){currentUser=user;$('profileBtn').textContent=(user.displayName||user.email)[0].toUpperCase();$('userAvatar').textContent=$('profileBtn').textContent;$('commentForm').style.display='flex';}
+            if(user){
+                currentUser=user;
+                $('profileBtn').textContent=(user.displayName||user.email)[0].toUpperCase();
+                $('userAvatar').textContent=$('profileBtn').textContent;
+                $('commentForm').style.display='flex';
+                $('paywallLoginPrompt').style.display='none';
+            }else{
+                $('paywallLoginPrompt').style.display='block';
+            }
             loadVideo();
         });
 
@@ -312,8 +466,21 @@
                 currentVideo={id:vDoc.id,...vDoc.data()};
                 await updateDoc(doc(db,'videos',videoId),{views:increment(1)});
                 currentVideo.views=(currentVideo.views||0)+1;
+                
+                // Check access before showing video
+                hasAccess=await checkViewerAccess();
+                
                 if(currentUser){await saveToWatchHistory();await checkWatchLater();}
                 displayVideo();
+                
+                // Show/hide paywall based on access
+                if(!hasAccess){
+                    updatePaywallUI();
+                    showPaywall();
+                }else{
+                    hidePaywall();
+                }
+                
                 if(currentUser)await checkUserInteractions();
                 await loadComments();
                 await loadRecommended();
@@ -350,7 +517,17 @@
             loadCreatorInfo();
         }
 
-        async function loadCreatorInfo(){try{const d=await getDoc(doc(db,'users',currentVideo.creatorId));if(d.exists())$('creatorSubs').textContent=`${(d.data().subscribers||0).toLocaleString()} subscribers`;}catch(e){}}
+        async function loadCreatorInfo(){
+            try{
+                const d=await getDoc(doc(db,'users',currentVideo.creatorId));
+                if(d.exists()){
+                    const subs=(d.data().subscribers||0);
+                    $('creatorSubs').textContent=`${subs.toLocaleString()} subscribers`;
+                    currentVideo.creatorSubscribers=subs;
+                    if(!hasAccess)updatePaywallUI();
+                }
+            }catch(e){}
+        }
 
         async function checkUserInteractions(){
             try{
@@ -391,18 +568,15 @@
         $('subscribeBtn').onclick=async()=>{
             if(!currentUser){showToast('Please sign in','error');return;}
             if(currentVideo.creatorId===currentUser.uid){showToast("Can't subscribe to yourself",'error');return;}
-            try{
-                const ref=doc(db,'subscriptions',`${currentUser.uid}_${currentVideo.creatorId}`);
-                if(isSubscribed){
-                    await deleteDoc(ref);await updateDoc(doc(db,'users',currentVideo.creatorId),{subscribers:increment(-1)});
-                    isSubscribed=false;$('subscribeBtn').textContent='Subscribe';$('subscribeBtn').classList.remove('subscribed');
-                }else{
-                    await setDoc(ref,{subscriberId:currentUser.uid,creatorId:currentVideo.creatorId,createdAt:serverTimestamp()});
-                    await updateDoc(doc(db,'users',currentVideo.creatorId),{subscribers:increment(1)});
-                    await addDoc(collection(db,'notifications'),{userId:currentVideo.creatorId,type:'subscriber',text:`${currentUser.displayName||'Someone'} subscribed`,read:false,createdAt:serverTimestamp()});
-                    isSubscribed=true;$('subscribeBtn').textContent='Subscribed';$('subscribeBtn').classList.add('subscribed');
-                }
-            }catch(e){showToast('Error','error');}
+            
+            // If not subscribed, redirect to payment
+            if(!isSubscribed){
+                $('paywallSubscribeBtn').click();
+                return;
+            }
+            
+            // If already subscribed, this would be handled by Stripe portal
+            showToast('Manage subscription in your account settings','success');
         };
 
         $('shareBtn').onclick=()=>{navigator.clipboard.writeText(window.location.href).then(()=>showToast('Link copied!','success'));};
