@@ -13,7 +13,7 @@ export default async function handler(req, res) {
         const tokenParts = id_token.split('.');
         const payload = JSON.parse(Buffer.from(tokenParts[1], 'base64').toString());
 
-        const appleUserId = payload.sub;
+        const uid = payload.sub;
         const email = payload.email || '';
 
         let firstName = '';
@@ -28,12 +28,13 @@ export default async function handler(req, res) {
             }
         }
 
+        const name = [firstName, lastName].filter(Boolean).join(' ');
+
         const params = new URLSearchParams({
             provider: 'apple',
-            appleUserId,
+            uid,
             email,
-            firstName,
-            lastName
+            name
         });
 
         return res.redirect(302, '/auth-complete.html?' + params.toString());
